@@ -12,3 +12,4 @@ riderModule.iml
 *.sln.ide
 *.sln.iml
 .DS_Store
+out/
