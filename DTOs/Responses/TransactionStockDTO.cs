@@ -17,7 +17,7 @@ public class TransactionStockDTO
     public string Type { get; set; }
     
     [Required]
-    public string ProduitNom { get; set; }
+    public int ProduitId { get; set; } 
     
     [Required]
     public double PrixUnitaire { get; set; }
