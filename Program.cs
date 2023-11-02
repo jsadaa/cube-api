@@ -3,6 +3,7 @@ using ApiCube.Domain.Entities;
 using ApiCube.Domain.Factories;
 using ApiCube.Repositories;
 using ApiCube.Repositories.Interfaces;
+using ApiCube.Services.FamilleProduit;
 using ApiCube.Services.ProduitService;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,10 +24,11 @@ builder.Services.AddScoped<IFamilleProduitRepository , FamilleProduitRepository>
 builder.Services.AddScoped<IPromotionRepository , PromotionRepository>();
 builder.Services.AddScoped<IProduitRepository , ProduitRepository>();
 builder.Services.AddScoped<IProduitService , ProduitService>();
-builder.Services.AddScoped<ProduitFactory>();
-builder.Services.AddScoped<TransactionStock>();
-builder.Services.AddScoped<TransactionStockFactory>();
+builder.Services.AddScoped<IFamilleProduitService , FamilleProduitService>();
 builder.Services.AddScoped<ITransactionStockRepository , TransactionStockRepository>();
+builder.Services.AddScoped<ProduitFactory>();
+builder.Services.AddScoped<TransactionStockFactory>();
+builder.Services.AddScoped<FamilleProduitFactory>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
