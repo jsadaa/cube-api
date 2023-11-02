@@ -1,18 +1,18 @@
 using ApiCube.Domain.Entities;
-using ApiCube.DTOs;
+using ApiCube.DTOs.Responses;
 
 namespace ApiCube.Repositories.Interfaces;
 
 public interface IFamilleProduitRepository
 {
     
-    public void AjouterFamilleProduit(FamilleProduit familleProduit);
+    public void Ajouter(FamilleProduit familleProduit);
     
-    public List<FamilleProduitDTO> ListerFamillesProduits();
+    public List<FamilleProduitDTO> Lister();
     
-    public FamilleProduitDTO TrouverFamilleProduit(int id);
+    public FamilleProduitDTO? Trouver(int id);
     
-    public void ModifierFamilleProduit(int id, FamilleProduit familleProduit);
+    public void Modifier(int id, FamilleProduit familleProduit);
     
-    public void SupprimerFamilleProduit(int id);
+    public void Supprimer(int id);
 }

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ApiCube.DTOs;
+namespace ApiCube.DTOs.Requests;
 
 public class AjouterProduitRequest
 {

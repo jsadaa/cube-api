@@ -1,5 +1,4 @@
 using ApiCube.Domain.Entities;
-using ApiCube.DTOs;
 using ApiCube.DTOs.Responses;
 using ApiCube.Models;
 using ApiCube.Repositories.Interfaces;
@@ -16,7 +15,7 @@ public class ProduitRepository : IProduitRepository
         _context = context;
     }
     
-    public void AjouterProduit(Produit produit)
+    public void Ajouter(Produit produit)
     {
         ProduitModel nouveauProduit = new ProduitModel
         {
@@ -39,7 +38,7 @@ public class ProduitRepository : IProduitRepository
         }
     }
     
-    public List<ProduitDTO> ListerProduits()
+    public List<ProduitDTO> Lister()
     {
         List<ProduitDTO> produits = new List<ProduitDTO>();
 
@@ -69,13 +68,12 @@ public class ProduitRepository : IProduitRepository
     }
         
     
-    public ProduitDTO? TrouverProduit(int id)
+    public ProduitDTO? Trouver(int id)
     {
         ProduitModel? produit = null;
-
+    
         using (_context)
         {
-            // find the product and find the family of the product to populate the DTO
             produit = _context.Produits
                 .Include(produit => produit.FamilleProduit)
                 .FirstOrDefault(produit => produit.Id == id);
@@ -101,7 +99,7 @@ public class ProduitRepository : IProduitRepository
         return produitDTO;
     }
 
-    public void ModifierProduit(int id, Produit produit)
+    public void Modifier(int id, Produit produit)
     {
         ProduitModel? produitModifié = null;
 
@@ -133,7 +131,7 @@ public class ProduitRepository : IProduitRepository
         }
     }
 
-    public void SupprimerProduit(int id)
+    public void Supprimer(int id)
     {
         ProduitModel? produit = null;
 

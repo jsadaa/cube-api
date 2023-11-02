@@ -1,4 +1,4 @@
-using ApiCube.DTOs;
+using ApiCube.DTOs.Requests;
 using ApiCube.DTOs.Responses;
 using ApiCube.Services.ProduitService;
 using Microsoft.AspNetCore.Mvc;

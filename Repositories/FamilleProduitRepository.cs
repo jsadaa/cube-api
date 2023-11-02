@@ -1,5 +1,5 @@
 using ApiCube.Domain.Entities;
-using ApiCube.DTOs;
+using ApiCube.DTOs.Responses;
 using ApiCube.Models;
 using ApiCube.Repositories.Interfaces;
 
@@ -14,7 +14,7 @@ public class FamilleProduitRepository : IFamilleProduitRepository
         _context = context;
     }
     
-    public void AjouterFamilleProduit(FamilleProduit familleProduit)
+    public void Ajouter(FamilleProduit familleProduit)
     {
         FamilleProduitModel nouvelleFamilleProduit = new FamilleProduitModel
         {
@@ -29,7 +29,7 @@ public class FamilleProduitRepository : IFamilleProduitRepository
         }
     }
     
-    public List<FamilleProduitDTO> ListerFamillesProduits()
+    public List<FamilleProduitDTO> Lister()
     {
         List<FamilleProduitDTO> famillesProduits = new List<FamilleProduitDTO>();
 
@@ -49,7 +49,7 @@ public class FamilleProduitRepository : IFamilleProduitRepository
         return famillesProduits;
     }
     
-    public FamilleProduitDTO? TrouverFamilleProduit(int id)
+    public FamilleProduitDTO? Trouver(int id)
     {
         FamilleProduitModel? familleProduit = null;
         
@@ -71,7 +71,7 @@ public class FamilleProduitRepository : IFamilleProduitRepository
         };
     }
     
-    public void ModifierFamilleProduit(int id, FamilleProduit familleProduit)
+    public void Modifier(int id, FamilleProduit familleProduit)
     {
         FamilleProduitModel? familleProduitModifiée = null;
         
@@ -95,7 +95,7 @@ public class FamilleProduitRepository : IFamilleProduitRepository
         }
     }
     
-    public void SupprimerFamilleProduit(int id)
+    public void Supprimer(int id)
     {
         FamilleProduitModel? familleProduit = null;
         

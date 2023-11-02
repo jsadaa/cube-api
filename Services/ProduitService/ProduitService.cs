@@ -1,30 +1,29 @@
 using System.Net;
 using ApiCube.Domain.Entities;
 using ApiCube.Domain.Factories;
-using ApiCube.DTOs;
+using ApiCube.DTOs.Requests;
 using ApiCube.DTOs.Responses;
-using ApiCube.Repositories;
 using ApiCube.Repositories.Interfaces;
 
 namespace ApiCube.Services.ProduitService;
 
 public class ProduitService : IProduitService
 {
-    public IProduitRepository ProduitRepository;
-    public readonly ProduitFactory ProduitFactory;
+    private readonly IProduitRepository _produitRepository;
+    private readonly ProduitFactory _produitFactory;
     
     public ProduitService(IProduitRepository produitRepository, ProduitFactory produitFactory)
     {
-        ProduitRepository = produitRepository;
-        ProduitFactory = produitFactory;
+        _produitRepository = produitRepository;
+        _produitFactory = produitFactory;
     }
 
     public BaseResponse AjouterUnProduitAuStock(AjouterProduitRequest produitRequest)
     {
         try
         {
-            Produit nouveauProduit = ProduitFactory.CreerProduit(produitRequest);
-            ProduitRepository.AjouterProduit(nouveauProduit);
+            Produit nouveauProduit = _produitFactory.CreerProduit(produitRequest);
+            _produitRepository.Ajouter(nouveauProduit);
             
             BaseResponse response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
@@ -48,7 +47,7 @@ public class ProduitService : IProduitService
     {
         try
         {
-            List<ProduitDTO> produits = ProduitRepository.ListerProduits();
+            List<ProduitDTO> produits = _produitRepository.Lister();
             
             BaseResponse response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,

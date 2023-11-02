@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using ApiCube.Domain.Entities;
 
-namespace ApiCube.DTOs;
+namespace ApiCube.DTOs.Requests;
 
 public class AjouterPromotionRequest
 {

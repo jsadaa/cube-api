@@ -1,13 +1,13 @@
 using ApiCube.Domain.Entities;
-using ApiCube.DTOs;
+using ApiCube.DTOs.Requests;
 
 namespace ApiCube.Repositories.Interfaces;
 
 public interface IPromotionRepository
 {
-    public void AjouterPromotion(Promotion promotion);
-    public AjouterPromotionRequest? TrouverPromotion(int id);
-    public List<AjouterPromotionRequest> ListerPromotions();
-    public void ModifierPromotion(int id, Promotion promotion);
-    public void SupprimerPromotion(int id);
+    public void Ajouter(Promotion promotion);
+    public AjouterPromotionRequest? Trouver(int id);
+    public List<AjouterPromotionRequest> Lister();
+    public void Modifier(int id, Promotion promotion);
+    public void Supprimer(int id);
 }

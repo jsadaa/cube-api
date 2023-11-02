@@ -1,6 +1,6 @@
 using Microsoft.Build.Framework;
 
-namespace ApiCube.DTOs;
+namespace ApiCube.DTOs.Responses;
 
 public class FamilleProduitDTO
 {

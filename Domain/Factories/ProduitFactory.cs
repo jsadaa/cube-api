@@ -1,5 +1,6 @@
 using ApiCube.Domain.Entities;
-using ApiCube.DTOs;
+using ApiCube.DTOs.Requests;
+using ApiCube.DTOs.Responses;
 using ApiCube.Repositories.Interfaces;
 
 namespace ApiCube.Domain.Factories;
@@ -15,7 +16,7 @@ public class ProduitFactory
     
     public Produit CreerProduit(AjouterProduitRequest produitRequest)
     {
-        FamilleProduitDTO? familleProduitDTO = _familleProduitRepository.TrouverFamilleProduit(produitRequest.FamilleProduitId);
+        FamilleProduitDTO? familleProduitDTO = _familleProduitRepository.Trouver(produitRequest.FamilleProduitId);
         
         if (familleProduitDTO == null)
         {

@@ -1,5 +1,5 @@
 using ApiCube.Domain.Entities;
-using ApiCube.DTOs;
+using ApiCube.DTOs.Requests;
 using ApiCube.Models;
 using ApiCube.Repositories.Interfaces;
 
@@ -7,15 +7,14 @@ namespace ApiCube.Repositories;
 
 public class PromotionRepository : IPromotionRepository
 {
-    
-    public ApiDbContext _context;
+    private readonly ApiDbContext _context;
     
     public PromotionRepository(ApiDbContext context)
     {
         _context = context;
     }
     
-    public void AjouterPromotion(Promotion promotion)
+    public void Ajouter(Promotion promotion)
     {
         PromotionModel nouvellePromotion = new PromotionModel
         {
@@ -34,7 +33,7 @@ public class PromotionRepository : IPromotionRepository
         }
     }
     
-    public AjouterPromotionRequest? TrouverPromotion(int id)
+    public AjouterPromotionRequest? Trouver(int id)
     {
         PromotionModel? promotion = null;
         
@@ -59,7 +58,7 @@ public class PromotionRepository : IPromotionRepository
         };
     }
     
-    public List<AjouterPromotionRequest> ListerPromotions()
+    public List<AjouterPromotionRequest> Lister()
     {
         List<AjouterPromotionRequest> promotions = new List<AjouterPromotionRequest>();
         
@@ -82,7 +81,7 @@ public class PromotionRepository : IPromotionRepository
         return promotions;
     }
     
-    public void ModifierPromotion(int id, Promotion promotion)
+    public void Modifier(int id, Promotion promotion)
     {
         PromotionModel? promotionModifiée = null;
         
@@ -110,7 +109,7 @@ public class PromotionRepository : IPromotionRepository
         }
     }
     
-    public void SupprimerPromotion(int id)
+    public void Supprimer(int id)
     {
         PromotionModel? promotion = null;
         

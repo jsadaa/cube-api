@@ -1,18 +1,17 @@
 using ApiCube.Domain.Entities;
-using ApiCube.DTOs;
 using ApiCube.DTOs.Responses;
 
 namespace ApiCube.Repositories.Interfaces;
 
 public interface IProduitRepository
 {
-    public void AjouterProduit(Produit produit);
+    public void Ajouter(Produit produit);
     
-    public List<ProduitDTO> ListerProduits();
+    public List<ProduitDTO> Lister();
     
-    public ProduitDTO? TrouverProduit(int id);
+    public ProduitDTO? Trouver(int id);
     
-    public void ModifierProduit(int id, Produit produit);
+    public void Modifier(int id, Produit produit);
     
-    public void SupprimerProduit(int id);
+    public void Supprimer(int id);
 }

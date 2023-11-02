@@ -1,4 +1,4 @@
-using ApiCube.DTOs;
+using ApiCube.DTOs.Requests;
 using ApiCube.DTOs.Responses;
 
 namespace ApiCube.Services.ProduitService;
