@@ -62,4 +62,11 @@ public class ProduitModel
     
     [ForeignKey("FamilleProduitId")]
     public FamilleProduitModel FamilleProduit { get; set; }
+    
+    [Column("fournisseur_id")]
+    [Required]
+    public int FournisseurId { get; set; }
+    
+    [ForeignKey("FournisseurId")]
+    public FournisseurModel Fournisseur { get; set; }
 }
