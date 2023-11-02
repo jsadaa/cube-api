@@ -3,6 +3,7 @@ using System;
 using ApiCube;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiCube.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231102230413_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -533,8 +536,9 @@ namespace ApiCube.Migrations
                         .HasColumnType("int")
                         .HasColumnName("famille_produit_id");
 
-                    b.Property<int?>("FournisseurModelId")
-                        .HasColumnType("int");
+                    b.Property<int>("FournisseurId")
+                        .HasColumnType("int")
+                        .HasColumnName("fournisseur_id");
 
                     b.Property<string>("Nom")
                         .IsRequired()
@@ -549,6 +553,10 @@ namespace ApiCube.Migrations
                     b.Property<double>("PrixVente")
                         .HasColumnType("double")
                         .HasColumnName("prix_vente");
+
+                    b.Property<int?>("PromotionId")
+                        .HasColumnType("int")
+                        .HasColumnName("promotion_id");
 
                     b.Property<int>("Quantite")
                         .HasColumnType("int")
@@ -568,7 +576,9 @@ namespace ApiCube.Migrations
 
                     b.HasIndex("FamilleProduitId");
 
-                    b.HasIndex("FournisseurModelId");
+                    b.HasIndex("FournisseurId");
+
+                    b.HasIndex("PromotionId");
 
                     b.ToTable("produit");
                 });
@@ -633,48 +643,6 @@ namespace ApiCube.Migrations
                     b.ToTable("role");
                 });
 
-            modelBuilder.Entity("ApiCube.Models.StudentModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("address");
-
-                    b.Property<string>("ContactNumber")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("contact_number");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("email");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("first_name");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("last_name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Student");
-                });
-
             modelBuilder.Entity("ApiCube.Models.TransactionStockModel", b =>
                 {
                     b.Property<int>("Id")
@@ -685,10 +653,6 @@ namespace ApiCube.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date");
-
-                    b.Property<int>("EmployeId")
-                        .HasColumnType("int")
-                        .HasColumnName("employe_id");
 
                     b.Property<double>("PrixTotal")
                         .HasColumnType("double")
@@ -713,8 +677,6 @@ namespace ApiCube.Migrations
                         .HasColumnName("type");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeId");
 
                     b.HasIndex("ProduitId");
 
@@ -866,17 +828,27 @@ namespace ApiCube.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApiCube.Models.FournisseurModel", null)
+                    b.HasOne("ApiCube.Models.FournisseurModel", "Fournisseur")
                         .WithMany("Produits")
-                        .HasForeignKey("FournisseurModelId");
+                        .HasForeignKey("FournisseurId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ApiCube.Models.PromotionModel", "Promotion")
+                        .WithMany()
+                        .HasForeignKey("PromotionId");
 
                     b.Navigation("FamilleProduit");
+
+                    b.Navigation("Fournisseur");
+
+                    b.Navigation("Promotion");
                 });
 
             modelBuilder.Entity("ApiCube.Models.PromotionModel", b =>
                 {
                     b.HasOne("ApiCube.Models.ProduitModel", "Produit")
-                        .WithMany("Promotions")
+                        .WithMany()
                         .HasForeignKey("ProduitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -886,19 +858,11 @@ namespace ApiCube.Migrations
 
             modelBuilder.Entity("ApiCube.Models.TransactionStockModel", b =>
                 {
-                    b.HasOne("ApiCube.Models.EmployeModel", "Employe")
-                        .WithMany()
-                        .HasForeignKey("EmployeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ApiCube.Models.ProduitModel", "Produit")
                         .WithMany()
                         .HasForeignKey("ProduitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Employe");
 
                     b.Navigation("Produit");
                 });
@@ -923,11 +887,6 @@ namespace ApiCube.Migrations
             modelBuilder.Entity("ApiCube.Models.FournisseurModel", b =>
                 {
                     b.Navigation("Produits");
-                });
-
-            modelBuilder.Entity("ApiCube.Models.ProduitModel", b =>
-                {
-                    b.Navigation("Promotions");
                 });
 
             modelBuilder.Entity("ApiCube.Models.RoleModel", b =>
