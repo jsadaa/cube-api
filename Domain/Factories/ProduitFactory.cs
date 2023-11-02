@@ -30,7 +30,7 @@ public class ProduitFactory
         );
         
         Produit nouveauProduit = new Produit(
-            id: produitRequest.Id,
+            id: 0,
             nom: produitRequest.Nom,
             description: produitRequest.Description,
             quantite: produitRequest.Quantite,
