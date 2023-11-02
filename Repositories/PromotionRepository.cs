@@ -15,7 +15,7 @@ public class PromotionRepository : IPromotionRepository
         _context = context;
     }
     
-    public void Ajouter(Promotion promotion)
+    public void Ajouter(AjouterPromotionRequest promotion)
     {
         PromotionModel nouvellePromotion = new PromotionModel
         {
@@ -24,25 +24,18 @@ public class PromotionRepository : IPromotionRepository
             DateDebut = promotion.DateDebut,
             DateFin = promotion.DateFin,
             Pourcentage = promotion.Pourcentage,
-            ProduitId = promotion.Produit.Id
+            ProduitId = promotion.ProduitId
         };
-
-        using (_context)
-        {
-            _context.Promotions.Add(nouvellePromotion);
-            _context.SaveChanges();
-        }
+        
+        _context.Promotions.Add(nouvellePromotion);
+        _context.SaveChanges();
     }
     
     public PromotionDTO? Trouver(int id)
     {
         PromotionModel? promotion = null;
-        
-        using (_context)
-        {
-            promotion = _context.Promotions.Find(id);
-        }
-
+        promotion = _context.Promotions.Find(id);
+            
         if (promotion == null)
         {
             return null;
@@ -63,33 +56,26 @@ public class PromotionRepository : IPromotionRepository
     {
         List<PromotionDTO> promotions = new List<PromotionDTO>();
         
-        using (_context)
-        {
-            promotions.AddRange(
-                _context.Promotions
-                    .Select(promotion => new PromotionDTO()
-                    {
-                        Id = promotion.Id,
-                        Nom = promotion.Nom,
-                        Description = promotion.Description,
-                        DateDebut = promotion.DateDebut,
-                        DateFin = promotion.DateFin,
-                        Pourcentage = promotion.Pourcentage
-                    })
-            );
-        }
-
+        promotions.AddRange(
+            _context.Promotions
+                .Select(promotion => new PromotionDTO()
+                {
+                    Id = promotion.Id,
+                    Nom = promotion.Nom,
+                    Description = promotion.Description,
+                    DateDebut = promotion.DateDebut,
+                    DateFin = promotion.DateFin,
+                    Pourcentage = promotion.Pourcentage
+                })
+        );
+        
         return promotions;
     }
     
-    public void Modifier(int id, Promotion promotion)
+    public void Modifier(int id, AjouterPromotionRequest promotion)
     {
         PromotionModel? promotionModifiée = null;
-        
-        using (_context)
-        {
-            promotionModifiée = _context.Promotions.Find(id);
-        }
+        promotionModifiée = _context.Promotions.Find(id);
         
         if (promotionModifiée == null)
         {
@@ -101,33 +87,23 @@ public class PromotionRepository : IPromotionRepository
         promotionModifiée.DateDebut = promotion.DateDebut;
         promotionModifiée.DateFin = promotion.DateFin;
         promotionModifiée.Pourcentage = promotion.Pourcentage;
-        promotionModifiée.ProduitId = promotion.Produit.Id;
-
-        using (_context)
-        {
-            _context.Promotions.Update(promotionModifiée);
-            _context.SaveChanges();
-        }
+        promotionModifiée.ProduitId = promotion.ProduitId;
+        
+        _context.Promotions.Update(promotionModifiée);
+        _context.SaveChanges();
     }
     
     public void Supprimer(int id)
     {
         PromotionModel? promotion = null;
-        
-        using (_context)
-        {
-            promotion = _context.Promotions.Find(id);
-        }
+        promotion = _context.Promotions.Find(id);
         
         if (promotion == null)
         {
             return;
         }
-
-        using (_context)
-        {
-            _context.Promotions.Remove(promotion);
-            _context.SaveChanges();
-        }
+        
+        _context.Promotions.Remove(promotion);
+        _context.SaveChanges();
     }
 }

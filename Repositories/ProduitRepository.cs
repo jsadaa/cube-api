@@ -1,4 +1,5 @@
 using ApiCube.Domain.Entities;
+using ApiCube.DTOs.Requests;
 using ApiCube.DTOs.Responses;
 using ApiCube.Models;
 using ApiCube.Repositories.Interfaces;
@@ -15,7 +16,7 @@ public class ProduitRepository : IProduitRepository
         _context = context;
     }
     
-    public void Ajouter(Produit produit)
+    public void Ajouter(AjouterProduitRequest produit)
     {
         ProduitModel nouveauProduit = new ProduitModel
         {
@@ -24,45 +25,39 @@ public class ProduitRepository : IProduitRepository
             SeuilDisponibilite = produit.SeuilDisponibilite,
             StatutStock = produit.StatutStock,
             Quantite = produit.Quantite,
-            FamilleProduitId = produit.FamilleProduit.Id,
+            FamilleProduitId = produit.FamilleProduitId,
             PrixAchat = produit.PrixAchat,
             PrixVente = produit.PrixVente,
             DateAchat = produit.DateAchat,
             DatePeremption = produit.DatePeremption
         };
-
-        using (_context)
-        {
-            _context.Produits.Add(nouveauProduit);
-            _context.SaveChanges();
-        }
+        
+        _context.Produits.Add(nouveauProduit);
+        _context.SaveChanges();
     }
     
     public List<ProduitDTO> Lister()
     {
         List<ProduitDTO> produits = new List<ProduitDTO>();
-
-        using (_context)
-        {
-            produits.AddRange(
-                _context.Produits
-                    .Include(produit => produit.FamilleProduit)
-                    .Select(produit => new ProduitDTO
-                    {
-                        Id = produit.Id,
-                        Nom = produit.Nom,
-                        Description = produit.Description,
-                        SeuilDisponibilite = produit.SeuilDisponibilite,
-                        StatutStock = produit.StatutStock,
-                        Quantite = produit.Quantite,
-                        FamilleProduitNom = produit.FamilleProduit.Nom,
-                        PrixAchat = produit.PrixAchat,
-                        PrixVente = produit.PrixVente,
-                        DateAchat = produit.DateAchat,
-                        DatePeremption = produit.DatePeremption
-                    })
-            );
-        }
+        
+        produits.AddRange(
+            _context.Produits
+                .Include(produit => produit.FamilleProduit)
+                .Select(produit => new ProduitDTO
+                {
+                    Id = produit.Id,
+                    Nom = produit.Nom,
+                    Description = produit.Description,
+                    SeuilDisponibilite = produit.SeuilDisponibilite,
+                    StatutStock = produit.StatutStock,
+                    Quantite = produit.Quantite,
+                    FamilleProduitNom = produit.FamilleProduit.Nom,
+                    PrixAchat = produit.PrixAchat,
+                    PrixVente = produit.PrixVente,
+                    DateAchat = produit.DateAchat,
+                    DatePeremption = produit.DatePeremption
+                })
+        );
 
         return produits;
     }
@@ -71,13 +66,9 @@ public class ProduitRepository : IProduitRepository
     public ProduitDTO? Trouver(int id)
     {
         ProduitModel? produit = null;
-    
-        using (_context)
-        {
-            produit = _context.Produits
-                .Include(produit => produit.FamilleProduit)
-                .FirstOrDefault(produit => produit.Id == id);
-        }
+        produit = _context.Produits
+            .Include(produit => produit.FamilleProduit)
+            .FirstOrDefault(produit => produit.Id == id);
 
         if (produit == null) return null;
             
@@ -99,15 +90,11 @@ public class ProduitRepository : IProduitRepository
         return produitDTO;
     }
 
-    public void Modifier(int id, Produit produit)
+    public void Modifier(int id, AjouterProduitRequest produit)
     {
         ProduitModel? produitModifié = null;
-
-        using (_context)
-        {
-            produitModifié = _context.Produits.Find(id);
-        }
-
+        produitModifié = _context.Produits.Find(id);
+        
         if (produitModifié == null)
         {
             return;
@@ -118,37 +105,27 @@ public class ProduitRepository : IProduitRepository
         produitModifié.SeuilDisponibilite = produit.SeuilDisponibilite;
         produitModifié.StatutStock = produit.StatutStock;
         produitModifié.Quantite = produit.Quantite;
-        produitModifié.FamilleProduitId = produit.FamilleProduit.Id;
+        produitModifié.FamilleProduitId = produit.FamilleProduitId;
         produitModifié.PrixAchat = produit.PrixAchat;
         produitModifié.PrixVente = produit.PrixVente;
         produitModifié.DateAchat = produit.DateAchat;
         produitModifié.DatePeremption = produit.DatePeremption;
         
-        using (_context)
-        {
-            _context.Produits.Update(produitModifié);
-            _context.SaveChanges();
-        }
+        _context.Produits.Update(produitModifié);
+        _context.SaveChanges();
     }
 
     public void Supprimer(int id)
     {
         ProduitModel? produit = null;
-
-        using (_context)
-        {
-            produit = _context.Produits.Find(id);
-        }
+        produit = _context.Produits.Find(id);
         
         if (produit == null)
         {
             return;
         }
         
-        using (_context)
-        {
-            _context.Produits.Remove(produit);
-            _context.SaveChanges();
-        }
+        _context.Produits.Remove(produit);
+        _context.SaveChanges();
     }
 }

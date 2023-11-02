@@ -15,42 +15,36 @@ public class TransactionStockRepository : ITransactionStockRepository
         _context = context;
     }
     
-    public void Ajouter(TransactionStock transactionStock)
+    public void Ajouter(TransactionStockDTO transactionStock)
     {
         TransactionStockModel nouvelleTransactionStock = new TransactionStockModel
         {
             Quantite = transactionStock.Quantite,
             Date = transactionStock.Date,
-            ProduitId = transactionStock.Produit.Id
+            ProduitId = transactionStock.ProduitId,
         };
-
-        using (_context)
-        {
-            _context.TransactionsStock.Add(nouvelleTransactionStock);
-            _context.SaveChanges();
-        }
+        
+        _context.TransactionsStock.Add(nouvelleTransactionStock);
+        _context.SaveChanges();
     }
 
     public TransactionStockDTO? Trouver(int id)
     {
         TransactionStockDTO? transactionStock = null;
         
-        using (_context)
-        {
-            transactionStock = _context.TransactionsStock
-                .Include(transactionStock => transactionStock.Produit)
-                .Select(transactionStock => new TransactionStockDTO
-                {
-                    Id = transactionStock.Id,
-                    Quantite = transactionStock.Quantite,
-                    Date = transactionStock.Date,
-                    Type = transactionStock.Type,
-                    ProduitNom = transactionStock.Produit.Nom,
-                    PrixUnitaire = transactionStock.PrixUnitaire,
-                    PrixTotal = transactionStock.PrixTotal
-                })
-                .FirstOrDefault(transactionStock => transactionStock.Id == id);
-        }
+        transactionStock = _context.TransactionsStock
+            .Include(transactionStock => transactionStock.Produit)
+            .Select(transactionStock => new TransactionStockDTO
+            {
+                Id = transactionStock.Id,
+                Quantite = transactionStock.Quantite,
+                Date = transactionStock.Date,
+                Type = transactionStock.Type,
+                ProduitId = transactionStock.ProduitId,
+                PrixUnitaire = transactionStock.PrixUnitaire,
+                PrixTotal = transactionStock.PrixTotal
+            })
+            .FirstOrDefault(transactionStock => transactionStock.Id == id);
         
         return transactionStock;
     }
@@ -59,65 +53,48 @@ public class TransactionStockRepository : ITransactionStockRepository
     {
         List<TransactionStockDTO> transactionsStock = new List<TransactionStockDTO>();
 
-        using (_context)
-        {
-            transactionsStock.AddRange(
-                _context.TransactionsStock
-                    .Include(transactionStock => transactionStock.Produit)
-                    .Select(transactionStock => new TransactionStockDTO
-                    {
-                        Id = transactionStock.Id,
-                        Quantite = transactionStock.Quantite,
-                        Date = transactionStock.Date,
-                        Type = transactionStock.Type,
-                        ProduitNom = transactionStock.Produit.Nom,
-                        PrixUnitaire = transactionStock.PrixUnitaire,
-                        PrixTotal = transactionStock.PrixTotal
-                    })
-            );
-        }
-
+        transactionsStock.AddRange(
+            _context.TransactionsStock
+                .Include(transactionStock => transactionStock.Produit)
+                .Select(transactionStock => new TransactionStockDTO
+                {
+                    Id = transactionStock.Id,
+                    Quantite = transactionStock.Quantite,
+                    Date = transactionStock.Date,
+                    Type = transactionStock.Type,
+                    ProduitId = transactionStock.ProduitId,
+                    PrixUnitaire = transactionStock.PrixUnitaire,
+                    PrixTotal = transactionStock.PrixTotal
+                })
+        );
+        
         return transactionsStock;
     }
     
-    public void Modifier(int id, TransactionStock transactionStock)
+    public void Modifier(int id, TransactionStockDTO transactionStock)
     {
         TransactionStockModel? transactionStockAModifier = null;
-
-        using (_context)
-        {
-            transactionStockAModifier = _context.TransactionsStock.Find(id);
-        }
+        transactionStockAModifier = _context.TransactionsStock.Find(id);
         
         if (transactionStockAModifier == null) return;
         
         transactionStockAModifier.Quantite = transactionStock.Quantite;
         transactionStockAModifier.Date = transactionStock.Date;
         transactionStockAModifier.Type = transactionStock.Type.ToString();
-        transactionStockAModifier.ProduitId = transactionStock.Produit.Id;
+        transactionStockAModifier.ProduitId = transactionStock.ProduitId;
         
-        using (_context)
-        {
-            _context.TransactionsStock.Update(transactionStockAModifier);
-            _context.SaveChanges();
-        }
+        _context.TransactionsStock.Update(transactionStockAModifier);
+        _context.SaveChanges();
     }
 
     public void Supprimer(int id)
     {
         TransactionStockModel? transactionStockASupprimer = null;
-
-        using (_context)
-        {
-            transactionStockASupprimer = _context.TransactionsStock.Find(id);
-        }
+        transactionStockASupprimer = _context.TransactionsStock.Find(id);
 
         if (transactionStockASupprimer == null) return;
-
-        using (_context)
-        {
-            _context.TransactionsStock.Remove(transactionStockASupprimer);
-            _context.SaveChanges();
-        }
+        
+        _context.TransactionsStock.Remove(transactionStockASupprimer);
+        _context.SaveChanges();
     }
 }
