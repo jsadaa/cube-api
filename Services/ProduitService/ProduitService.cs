@@ -12,11 +12,11 @@ namespace ApiCube.Services.ProduitService;
 public class ProduitService : IProduitService
 {
     private readonly IProduitRepository _produitRepository;
+    private readonly ITransactionStockRepository _transactionStockRepository;
     private readonly ProduitFactory _produitFactory;
     private readonly TransactionStockFactory _transactionStockFactory;
-    private readonly TransactionStockRepository _transactionStockRepository;
     
-    public ProduitService(IProduitRepository produitRepository, ProduitFactory produitFactory, TransactionStockFactory transactionStockFactory, TransactionStockRepository transactionStockRepository)
+    public ProduitService(IProduitRepository produitRepository, ProduitFactory produitFactory, TransactionStockFactory transactionStockFactory, ITransactionStockRepository transactionStockRepository)
     {
         _produitRepository = produitRepository;
         _produitFactory = produitFactory;
@@ -30,8 +30,18 @@ public class ProduitService : IProduitService
         {
             Produit nouveauProduit = _produitFactory.CreerProduit(produitRequest);
             TransactionStock transactionStock = _transactionStockFactory.CreerTransactionStock(nouveauProduit, TypeTransactionStock.Achat);
-            _produitRepository.Ajouter(nouveauProduit);
-            _transactionStockRepository.Ajouter(transactionStock);
+            TransactionStockDTO transactionStockDTO = new TransactionStockDTO
+            {
+                Quantite = transactionStock.Quantite,
+                Date = transactionStock.Date,
+                Type = transactionStock.Type.ToString(),
+                ProduitId = transactionStock.Produit.Id,
+                PrixUnitaire = transactionStock.PrixUnitaire,
+                PrixTotal = transactionStock.PrixTotal
+            };
+            
+            _produitRepository.Ajouter(produitRequest);
+            _transactionStockRepository.Ajouter(transactionStockDTO);
             
             BaseResponse response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
