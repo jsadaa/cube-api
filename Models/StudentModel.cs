@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApiCube.Models;
 
+// THIS IS AN EXAMPLE OF A MODEL CLASS
 [Table("Student")]
 public class StudentModel
 {

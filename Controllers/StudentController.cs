@@ -8,6 +8,7 @@ using ApiCube.Services.StudentService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+// THIS IS AN EXAMPLE OF A CONTROLLER CLASS
 namespace ApiCube.Controllers
 {
     [Route("api/[controller]")]

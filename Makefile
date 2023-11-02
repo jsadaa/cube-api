@@ -17,3 +17,10 @@ db-migrate-add :
 	
 db-drop :
 	dotnet ef database drop
+	
+db-update :
+	dotnet ef database update
+	
+db-reset :
+	dotnet ef database drop
+	dotnet ef database update
