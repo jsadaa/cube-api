@@ -7,12 +7,10 @@ namespace ApiCube.Domain.Factories;
 public class ProduitFactory
 {
     private IFamilleProduitRepository _familleProduitRepository;
-    private IPromotionRepository _promotionRepository;
-    
-    public ProduitFactory(IFamilleProduitRepository familleProduitRepository, IPromotionRepository promotionRepository)
+
+    public ProduitFactory(IFamilleProduitRepository familleProduitRepository)
     {
         _familleProduitRepository = familleProduitRepository;
-        _promotionRepository = promotionRepository;
     }
     
     public Produit CreerProduit(AjouterProduitRequest produitRequest)

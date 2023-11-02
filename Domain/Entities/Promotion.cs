@@ -4,15 +4,10 @@ public class Promotion
 {
     public int Id { get; set; }
     public string Nom { get; set; }
-    
     public string Description { get; set; }
-    
     public double Pourcentage { get; set; }
-    
     public DateTime DateDebut { get; set; }
-    
     public DateTime DateFin { get; set; }
-    
     public Produit Produit { get; set; }
     
     public Promotion(string nom, string description, double pourcentage, DateTime dateDebut, DateTime dateFin, Produit produit)

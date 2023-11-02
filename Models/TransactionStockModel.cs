@@ -39,12 +39,10 @@ public class TransactionStockModel
     [ForeignKey("EmployeId")]
     public EmployeModel Employe { get; set; }
     
-    // prix unitaire
     [Column("prix_unitaire")]
     [Required]
     public double PrixUnitaire { get; set; }
     
-    // prix total
     [Column("prix_total")]
     [Required]
     public double PrixTotal { get; set; }

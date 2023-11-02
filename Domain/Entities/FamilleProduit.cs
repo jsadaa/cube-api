@@ -5,9 +5,7 @@ public class FamilleProduit
     
     public int Id { get; set; }
     public string Nom { get; set; }
-    
     public string Description { get; set; }
-    
     public ICollection<Produit?> Produits { get; set; } = new List<Produit?>();
     
     public FamilleProduit(string nom, string description)

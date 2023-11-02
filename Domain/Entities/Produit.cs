@@ -4,25 +4,15 @@ public class Produit
 {
     public int Id { get; set; }
     public string Nom { get; set; }
-    
     public string Description { get; set; }
-    
     public int Quantite { get; set; }
-    
     public int SeuilDisponibilite { get; set; }
-    
     public string StatutStock { get; set; }
-    
     public double PrixAchat { get; set; }
-    
     public double PrixVente { get; set; }
-    
     public DateTime DateAchat { get; set; }
-    
     public DateTime DatePeremption { get; set; }
-    
     public Promotion? Promotion { get; set; }
-    
     public FamilleProduit FamilleProduit { get; set; }
     
     public Produit(string nom, string description, int quantite, int seuilDisponibilite, string statutStock, double prixAchat, double prixVente, DateTime dateAchat, DateTime datePeremption, FamilleProduit familleProduit)

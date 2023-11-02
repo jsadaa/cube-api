@@ -33,28 +33,4 @@ public class FournisseurModel
     public string Email { get; set; }
     
     public ICollection<ProduitModel> Produits { get; set; }
-    
-    /*// a des Commandes
-    public List<CommandeModel> Commandes { get; set; }
-
-    // a des Factures
-    public List<FactureModel> Factures { get; set; }
-
-    // a des Paiements
-    public List<PaiementModel> Paiements { get; set; }
-
-    // a des Retours
-    public List<RetourModel> Retours { get; set; }
-
-    // a des Avoirs
-    public List<AvoirModel> Avoirs { get; set; }
-
-    // a des Acomptes
-    public List<AcompteModel> Acomptes { get; set; }
-
-    // a des Acomptes
-    public List<RemboursementModel> Remboursements { get; set; }
-
-    // a des Acomptes
-    public List<RemiseModel> Remises { get;*/
 }

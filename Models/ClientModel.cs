@@ -72,18 +72,7 @@ public class ClientModel
     [StringLength(50)]
     public string Role { get; set; }
     
-    // a des Commandes
     public ICollection<CommandeClientModel> Commandes { get; set; }
     
-    // a des Factures
     public ICollection<FactureClientModel> Factures { get; set; }
-    
-    // a des Paiements
-    /*public List<PaiementModel> Paiements { get; set; }
-    
-    // a des Retours
-    public List<RetourModel> Retours { get; set; }
-    
-    // a des Avoirs
-    public List<AvoirModel> Avoirs { get; set; }*/
 }
