@@ -9,8 +9,6 @@ public class ApiDbContext : DbContext
     {
     }
     
-    public DbSet<StudentModel> Students { get; set; }
-    
     public DbSet<ProduitModel> Produits { get; set; }
     
     public DbSet<PromotionModel> Promotions { get; set; }
