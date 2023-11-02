@@ -67,13 +67,4 @@ public class EmployeModel
     [Required]
     [StringLength(50)]
     public string Role { get; set; }
-    
-    /*// a des Commandes
-    public List<CommandeModel> Commandes { get; set; }
-    
-    // a des Factures
-    public List<FactureModel> Factures { get; set; }
-    
-    // a des Paiements
-    public List<PaiementModel> Paiements { get; set;*/
 }

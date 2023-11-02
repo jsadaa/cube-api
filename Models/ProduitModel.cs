@@ -50,10 +50,12 @@ public class ProduitModel
     [Required]
     public DateTime DatePeremption { get; set; }
     
-    // a des Promotions
-    public ICollection<PromotionModel> Promotions { get; set; }
+    [Column("promotion_id")]
+    public int? PromotionId { get; set; }
     
-    // a une FamilleProduit
+    [ForeignKey("PromotionId")]
+    public PromotionModel? Promotion { get; set; }
+    
     [Column("famille_produit_id")]
     [Required]
     public int FamilleProduitId { get; set; }
