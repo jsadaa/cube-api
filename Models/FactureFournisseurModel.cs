@@ -3,9 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApiCube.Models;
 
-[Table("facture_client")]
-public class FactureClientModel
+[Table("facture_fournisseur")]
+public class FactureFournisseurModel
 {
+    
     [Column("id")]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Key]
@@ -14,6 +15,10 @@ public class FactureClientModel
     [Column("date_facture")]
     [Required]
     public DateTime DateFacture { get; set; }
+    
+    [Column("date_echeance")]
+    [Required]
+    public DateTime DateEcheance { get; set; }
     
     [Column("statut")]
     [Required]
@@ -32,24 +37,25 @@ public class FactureClientModel
     [Required]
     public double Tva { get; set; }
     
-    [Column("client_id")]
+    [Column("fournisseur_id")]
     [Required]
-    public int ClientId { get; set; }
+    public int FournisseurId { get; set; }
     
     [Column("employe_id")]
     [Required]
     public int EmployeId { get; set; }
     
-    [ForeignKey("ClientId")]
-    public ClientModel Client { get; set; }
+    [ForeignKey("FournisseurId")]
+    public FournisseurModel Fournisseur { get; set; }
     
     [ForeignKey("EmployeId")]
     public EmployeModel Employe { get; set; }
     
-    [Column("commande_client_id")]
+    [Column("commande_fournisseur_id")]
     [Required]
-    public int CommandeClientId { get; set; }
+    public int CommandeFournisseurId { get; set; }
     
-    [ForeignKey("CommandeClientId")]
-    public CommandeClientModel CommandeClient { get; set; }
+    [ForeignKey("CommandeFournisseurId")]
+    public CommandeFournisseurModel CommandeFournisseur { get; set; }
+    
 }
