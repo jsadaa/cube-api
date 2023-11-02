@@ -1,5 +1,8 @@
 using ApiCube;
-using ApiCube.Services.StudentService;
+using ApiCube.Domain.Factories;
+using ApiCube.Repositories;
+using ApiCube.Repositories.Interfaces;
+using ApiCube.Services.ProduitService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +18,12 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
-builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IFamilleProduitRepository , FamilleProduitRepository>();
+builder.Services.AddScoped<IPromotionRepository , PromotionRepository>();
+builder.Services.AddScoped<IProduitRepository , ProduitRepository>();
+builder.Services.AddScoped<IProduitService , ProduitService>();
+builder.Services.AddScoped<ProduitFactory>();
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
