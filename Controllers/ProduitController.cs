@@ -17,6 +17,8 @@ public class ProduitController : ControllerBase
     }
     
     [HttpPost("ajouter")]
+    [ProducesResponseType(typeof(string), 201)]
+    [ProducesResponseType(typeof(string), 400)]
     public IActionResult AjouterUnProduitAuStock([FromBody] AjouterProduitRequest ajouterProduit)
     {
         BaseResponse response = _produitService.AjouterUnProduitAuStock(ajouterProduit);
@@ -25,6 +27,7 @@ public class ProduitController : ControllerBase
     }
     
     [HttpGet("lister")]
+    [ProducesResponseType(typeof(List<ProduitDTO>), 200)]
     public IActionResult ListerLesProduits()
     {
         BaseResponse response = _produitService.ListerLesProduits();

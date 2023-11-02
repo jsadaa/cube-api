@@ -8,8 +8,9 @@ public class FamilleProduit
     public string Description { get; set; }
     private ICollection<Produit?> Produits { get; set; } = new List<Produit?>();
     
-    public FamilleProduit(string nom, string description)
+    public FamilleProduit(int id, string nom, string description)
     {
+        Id = id;
         Nom = nom;
         Description = description;
     }

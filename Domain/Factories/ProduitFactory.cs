@@ -24,11 +24,13 @@ public class ProduitFactory
         }
         
         FamilleProduit familleProduit = new FamilleProduit(
+            id: familleProduitDTO.Id,
             nom: familleProduitDTO.Nom,
             description: familleProduitDTO.Description
         );
         
         Produit nouveauProduit = new Produit(
+            id: produitRequest.Id,
             nom: produitRequest.Nom,
             description: produitRequest.Description,
             quantite: produitRequest.Quantite,

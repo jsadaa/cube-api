@@ -10,8 +10,9 @@ public class Promotion
     public DateTime DateFin { get; set; }
     public Produit Produit { get; set; }
     
-    public Promotion(string nom, string description, double pourcentage, DateTime dateDebut, DateTime dateFin, Produit produit)
+    public Promotion(int id, string nom, string description, double pourcentage, DateTime dateDebut, DateTime dateFin, Produit produit)
     {
+        Id = id;
         Nom = nom;
         Description = description;
         Pourcentage = pourcentage;

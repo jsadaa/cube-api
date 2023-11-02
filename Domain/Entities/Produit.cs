@@ -15,8 +15,9 @@ public class Produit
     public Promotion? Promotion { get; set; }
     public FamilleProduit FamilleProduit { get; set; }
     
-    public Produit(string nom, string description, int quantite, int seuilDisponibilite, string statutStock, double prixAchat, double prixVente, DateTime dateAchat, DateTime datePeremption, FamilleProduit familleProduit)
+    public Produit(int id, string nom, string description, int quantite, int seuilDisponibilite, string statutStock, double prixAchat, double prixVente, DateTime dateAchat, DateTime datePeremption, FamilleProduit familleProduit)
     {
+        Id = id;
         Nom = nom;
         Description = description;
         Quantite = quantite;

@@ -1,5 +1,6 @@
 using ApiCube.Domain.Entities;
 using ApiCube.DTOs.Requests;
+using ApiCube.DTOs.Responses;
 using ApiCube.Models;
 using ApiCube.Repositories.Interfaces;
 
@@ -33,7 +34,7 @@ public class PromotionRepository : IPromotionRepository
         }
     }
     
-    public AjouterPromotionRequest? Trouver(int id)
+    public PromotionDTO? Trouver(int id)
     {
         PromotionModel? promotion = null;
         
@@ -47,7 +48,7 @@ public class PromotionRepository : IPromotionRepository
             return null;
         }
         
-        return new AjouterPromotionRequest
+        return new PromotionDTO
         {
             Id = promotion.Id,
             Nom = promotion.Nom,
@@ -58,15 +59,15 @@ public class PromotionRepository : IPromotionRepository
         };
     }
     
-    public List<AjouterPromotionRequest> Lister()
+    public List<PromotionDTO> Lister()
     {
-        List<AjouterPromotionRequest> promotions = new List<AjouterPromotionRequest>();
+        List<PromotionDTO> promotions = new List<PromotionDTO>();
         
         using (_context)
         {
             promotions.AddRange(
                 _context.Promotions
-                    .Select(promotion => new AjouterPromotionRequest
+                    .Select(promotion => new PromotionDTO()
                     {
                         Id = promotion.Id,
                         Nom = promotion.Nom,
