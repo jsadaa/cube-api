@@ -1,4 +1,5 @@
 using ApiCube;
+using ApiCube.Domain.Entities;
 using ApiCube.Domain.Factories;
 using ApiCube.Repositories;
 using ApiCube.Repositories.Interfaces;
@@ -23,7 +24,9 @@ builder.Services.AddScoped<IPromotionRepository , PromotionRepository>();
 builder.Services.AddScoped<IProduitRepository , ProduitRepository>();
 builder.Services.AddScoped<IProduitService , ProduitService>();
 builder.Services.AddScoped<ProduitFactory>();
-
+builder.Services.AddScoped<TransactionStock>();
+builder.Services.AddScoped<TransactionStockFactory>();
+builder.Services.AddScoped<ITransactionStockRepository , TransactionStockRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
