@@ -5,9 +5,9 @@ namespace ApiCube.Repositories.Interfaces;
 
 public interface ITransactionStockRepository
 {
-    public void Ajouter(TransactionStock transactionStock);
+    public void Ajouter(TransactionStockDTO transactionStock);
     public TransactionStockDTO? Trouver(int id);
     public List<TransactionStockDTO> Lister();
-    public void Modifier(int id, TransactionStock transactionStock);
+    public void Modifier(int id, TransactionStockDTO transactionStock);
     public void Supprimer(int id);
 }
