@@ -5,9 +5,6 @@ namespace ApiCube.DTOs.Requests;
 public class AjouterPromotionRequest
 {
     [Required]
-    public int Id { get; set; }
-    
-    [Required]
     public string Nom { get; set; } = null!;
     
     [Required]
@@ -21,4 +18,7 @@ public class AjouterPromotionRequest
     
     [Required]
     public double Pourcentage { get; set; }
+    
+    [Required]
+    public int ProduitId { get; set; }
 }

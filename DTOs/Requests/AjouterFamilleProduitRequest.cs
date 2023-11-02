@@ -1,12 +1,10 @@
-using Microsoft.Build.Framework;
+
+using System.ComponentModel.DataAnnotations;
 
 namespace ApiCube.DTOs.Requests;
 
 public class AjouterFamilleProduitRequest
 {
-    [Required]
-    public int Id { get; set; }
-    
     [Required]
     public string Nom { get; set; } = null!;
     

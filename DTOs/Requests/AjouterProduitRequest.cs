@@ -6,9 +6,6 @@ public class AjouterProduitRequest
 {
     
     [Required]
-    public int Id { get; set; }
-    
-    [Required]
     public string Nom { get; set; }
     
     [Required]
