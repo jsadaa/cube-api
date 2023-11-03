@@ -1,3 +1,6 @@
+using ApiCube.DTOs.Requests;
+using ApiCube.DTOs.Responses;
+
 namespace ApiCube.Domain.Entities;
 
 public class Promotion
@@ -24,5 +27,30 @@ public class Promotion
     public bool EstValide()
     {
         return DateDebut < DateTime.Now && DateFin > DateTime.Now;
+    }
+    
+    public PromotionDTO ToResponsesDTO()
+    {
+        return new PromotionDTO
+        {
+            Id = Id,
+            Nom = Nom,
+            Description = Description,
+            Pourcentage = Pourcentage,
+            DateDebut = DateDebut,
+            DateFin = DateFin,
+        };
+    }
+    
+    public AjouterPromotionRequest ToRequestDTO()
+    {
+        return new AjouterPromotionRequest
+        {
+            Nom = Nom,
+            Description = Description,
+            Pourcentage = Pourcentage,
+            DateDebut = DateDebut,
+            DateFin = DateFin,
+        };
     }
 }

@@ -36,4 +36,7 @@ public class ProduitDTO
     
     [Required]
     public string FamilleProduitNom { get; set; } = null!;
+    
+    [Required]
+    public string FournisseurNom { get; set; } = null!;
 }

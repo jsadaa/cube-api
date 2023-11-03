@@ -1,13 +1,12 @@
-using ApiCube.Domain.Entities;
 using ApiCube.DTOs.Responses;
 
-namespace ApiCube.Repositories.Interfaces;
+namespace ApiCube.Repositories.TransactionStock;
 
 public interface ITransactionStockRepository
 {
-    public void Ajouter(TransactionStockDTO transactionStock);
+    public int Ajouter(TransactionStockDTO transactionStock);
     public TransactionStockDTO? Trouver(int id);
     public List<TransactionStockDTO> Lister();
-    public void Modifier(int id, TransactionStockDTO transactionStock);
+    public int? Modifier(int id, TransactionStockDTO transactionStock);
     public void Supprimer(int id);
 }

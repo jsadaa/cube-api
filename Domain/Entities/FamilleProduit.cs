@@ -1,3 +1,6 @@
+using ApiCube.DTOs.Requests;
+using ApiCube.DTOs.Responses;
+
 namespace ApiCube.Domain.Entities;
 
 public class FamilleProduit
@@ -28,5 +31,24 @@ public class FamilleProduit
     public ICollection<Produit?> ObtenirProduits()
     {
         return Produits;
+    }
+    
+    public FamilleProduitDTO ToResponseDTO()
+    {
+        return new FamilleProduitDTO
+        {
+            Id = Id,
+            Nom = Nom,
+            Description = Description
+        };
+    }
+    
+    public AjouterFamilleProduitRequest ToRequestDTO()
+    {
+        return new AjouterFamilleProduitRequest
+        {
+            Nom = Nom,
+            Description = Description
+        };
     }
 }

@@ -26,7 +26,7 @@ namespace ApiCube.Controllers
         [ProducesResponseType(typeof(string), 400)]
         public IActionResult AjouterUneFamilleProduit([FromBody] AjouterFamilleProduitRequest ajouterFamilleProduitRequest)
         {
-            BaseResponse response = _familleProduitService.AjouterFamilleProduit(ajouterFamilleProduitRequest);
+            BaseResponse response = _familleProduitService.AjouterUneFamilleProduit(ajouterFamilleProduitRequest);
             
             return StatusCode(response.StatusCode, response.Data);
         }
@@ -35,7 +35,7 @@ namespace ApiCube.Controllers
         [ProducesResponseType(typeof(List<FamilleProduitDTO>), 200)]
         public IActionResult ListerLesFamillesProduits()
         {
-            BaseResponse response = _familleProduitService.ListerFamillesProduits();
+            BaseResponse response = _familleProduitService.ListerLesFamillesProduits();
             
             return StatusCode(response.StatusCode, response.Data);
         }

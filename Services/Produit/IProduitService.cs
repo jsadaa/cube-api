@@ -1,7 +1,7 @@
 using ApiCube.DTOs.Requests;
 using ApiCube.DTOs.Responses;
 
-namespace ApiCube.Services.ProduitService;
+namespace ApiCube.Services.Produit;
 
 public interface IProduitService
 {

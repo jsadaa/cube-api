@@ -1,10 +1,8 @@
-using ApiCube.Domain.Entities;
 using ApiCube.DTOs.Responses;
 using ApiCube.Models;
-using ApiCube.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace ApiCube.Repositories;
+namespace ApiCube.Repositories.TransactionStock;
 
 public class TransactionStockRepository : ITransactionStockRepository
 {
@@ -15,17 +13,22 @@ public class TransactionStockRepository : ITransactionStockRepository
         _context = context;
     }
     
-    public void Ajouter(TransactionStockDTO transactionStock)
+    public int Ajouter(TransactionStockDTO transactionStock)
     {
         TransactionStockModel nouvelleTransactionStock = new TransactionStockModel
         {
             Quantite = transactionStock.Quantite,
             Date = transactionStock.Date,
+            Type = transactionStock.Type,
             ProduitId = transactionStock.ProduitId,
+            PrixUnitaire = transactionStock.PrixUnitaire,
+            PrixTotal = transactionStock.PrixTotal
         };
         
         _context.TransactionsStock.Add(nouvelleTransactionStock);
         _context.SaveChanges();
+        
+        return nouvelleTransactionStock.Id;
     }
 
     public TransactionStockDTO? Trouver(int id)
@@ -71,20 +74,22 @@ public class TransactionStockRepository : ITransactionStockRepository
         return transactionsStock;
     }
     
-    public void Modifier(int id, TransactionStockDTO transactionStock)
+    public int? Modifier(int id, TransactionStockDTO transactionStock)
     {
         TransactionStockModel? transactionStockAModifier = null;
         transactionStockAModifier = _context.TransactionsStock.Find(id);
         
-        if (transactionStockAModifier == null) return;
+        if (transactionStockAModifier == null) return null;
         
         transactionStockAModifier.Quantite = transactionStock.Quantite;
         transactionStockAModifier.Date = transactionStock.Date;
-        transactionStockAModifier.Type = transactionStock.Type.ToString();
+        transactionStockAModifier.Type = transactionStock.Type;
         transactionStockAModifier.ProduitId = transactionStock.ProduitId;
         
         _context.TransactionsStock.Update(transactionStockAModifier);
         _context.SaveChanges();
+        
+        return transactionStockAModifier.Id;
     }
 
     public void Supprimer(int id)

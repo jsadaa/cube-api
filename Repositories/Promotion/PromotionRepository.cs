@@ -1,10 +1,8 @@
-using ApiCube.Domain.Entities;
 using ApiCube.DTOs.Requests;
 using ApiCube.DTOs.Responses;
 using ApiCube.Models;
-using ApiCube.Repositories.Interfaces;
 
-namespace ApiCube.Repositories;
+namespace ApiCube.Repositories.Promotion;
 
 public class PromotionRepository : IPromotionRepository
 {
@@ -15,7 +13,7 @@ public class PromotionRepository : IPromotionRepository
         _context = context;
     }
     
-    public void Ajouter(AjouterPromotionRequest promotion)
+    public int Ajouter(AjouterPromotionRequest promotion)
     {
         PromotionModel nouvellePromotion = new PromotionModel
         {
@@ -29,6 +27,8 @@ public class PromotionRepository : IPromotionRepository
         
         _context.Promotions.Add(nouvellePromotion);
         _context.SaveChanges();
+        
+        return nouvellePromotion.Id;
     }
     
     public PromotionDTO? Trouver(int id)
@@ -72,25 +72,27 @@ public class PromotionRepository : IPromotionRepository
         return promotions;
     }
     
-    public void Modifier(int id, AjouterPromotionRequest promotion)
+    public int? Modifier(int id, AjouterPromotionRequest promotion)
     {
-        PromotionModel? promotionModifiée = null;
-        promotionModifiée = _context.Promotions.Find(id);
+        PromotionModel? promotionAModifier = null;
+        promotionAModifier = _context.Promotions.Find(id);
         
-        if (promotionModifiée == null)
+        if (promotionAModifier == null)
         {
-            return;
+            return null;
         }
         
-        promotionModifiée.Nom = promotion.Nom;
-        promotionModifiée.Description = promotion.Description;
-        promotionModifiée.DateDebut = promotion.DateDebut;
-        promotionModifiée.DateFin = promotion.DateFin;
-        promotionModifiée.Pourcentage = promotion.Pourcentage;
-        promotionModifiée.ProduitId = promotion.ProduitId;
+        promotionAModifier.Nom = promotion.Nom;
+        promotionAModifier.Description = promotion.Description;
+        promotionAModifier.DateDebut = promotion.DateDebut;
+        promotionAModifier.DateFin = promotion.DateFin;
+        promotionAModifier.Pourcentage = promotion.Pourcentage;
+        promotionAModifier.ProduitId = promotion.ProduitId;
         
-        _context.Promotions.Update(promotionModifiée);
+        _context.Promotions.Update(promotionAModifier);
         _context.SaveChanges();
+        
+        return promotionAModifier.Id;
     }
     
     public void Supprimer(int id)

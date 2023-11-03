@@ -1,11 +1,9 @@
-using ApiCube.Domain.Entities;
 using ApiCube.DTOs.Requests;
 using ApiCube.DTOs.Responses;
 using ApiCube.Models;
-using ApiCube.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace ApiCube.Repositories;
+namespace ApiCube.Repositories.Produit;
 
 public class ProduitRepository : IProduitRepository
 {
@@ -16,7 +14,7 @@ public class ProduitRepository : IProduitRepository
         _context = context;
     }
     
-    public void Ajouter(AjouterProduitRequest produit)
+    public int Ajouter(AjouterProduitRequest produit)
     {
         ProduitModel nouveauProduit = new ProduitModel
         {
@@ -26,6 +24,7 @@ public class ProduitRepository : IProduitRepository
             StatutStock = produit.StatutStock,
             Quantite = produit.Quantite,
             FamilleProduitId = produit.FamilleProduitId,
+            FournisseurId = produit.FournisseurId,
             PrixAchat = produit.PrixAchat,
             PrixVente = produit.PrixVente,
             DateAchat = produit.DateAchat,
@@ -34,6 +33,8 @@ public class ProduitRepository : IProduitRepository
         
         _context.Produits.Add(nouveauProduit);
         _context.SaveChanges();
+        
+        return nouveauProduit.Id;
     }
     
     public List<ProduitDTO> Lister()
@@ -43,6 +44,7 @@ public class ProduitRepository : IProduitRepository
         produits.AddRange(
             _context.Produits
                 .Include(produit => produit.FamilleProduit)
+                .Include(produit => produit.Fournisseur)
                 .Select(produit => new ProduitDTO
                 {
                     Id = produit.Id,
@@ -52,6 +54,7 @@ public class ProduitRepository : IProduitRepository
                     StatutStock = produit.StatutStock,
                     Quantite = produit.Quantite,
                     FamilleProduitNom = produit.FamilleProduit.Nom,
+                    FournisseurNom = produit.Fournisseur.Nom,
                     PrixAchat = produit.PrixAchat,
                     PrixVente = produit.PrixVente,
                     DateAchat = produit.DateAchat,
@@ -68,6 +71,7 @@ public class ProduitRepository : IProduitRepository
         ProduitModel? produit = null;
         produit = _context.Produits
             .Include(produit => produit.FamilleProduit)
+            .Include(produit => produit.Fournisseur)
             .FirstOrDefault(produit => produit.Id == id);
 
         if (produit == null) return null;
@@ -81,6 +85,7 @@ public class ProduitRepository : IProduitRepository
             StatutStock = produit.StatutStock,
             Quantite = produit.Quantite,
             FamilleProduitNom = produit.FamilleProduit.Nom,
+            FournisseurNom = produit.Fournisseur.Nom,
             PrixAchat = produit.PrixAchat,
             PrixVente = produit.PrixVente,
             DateAchat = produit.DateAchat,
@@ -90,29 +95,32 @@ public class ProduitRepository : IProduitRepository
         return produitDTO;
     }
 
-    public void Modifier(int id, AjouterProduitRequest produit)
+    public int? Modifier(int id, AjouterProduitRequest produit)
     {
-        ProduitModel? produitModifié = null;
-        produitModifié = _context.Produits.Find(id);
+        ProduitModel? produitAModifier = null;
+        produitAModifier = _context.Produits.Find(id);
         
-        if (produitModifié == null)
+        if (produitAModifier == null)
         {
-            return;
+            return null;
         }
         
-        produitModifié.Nom = produit.Nom;
-        produitModifié.Description = produit.Description;
-        produitModifié.SeuilDisponibilite = produit.SeuilDisponibilite;
-        produitModifié.StatutStock = produit.StatutStock;
-        produitModifié.Quantite = produit.Quantite;
-        produitModifié.FamilleProduitId = produit.FamilleProduitId;
-        produitModifié.PrixAchat = produit.PrixAchat;
-        produitModifié.PrixVente = produit.PrixVente;
-        produitModifié.DateAchat = produit.DateAchat;
-        produitModifié.DatePeremption = produit.DatePeremption;
+        produitAModifier.Nom = produit.Nom;
+        produitAModifier.Description = produit.Description;
+        produitAModifier.SeuilDisponibilite = produit.SeuilDisponibilite;
+        produitAModifier.StatutStock = produit.StatutStock;
+        produitAModifier.Quantite = produit.Quantite;
+        produitAModifier.FamilleProduitId = produit.FamilleProduitId;
+        produitAModifier.FournisseurId = produit.FournisseurId;
+        produitAModifier.PrixAchat = produit.PrixAchat;
+        produitAModifier.PrixVente = produit.PrixVente;
+        produitAModifier.DateAchat = produit.DateAchat;
+        produitAModifier.DatePeremption = produit.DatePeremption;
         
-        _context.Produits.Update(produitModifié);
+        _context.Produits.Update(produitAModifier);
         _context.SaveChanges();
+        
+        return produitAModifier.Id;
     }
 
     public void Supprimer(int id)

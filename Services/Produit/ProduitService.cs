@@ -4,10 +4,10 @@ using ApiCube.Domain.Factories;
 using ApiCube.Domain.Stock;
 using ApiCube.DTOs.Requests;
 using ApiCube.DTOs.Responses;
-using ApiCube.Repositories;
-using ApiCube.Repositories.Interfaces;
+using ApiCube.Repositories.Produit;
+using ApiCube.Repositories.TransactionStock;
 
-namespace ApiCube.Services.ProduitService;
+namespace ApiCube.Services.Produit;
 
 public class ProduitService : IProduitService
 {
@@ -28,20 +28,12 @@ public class ProduitService : IProduitService
     {
         try
         {
-            Produit nouveauProduit = _produitFactory.CreerProduit(produitRequest);
-            TransactionStock transactionStock = _transactionStockFactory.CreerTransactionStock(nouveauProduit, TypeTransactionStock.Achat);
-            TransactionStockDTO transactionStockDTO = new TransactionStockDTO
-            {
-                Quantite = transactionStock.Quantite,
-                Date = transactionStock.Date,
-                Type = transactionStock.Type.ToString(),
-                ProduitId = transactionStock.Produit.Id,
-                PrixUnitaire = transactionStock.PrixUnitaire,
-                PrixTotal = transactionStock.PrixTotal
-            };
+            Domain.Entities.Produit nouveauProduit = _produitFactory.CreerProduit(produitRequest);
+            int nouveauProduitId = _produitRepository.Ajouter(nouveauProduit.ToRequestDTO());
             
-            _produitRepository.Ajouter(produitRequest);
-            _transactionStockRepository.Ajouter(transactionStockDTO);
+            nouveauProduit.Id = nouveauProduitId;
+            TransactionStock transactionStock = _transactionStockFactory.CreerTransactionStock(nouveauProduit, TypeTransactionStock.Achat);
+            _transactionStockRepository.Ajouter(transactionStock.ToDTO());
             
             BaseResponse response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
@@ -55,7 +47,7 @@ public class ProduitService : IProduitService
             BaseResponse response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
                 data: new { message = e.Message }
-                );
+            );
             
             return response;
         }

@@ -5,7 +5,7 @@ namespace ApiCube.Services.FamilleProduit;
 
 public interface IFamilleProduitService
 {
-    public BaseResponse AjouterFamilleProduit(AjouterFamilleProduitRequest familleProduitRequest);
+    public BaseResponse AjouterUneFamilleProduit(AjouterFamilleProduitRequest familleProduitRequest);
     
-    public BaseResponse ListerFamillesProduits();
+    public BaseResponse ListerLesFamillesProduits();
 }

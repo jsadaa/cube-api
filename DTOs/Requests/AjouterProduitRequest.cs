@@ -34,4 +34,7 @@ public class AjouterProduitRequest
     
     [Required]
     public int FamilleProduitId { get; set; }
+    
+    [Required]
+    public int FournisseurId { get; set; }
 }

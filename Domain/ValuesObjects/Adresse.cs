@@ -53,6 +53,6 @@ public class Adresse
     
     public override string ToString()
     {
-        return Numero + " " + Rue + " " + CodePostal + " " + Ville + " " + Pays;
+        return Numero + ", " + Rue + ", " + CodePostal + ", " + Ville + ", " + Pays;
     }
 }

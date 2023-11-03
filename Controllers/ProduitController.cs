@@ -1,6 +1,6 @@
 using ApiCube.DTOs.Requests;
 using ApiCube.DTOs.Responses;
-using ApiCube.Services.ProduitService;
+using ApiCube.Services.Produit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiCube.Controllers;

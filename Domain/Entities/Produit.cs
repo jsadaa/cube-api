@@ -1,3 +1,6 @@
+using ApiCube.DTOs.Requests;
+using ApiCube.DTOs.Responses;
+
 namespace ApiCube.Domain.Entities;
 
 public class Produit
@@ -14,8 +17,9 @@ public class Produit
     public DateTime DatePeremption { get; set; }
     public Promotion? Promotion { get; set; }
     public FamilleProduit FamilleProduit { get; set; }
+    public Fournisseur Fournisseur { get; set; }
     
-    public Produit(int id, string nom, string description, int quantite, int seuilDisponibilite, string statutStock, double prixAchat, double prixVente, DateTime dateAchat, DateTime datePeremption, FamilleProduit familleProduit)
+    public Produit(int id, string nom, string description, int quantite, int seuilDisponibilite, string statutStock, double prixAchat, double prixVente, DateTime dateAchat, DateTime datePeremption, FamilleProduit familleProduit, Fournisseur fournisseur)
     {
         Id = id;
         Nom = nom;
@@ -28,6 +32,7 @@ public class Produit
         DateAchat = dateAchat;
         DatePeremption = datePeremption;
         FamilleProduit = familleProduit;
+        Fournisseur = fournisseur;
     }
     
     public void MettreStockAjour(int quantite)
@@ -47,7 +52,7 @@ public class Produit
     
     public bool EstEnPromotion()
     {
-        return Promotion != null;
+        return Promotion != null && Promotion.EstValide();
     }
     
     public bool EstPerime()
@@ -80,6 +85,43 @@ public class Produit
     public double CalculerPrixDeVente()
     {
         return EstEnPromotion() ? CalculerPrixAvecPromotion() : PrixVente;
+    }
+    
+    public ProduitDTO ToResponseDTO()
+    {
+        return new ProduitDTO
+        {
+            Id = Id,
+            Nom = Nom,
+            Description = Description,
+            Quantite = Quantite,
+            SeuilDisponibilite = SeuilDisponibilite,
+            StatutStock = StatutStock,
+            PrixAchat = PrixAchat,
+            PrixVente = PrixVente,
+            DateAchat = DateAchat,
+            DatePeremption = DatePeremption,
+            FamilleProduitNom = FamilleProduit.Nom,
+            FournisseurNom = Fournisseur.Nom
+        };
+    }
+    
+    public AjouterProduitRequest ToRequestDTO()
+    {
+        return new AjouterProduitRequest
+        {
+            Nom = Nom,
+            Description = Description,
+            Quantite = Quantite,
+            SeuilDisponibilite = SeuilDisponibilite,
+            StatutStock = StatutStock,
+            PrixAchat = PrixAchat,
+            PrixVente = PrixVente,
+            DateAchat = DateAchat,
+            DatePeremption = DatePeremption,
+            FamilleProduitId = FamilleProduit.Id,
+            FournisseurId = Fournisseur.Id
+        };
     }
     
     
