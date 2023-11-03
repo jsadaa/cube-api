@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApiCube.Persistence.Models;
 
+[Table("stock")]
 public class StockModel
 {
     [Column ("id")]

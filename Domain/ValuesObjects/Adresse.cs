@@ -45,12 +45,7 @@ public class Adresse
     {
         Pays = pays;
     }
-    
-    public bool EstValide()
-    {
-        return Numero != null && Rue != null && CodePostal != null && Ville != null && Pays != null;
-    }
-    
+  
     public override string ToString()
     {
         return Numero + ", " + Rue + ", " + CodePostal + ", " + Ville + ", " + Pays;

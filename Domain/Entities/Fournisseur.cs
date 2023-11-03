@@ -6,7 +6,7 @@ namespace ApiCube.Domain.Entities;
 
 public class Fournisseur
 {
-    public int Id { get; set; }
+    public int Id { get; set; } = 0;
     
     public string Nom { get; set; }
     
@@ -16,7 +16,15 @@ public class Fournisseur
     
     public string Email { get; set; }
     
-    public ICollection<Produit> Produits { get; set; }
+    public ICollection<Produit>? Produits { get; set; }
+    
+    public Fournisseur(string nom, string adresse, string telephone, string email)
+    {
+        Nom = nom;
+        Adresse = ValiderEtFormaterAdresse(adresse);
+        Telephone = ValiderEtFormaterTelephone(telephone);
+        Email = email;
+    }
     
     public Fournisseur(int id, string nom, string adresse, string telephone, string email)
     {

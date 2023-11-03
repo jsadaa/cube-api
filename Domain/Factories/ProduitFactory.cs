@@ -17,6 +17,12 @@ public class ProduitFactory
         _fournisseurRepository = fournisseurRepository;
     }
     
+    /// <summary>
+    /// Créer un produit à partir d'une requête
+    /// </summary>
+    /// <param name="produitRequest"> La requête </param>
+    /// <returns> Produit </returns>
+    /// <exception cref="Exception"> Si la famille de produit ou le fournisseur n'existe pas </exception>
     public Produit CreerProduit(AjouterProduitRequest produitRequest)
     {
         FamilleProduitDTO? familleProduitDTO = _familleProduitRepository.Trouver(produitRequest.FamilleProduitId);
@@ -40,7 +46,6 @@ public class ProduitFactory
         );
         
         Produit nouveauProduit = new Produit(
-            id: 0,
             nom: produitRequest.Nom,
             description: produitRequest.Description,
             appellation: produitRequest.Appellation,

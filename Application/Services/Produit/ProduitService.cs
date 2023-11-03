@@ -24,10 +24,6 @@ public class ProduitService : IProduitService
             Domain.Entities.Produit nouveauProduit = _produitFactory.CreerProduit(produitRequest);
             _produitRepository.Ajouter(nouveauProduit.ToRequestDTO());
             
-            /*nouveauProduit.Id = nouveauProduitId;
-            TransactionStock transactionStock = _transactionStockFactory.CreerTransactionStock(nouveauProduit, TypeTransactionStock.Achat);
-            _transactionStockRepository.Ajouter(transactionStock.ToDTO());*/
-            
             BaseResponse response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
                 data: new { message = "Produit ajouté au stock avec succès" }

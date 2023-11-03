@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ApiCube.Persistence.Repositories.Stock;
 
-public class StockRepository
+public class StockRepository : IStockRepository
 {
     private readonly ApiDbContext _context;
     

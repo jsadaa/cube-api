@@ -20,6 +20,9 @@ public class TransactionStockDTO
     public int ProduitId { get; set; } 
     
     [Required]
+    public int StockId { get; set; }
+    
+    [Required]
     public double PrixUnitaire { get; set; }
    
     [Required]

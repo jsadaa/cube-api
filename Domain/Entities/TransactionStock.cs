@@ -16,34 +16,33 @@ public class TransactionStock
     
     public Produit Produit { get; set; }
     
+    public Stock Stock { get; set; }
+    
     public double PrixUnitaire { get; set; }
     
     public double PrixTotal { get; set; }
     
-    public TransactionStock(int id, int quantite, DateTime date, TypeTransactionStock type, Produit produit, double prixUnitaire)
+    public TransactionStock(int id, int quantite, DateTime date, TypeTransactionStock type, Produit produit, Stock stock, double prixUnitaire)
     {
         Id = id;
         Quantite = quantite;
         Date = date;
         Type = type;
         Produit = produit;
+        Stock = stock;
         PrixUnitaire = prixUnitaire;
         PrixTotal = CalculerPrixTotal();
     }
     
-    public TransactionStock(int quantite, DateTime date, TypeTransactionStock type, Produit produit, double prixUnitaire)
+    public TransactionStock(int quantite, DateTime date, TypeTransactionStock type, Produit produit, Stock stock, double prixUnitaire)
     {
         Quantite = quantite;
         Date = date;
         Type = type;
         Produit = produit;
+        Stock = stock;
         PrixUnitaire = prixUnitaire;
         PrixTotal = CalculerPrixTotal();
-    }
-    
-    public void MettreAJourQuantite(int quantite)
-    {
-        Quantite = quantite;
     }
     
     public double CalculerPrixTotal()
@@ -53,42 +52,42 @@ public class TransactionStock
     
     public bool EstUneEntree()
     {
-        return Type == TypeTransactionStock.Achat || Type == TypeTransactionStock.Retour;
+        return Type is TypeTransactionStock.Achat or TypeTransactionStock.Retour;
     }
     
     public bool EstUneSortie()
     {
-        return Type == TypeTransactionStock.Vente || Type == TypeTransactionStock.Perte || Type == TypeTransactionStock.Vol || Type == TypeTransactionStock.Peremption;
+        return Type is TypeTransactionStock.Vente or TypeTransactionStock.Perte or TypeTransactionStock.Vol or TypeTransactionStock.Peremption;
     }
     
     public bool EstUnePerte()
     {
-        return Type == TypeTransactionStock.Perte;
+        return Type is TypeTransactionStock.Perte;
     }
     
     public bool EstUnVol()
     {
-        return Type == TypeTransactionStock.Vol;
+        return Type is TypeTransactionStock.Vol;
     }
     
     public bool EstUnePeremption()
     {
-        return Type == TypeTransactionStock.Peremption;
+        return Type is TypeTransactionStock.Peremption;
     }
     
     public bool EstUneVente()
     {
-        return Type == TypeTransactionStock.Vente;
+        return Type is TypeTransactionStock.Vente;
     }
     
     public bool EstUnAchat()
     {
-        return Type == TypeTransactionStock.Achat;
+        return Type is TypeTransactionStock.Achat;
     }
     
     public bool EstUnRetour()
     {
-        return Type == TypeTransactionStock.Retour;
+        return Type is TypeTransactionStock.Retour;
     }
     
     public bool EstUneEntreeEnStock()
@@ -109,6 +108,7 @@ public class TransactionStock
             Quantite = Quantite,
             Date = Date,
             Type = Type.ToString(),
+            StockId = Stock.Id,
             ProduitId = Produit.Id,
             PrixUnitaire = PrixUnitaire,
             PrixTotal = PrixTotal,

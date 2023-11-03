@@ -13,26 +13,27 @@ public class TransactionStockFactory
         _typeTransactionStockMapper = typeTransactionStockMapper;
     }
     
-    public TransactionStock CreerTransactionStock(Produit produit, TypeTransactionStock type)
+    public TransactionStock CreerTransactionStock(Stock stock, TypeTransactionStock type)
     {
         return new TransactionStock(
-            quantite: 0,
+            quantite: stock.Quantite,
             date: DateTime.Now,
             type: type,
-            produit: produit,
-            prixUnitaire: produit.PrixAchat
+            stock: stock,
+            produit: stock.Produit,
+            prixUnitaire: stock.Produit.PrixAchat
         );
     }
     
-    
-    public TransactionStock MapperTransactionStock(Produit produit, TransactionStockDTO transactionStock)
+    public TransactionStock MapperTransactionStock(Stock stock, TransactionStockDTO transactionStock)
     {
         return new TransactionStock(
             id: transactionStock.Id,
             quantite: transactionStock.Quantite,
             date: transactionStock.Date,
             type: _typeTransactionStockMapper.Mapper(transactionStock.Type),
-            produit: produit,
+            stock: stock,
+            produit: stock.Produit,
             prixUnitaire: transactionStock.PrixUnitaire
         );
     }

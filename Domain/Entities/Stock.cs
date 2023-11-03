@@ -16,7 +16,7 @@ public class Stock
     
     public Produit Produit { get; set; }
     
-    public List<TransactionStock?> Transactions { get; set; }
+    public List<TransactionStock> Transactions { get; set; }
     
     public DateTime DateCreation { get; set; }
     
@@ -103,12 +103,18 @@ public class Stock
         return EstEnRupture() || EstPerime();
     }
     
+    public void AjouterTransaction(TransactionStock transactionStock)
+    {
+        Transactions.Add(transactionStock);
+    }
+    
     public AjouterStockRequest ToRequestDTO()
     {
         return new AjouterStockRequest
         {
             Quantite = Quantite,
             SeuilDisponibilite = SeuilDisponibilite,
+            Statut = Statut.ToString(),
             ProduitId = Produit.Id,
             DateCreation = DateCreation,
             DatePeremption = DatePeremption,

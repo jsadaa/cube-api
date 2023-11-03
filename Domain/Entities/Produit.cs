@@ -5,7 +5,7 @@ namespace ApiCube.Domain.Entities;
 
 public class Produit
 {
-    public int Id { get; set; }
+    public int Id { get; set; } = 0;
     public string Nom { get; set; }
     public string Description { get; set; }
     public string Appellation { get; set; }
@@ -18,6 +18,21 @@ public class Produit
     public Promotion? Promotion { get; set; }
     public FamilleProduit FamilleProduit { get; set; }
     public Fournisseur Fournisseur { get; set; }
+    
+    public Produit(string nom, string description,string appellation, string cepage, string region, double degreAlcool, bool enPromotion, double prixAchat, double prixVente, FamilleProduit familleProduit, Fournisseur fournisseur)
+    {
+        Nom = nom;
+        Description = description;
+        Appellation = appellation;
+        Cepage = cepage;
+        Region = region;
+        DegreAlcool = degreAlcool;
+        PrixAchat = prixAchat;
+        PrixVente = prixVente;
+        EnPromotion = enPromotion;
+        FamilleProduit = familleProduit;
+        Fournisseur = fournisseur;
+    }
     
     public Produit(int id, string nom, string description,string appellation, string cepage, string region, double degreAlcool, bool enPromotion, double prixAchat, double prixVente, FamilleProduit familleProduit, Fournisseur fournisseur)
     {
@@ -96,6 +111,4 @@ public class Produit
             FournisseurId = Fournisseur.Id
         };
     }
-    
-    
 }

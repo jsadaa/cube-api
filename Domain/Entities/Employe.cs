@@ -6,7 +6,7 @@ namespace ApiCube.Domain.Entities;
 public class Employe
 {
     
-    public int Id { get; set; }
+    public int Id { get; set; } = 0;
     
     public string Nom { get; set; }
     
@@ -31,6 +31,22 @@ public class Employe
     public string MotDePasse { get; set; }
     
     public Role Role { get; set; }
+    
+    public Employe(string nom, string prenom, string adresse, string telephone, string email, DateTime dateEmbauche, DateTime dateDepart, string statut, double salaire, string login, string motDePasse, Role role)
+    {
+        Nom = nom;
+        Prenom = prenom;
+        Email = email;
+        DateEmbauche = dateEmbauche;
+        DateDepart = dateDepart;
+        Statut = statut;
+        Salaire = salaire;
+        Login = login;
+        MotDePasse = motDePasse;
+        Role = role;
+        Adresse = ValiderEtFormaterAdresse(adresse);
+        Telephone = ValiderEtFormaterTelephone(telephone);
+    }
     
     public Employe(int id, string nom, string prenom, string adresse, string telephone, string email, DateTime dateEmbauche, DateTime dateDepart, string statut, double salaire, string login, string motDePasse, Role role)
     {

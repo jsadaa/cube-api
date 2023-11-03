@@ -32,6 +32,13 @@ public class TransactionStockModel
     [ForeignKey("ProduitId")]
     public ProduitModel Produit { get; set; }
     
+    [Column("stock_id")]
+    [Required]
+    public int StockId { get; set; }
+    
+    [ForeignKey("StockId")]
+    public StockModel Stock { get; set; }
+    
     [Column("prix_unitaire")]
     [Required]
     public double PrixUnitaire { get; set; }

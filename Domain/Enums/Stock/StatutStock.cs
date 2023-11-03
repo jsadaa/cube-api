@@ -16,3 +16,27 @@ public enum StatutStock
     Casse,
     Autre,
 }
+
+public class StatutStockMapper
+{
+    public StatutStock Mapper(string statut)
+    {
+        return statut switch
+        {
+            "EnStock" => StatutStock.EnStock,
+            "EnRuptureDeStock" => StatutStock.EnRuptureDeStock,
+            "Indisponible" => StatutStock.Indisponible,
+            "EnCommande" => StatutStock.EnCommande,
+            "EnCoursDeLivraison" => StatutStock.EnCoursDeLivraison,
+            "Livre" => StatutStock.Livre,
+            "Perime" => StatutStock.Perime,
+            "Retourne" => StatutStock.Retourne,
+            "Vendu" => StatutStock.Vendu,
+            "Perdu" => StatutStock.Perdu,
+            "Vole" => StatutStock.Vole,
+            "Casse" => StatutStock.Casse,
+            "Autre" => StatutStock.Autre,
+            _ => throw new Exception("Le statut n'existe pas")
+        };
+    }
+}

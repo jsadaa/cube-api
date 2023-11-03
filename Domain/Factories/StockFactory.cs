@@ -13,43 +13,73 @@ public class StockFactory
     private readonly IProduitRepository _produitRepository;
     private readonly ProduitFactory _produitFactory;
     private readonly TransactionStockFactory _transactionStockFactory;
+    private readonly StatutStockMapper _statutStockMapper;
     
-    public StockFactory(ITransactionStockRepository transactionStockRepository, IProduitRepository produitRepository, ProduitFactory produitFactory, TransactionStockFactory transactionStockFactory)
+    public StockFactory(ITransactionStockRepository transactionStockRepository, IProduitRepository produitRepository, ProduitFactory produitFactory, TransactionStockFactory transactionStockFactory, StatutStockMapper statutStockMapper)
     {
         _transactionStockRepository = transactionStockRepository;
         _produitRepository = produitRepository;
         _produitFactory = produitFactory;
         _transactionStockFactory = transactionStockFactory;
+        _statutStockMapper = statutStockMapper;
     }
     
-    private Stock CréerStock(AjouterStockRequest stock)
+    public Stock CréerStock(AjouterStockRequest stockDTO)
     {
-        ProduitDTO? produitDTO = _produitRepository.Trouver(stock.ProduitId);
-        List<TransactionStockDTO> transactionsStockDTO = _transactionStockRepository.ListerParStock(stock.ProduitId);
+        ProduitDTO? produitDTO = _produitRepository.Trouver(stockDTO.ProduitId);
 
         if (produitDTO == null) throw new Exception("Le produit n'existe pas");
               
         Produit produit = _produitFactory.MapperProduit(produitDTO);
         List<TransactionStock> transactionsStock = new List<TransactionStock>();
-
-        foreach (var transactionStock in transactionsStockDTO)
-        {
-            transactionsStock.Add(_transactionStockFactory.MapperTransactionStock(produit, transactionStock));
-        }
         
-        Stock stockEntity = new Stock(
-            stock.Quantite, 
-            stock.SeuilDisponibilite, 
+        Stock stock = new Stock(
+            stockDTO.Quantite, 
+            stockDTO.SeuilDisponibilite, 
             StatutStock.EnStock, 
             produit,
             transactionsStock,
             DateTime.Now, 
-            stock.DatePeremption, 
+            stockDTO.DatePeremption, 
             DateTime.Now, 
             null
         );
         
-        return stockEntity;
+        return stock;
     }
     
+    public Stock MapperStock(StockDTO stockDTO)
+    {
+        ProduitDTO? produitDTO = _produitRepository.Trouver(stockDTO.Produit.Id);
+
+        if (produitDTO == null) throw new Exception("Le produit n'existe pas");
+              
+        Produit produit = _produitFactory.MapperProduit(produitDTO);
+        List<TransactionStockDTO> transactionsStockDTO = _transactionStockRepository.ListerParStock(stockDTO.Id);
+        List<TransactionStock> transactionsStock = new List<TransactionStock>();
+        
+        Stock stock = new Stock(
+            stockDTO.Id,
+            stockDTO.Quantite, 
+            stockDTO.SeuilDisponibilite, 
+            _statutStockMapper.Mapper(stockDTO.Statut),
+            produit,
+            transactionsStock,
+            stockDTO.DateCreation, 
+            stockDTO.DatePeremption, 
+            stockDTO.DateModification, 
+            stockDTO.DateSuppression
+        );
+        
+        transactionsStock = transactionsStockDTO.Select(
+            transactionStockDTO => _transactionStockFactory.MapperTransactionStock(
+                stock, 
+                transactionStockDTO
+            )
+        ).ToList();
+        
+        stock.Transactions = transactionsStock;
+        
+        return stock;
+    }
 }

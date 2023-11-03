@@ -2,12 +2,15 @@ using ApiCube;
 using ApiCube.Application.Services.FamilleProduit;
 using ApiCube.Application.Services.Fournisseur;
 using ApiCube.Application.Services.Produit;
+using ApiCube.Application.Services.Stock;
 using ApiCube.Domain.Entities;
+using ApiCube.Domain.Enums.Stock;
 using ApiCube.Domain.Factories;
 using ApiCube.Persistence.Repositories.FamilleProduit;
 using ApiCube.Persistence.Repositories.Fournisseur;
 using ApiCube.Persistence.Repositories.Produit;
 using ApiCube.Persistence.Repositories.Promotion;
+using ApiCube.Persistence.Repositories.Stock;
 using ApiCube.Persistence.Repositories.TransactionStock;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,6 +38,11 @@ builder.Services.AddScoped<FamilleProduitFactory>();
 builder.Services.AddScoped<FournisseurFactory>();
 builder.Services.AddScoped<IFournisseurRepository , FournisseurRepository>();
 builder.Services.AddScoped<IFournisseurService , FournisseurService>();
+builder.Services.AddScoped<IStockRepository , StockRepository>();
+builder.Services.AddScoped<IStockService , StockService>();
+builder.Services.AddScoped<StockFactory>();
+builder.Services.AddScoped<TypeTransactionStockMapper>();
+builder.Services.AddScoped<StatutStockMapper>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
