@@ -1,4 +1,4 @@
-using ApiCube.Domain.Administration;
+using ApiCube.Domain.Enums.Administration;
 using ApiCube.Domain.ValuesObjects;
 
 namespace ApiCube.Domain.Entities;

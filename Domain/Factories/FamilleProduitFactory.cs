@@ -1,5 +1,5 @@
+using ApiCube.Application.DTOs.Requests;
 using ApiCube.Domain.Entities;
-using ApiCube.DTOs.Requests;
 
 namespace ApiCube.Domain.Factories;
 

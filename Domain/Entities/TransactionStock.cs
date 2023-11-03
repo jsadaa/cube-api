@@ -1,5 +1,5 @@
-using ApiCube.Domain.Stock;
-using ApiCube.DTOs.Responses;
+using ApiCube.Application.DTOs.Responses;
+using ApiCube.Domain.Enums.Stock;
 
 namespace ApiCube.Domain.Entities;
 
@@ -19,6 +19,17 @@ public class TransactionStock
     public double PrixUnitaire { get; set; }
     
     public double PrixTotal { get; set; }
+    
+    public TransactionStock(int id, int quantite, DateTime date, TypeTransactionStock type, Produit produit, double prixUnitaire)
+    {
+        Id = id;
+        Quantite = quantite;
+        Date = date;
+        Type = type;
+        Produit = produit;
+        PrixUnitaire = prixUnitaire;
+        PrixTotal = CalculerPrixTotal();
+    }
     
     public TransactionStock(int quantite, DateTime date, TypeTransactionStock type, Produit produit, double prixUnitaire)
     {

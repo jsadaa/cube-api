@@ -1,6 +1,6 @@
-using ApiCube.DTOs.Requests;
-using ApiCube.DTOs.Responses;
-using ApiCube.Services.Produit;
+using ApiCube.Application.DTOs.Requests;
+using ApiCube.Application.DTOs.Responses;
+using ApiCube.Application.Services.Produit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiCube.Controllers;
@@ -19,9 +19,9 @@ public class ProduitController : ControllerBase
     [HttpPost("ajouter")]
     [ProducesResponseType(typeof(string), 201)]
     [ProducesResponseType(typeof(string), 400)]
-    public IActionResult AjouterUnProduitAuStock([FromBody] AjouterProduitRequest ajouterProduit)
+    public IActionResult AjouterUnProduitAuCatalogue([FromBody] AjouterProduitRequest ajouterProduit)
     {
-        BaseResponse response = _produitService.AjouterUnProduitAuStock(ajouterProduit);
+        BaseResponse response = _produitService.AjouterUnProduitAuCatalogue(ajouterProduit);
         
         return StatusCode(response.StatusCode, response.Data);
     }

@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ApiCube.DTOs.Requests;
-using ApiCube.DTOs.Responses;
-using ApiCube.Services.Fournisseur;
+using ApiCube.Application.DTOs.Requests;
+using ApiCube.Application.DTOs.Responses;
+using ApiCube.Application.Services.Fournisseur;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,21 +1,19 @@
 using ApiCube;
+using ApiCube.Application.Services.FamilleProduit;
+using ApiCube.Application.Services.Fournisseur;
+using ApiCube.Application.Services.Produit;
 using ApiCube.Domain.Entities;
 using ApiCube.Domain.Factories;
-using ApiCube.Repositories;
-using ApiCube.Repositories.FamilleProduit;
-using ApiCube.Repositories.Fournisseur;
-using ApiCube.Repositories.Produit;
-using ApiCube.Repositories.Promotion;
-using ApiCube.Repositories.TransactionStock;
-using ApiCube.Services.FamilleProduit;
-using ApiCube.Services.Fournisseur;
-using ApiCube.Services.Produit;
+using ApiCube.Persistence.Repositories.FamilleProduit;
+using ApiCube.Persistence.Repositories.Fournisseur;
+using ApiCube.Persistence.Repositories.Produit;
+using ApiCube.Persistence.Repositories.Promotion;
+using ApiCube.Persistence.Repositories.TransactionStock;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 
 // Configure Entity Framework Core to use MySQL

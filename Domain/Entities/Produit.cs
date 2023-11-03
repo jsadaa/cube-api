@@ -1,5 +1,5 @@
-using ApiCube.DTOs.Requests;
-using ApiCube.DTOs.Responses;
+using ApiCube.Application.DTOs.Requests;
+using ApiCube.Application.DTOs.Responses;
 
 namespace ApiCube.Domain.Entities;
 
@@ -8,66 +8,41 @@ public class Produit
     public int Id { get; set; }
     public string Nom { get; set; }
     public string Description { get; set; }
-    public int Quantite { get; set; }
-    public int SeuilDisponibilite { get; set; }
-    public string StatutStock { get; set; }
+    public string Appellation { get; set; }
+    public string Cepage { get; set; }
+    public string Region { get; set; }
+    public double DegreAlcool { get; set; }
     public double PrixAchat { get; set; }
     public double PrixVente { get; set; }
-    public DateTime DateAchat { get; set; }
-    public DateTime DatePeremption { get; set; }
+    public bool EnPromotion { get; set; }
     public Promotion? Promotion { get; set; }
     public FamilleProduit FamilleProduit { get; set; }
     public Fournisseur Fournisseur { get; set; }
     
-    public Produit(int id, string nom, string description, int quantite, int seuilDisponibilite, string statutStock, double prixAchat, double prixVente, DateTime dateAchat, DateTime datePeremption, FamilleProduit familleProduit, Fournisseur fournisseur)
+    public Produit(int id, string nom, string description,string appellation, string cepage, string region, double degreAlcool, bool enPromotion, double prixAchat, double prixVente, FamilleProduit familleProduit, Fournisseur fournisseur)
     {
         Id = id;
         Nom = nom;
         Description = description;
-        Quantite = quantite;
-        SeuilDisponibilite = seuilDisponibilite;
-        StatutStock = statutStock;
+        Appellation = appellation;
+        Cepage = cepage;
+        Region = region;
+        DegreAlcool = degreAlcool;
         PrixAchat = prixAchat;
         PrixVente = prixVente;
-        DateAchat = dateAchat;
-        DatePeremption = datePeremption;
+        EnPromotion = enPromotion;
         FamilleProduit = familleProduit;
         Fournisseur = fournisseur;
     }
-    
-    public void MettreStockAjour(int quantite)
-    {
-        Quantite = quantite;
-    }   
     
     public void AppliquerPromotion(Promotion promotion)
     {
         Promotion = promotion;
     }
     
-    public bool EstDisponible()
-    {
-        return Quantite > SeuilDisponibilite;
-    }
-    
     public bool EstEnPromotion()
     {
-        return Promotion != null && Promotion.EstValide();
-    }
-    
-    public bool EstPerime()
-    {
-        return DatePeremption < DateTime.Now;
-    }
-    
-    public bool EstEnRuptureDeStock()
-    {
-        return Quantite == 0;
-    }
-    
-    public bool EstEnStock()
-    {
-        return Quantite > 0;
+        return EnPromotion && Promotion != null;
     }
     
     private double CalculerPrixAvecPromotion()
@@ -94,13 +69,12 @@ public class Produit
             Id = Id,
             Nom = Nom,
             Description = Description,
-            Quantite = Quantite,
-            SeuilDisponibilite = SeuilDisponibilite,
-            StatutStock = StatutStock,
+            Appellation = Appellation,
+            Cepage = Cepage,
+            Region = Region,
+            DegreAlcool = DegreAlcool,
             PrixAchat = PrixAchat,
             PrixVente = PrixVente,
-            DateAchat = DateAchat,
-            DatePeremption = DatePeremption,
             FamilleProduitNom = FamilleProduit.Nom,
             FournisseurNom = Fournisseur.Nom
         };
@@ -112,13 +86,12 @@ public class Produit
         {
             Nom = Nom,
             Description = Description,
-            Quantite = Quantite,
-            SeuilDisponibilite = SeuilDisponibilite,
-            StatutStock = StatutStock,
+            Appellation = Appellation,
+            Cepage = Cepage,
+            Region = Region,
+            DegreAlcool = DegreAlcool,
             PrixAchat = PrixAchat,
             PrixVente = PrixVente,
-            DateAchat = DateAchat,
-            DatePeremption = DatePeremption,
             FamilleProduitId = FamilleProduit.Id,
             FournisseurId = Fournisseur.Id
         };

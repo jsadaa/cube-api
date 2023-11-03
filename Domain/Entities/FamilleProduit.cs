@@ -1,5 +1,5 @@
-using ApiCube.DTOs.Requests;
-using ApiCube.DTOs.Responses;
+using ApiCube.Application.DTOs.Requests;
+using ApiCube.Application.DTOs.Responses;
 
 namespace ApiCube.Domain.Entities;
 

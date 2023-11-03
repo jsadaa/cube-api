@@ -1,6 +1,6 @@
+using ApiCube.Application.DTOs.Requests;
+using ApiCube.Application.DTOs.Responses;
 using ApiCube.Domain.ValuesObjects;
-using ApiCube.DTOs.Requests;
-using ApiCube.DTOs.Responses;
 
 namespace ApiCube.Domain.Entities;
 
