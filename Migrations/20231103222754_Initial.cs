@@ -89,6 +89,26 @@ namespace ApiCube.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "promotion",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    nom = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    description = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    date_debut = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    date_fin = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    pourcentage = table.Column<double>(type: "double", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_promotion", x => x.id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "role",
                 columns: table => new
                 {
@@ -100,6 +120,53 @@ namespace ApiCube.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_role", x => x.id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "produit",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    nom = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    description = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    appellation = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    cepage = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    region = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    degre_alcool = table.Column<double>(type: "double", nullable: false),
+                    prix_achat = table.Column<double>(type: "double", nullable: false),
+                    prix_vente = table.Column<double>(type: "double", nullable: false),
+                    en_promotion = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    promotion_id = table.Column<int>(type: "int", nullable: true),
+                    famille_produit_id = table.Column<int>(type: "int", nullable: false),
+                    fournisseur_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_produit", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_produit_famille_produit_famille_produit_id",
+                        column: x => x.famille_produit_id,
+                        principalTable: "famille_produit",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_produit_fournisseur_fournisseur_id",
+                        column: x => x.fournisseur_id,
+                        principalTable: "fournisseur",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_produit_promotion_promotion_id",
+                        column: x => x.promotion_id,
+                        principalTable: "promotion",
+                        principalColumn: "id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -140,6 +207,35 @@ namespace ApiCube.Migrations
                         column: x => x.RoleModelId,
                         principalTable: "role",
                         principalColumn: "id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "stock",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    quantite = table.Column<int>(type: "int", nullable: false),
+                    seuil_disponibilite = table.Column<int>(type: "int", nullable: false),
+                    statut = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    produit_id = table.Column<int>(type: "int", nullable: false),
+                    date_creation = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    date_peremption = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    date_modification = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    date_suppression = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    est_supprime = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_stock", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_stock_produit_produit_id",
+                        column: x => x.produit_id,
+                        principalTable: "produit",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -206,6 +302,39 @@ namespace ApiCube.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "transaction_stock",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    quantite = table.Column<int>(type: "int", nullable: false),
+                    date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    type = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    produit_id = table.Column<int>(type: "int", nullable: false),
+                    stock_id = table.Column<int>(type: "int", nullable: false),
+                    prix_unitaire = table.Column<double>(type: "double", nullable: false),
+                    prix_total = table.Column<double>(type: "double", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_transaction_stock", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_transaction_stock_produit_produit_id",
+                        column: x => x.produit_id,
+                        principalTable: "produit",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_transaction_stock_stock_stock_id",
+                        column: x => x.stock_id,
+                        principalTable: "stock",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "facture_client",
                 columns: table => new
                 {
@@ -240,6 +369,37 @@ namespace ApiCube.Migrations
                         name: "FK_facture_client_employe_employe_id",
                         column: x => x.employe_id,
                         principalTable: "employe",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ligne_commande_client",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    quantite = table.Column<int>(type: "int", nullable: false),
+                    prix_unitaire = table.Column<double>(type: "double", nullable: false),
+                    remise = table.Column<double>(type: "double", nullable: false),
+                    total = table.Column<double>(type: "double", nullable: false),
+                    produit_id = table.Column<int>(type: "int", nullable: false),
+                    commande_client_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ligne_commande_client", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_ligne_commande_client_commande_client_commande_client_id",
+                        column: x => x.commande_client_id,
+                        principalTable: "commande_client",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ligne_commande_client_produit_produit_id",
+                        column: x => x.produit_id,
+                        principalTable: "produit",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -287,31 +447,6 @@ namespace ApiCube.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "ligne_commande_client",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    quantite = table.Column<int>(type: "int", nullable: false),
-                    prix_unitaire = table.Column<double>(type: "double", nullable: false),
-                    remise = table.Column<double>(type: "double", nullable: false),
-                    total = table.Column<double>(type: "double", nullable: false),
-                    produit_id = table.Column<int>(type: "int", nullable: false),
-                    commande_client_id = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ligne_commande_client", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_ligne_commande_client_commande_client_commande_client_id",
-                        column: x => x.commande_client_id,
-                        principalTable: "commande_client",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "ligne_commande_fournisseur",
                 columns: table => new
                 {
@@ -333,95 +468,8 @@ namespace ApiCube.Migrations
                         principalTable: "commande_fournisseur",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "produit",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    nom = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    description = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    quantite = table.Column<int>(type: "int", nullable: false),
-                    seuil_disponibilite = table.Column<int>(type: "int", nullable: false),
-                    statut_stock = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    prix_achat = table.Column<double>(type: "double", nullable: false),
-                    prix_vente = table.Column<double>(type: "double", nullable: false),
-                    date_achat = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    date_peremption = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    promotion_id = table.Column<int>(type: "int", nullable: true),
-                    famille_produit_id = table.Column<int>(type: "int", nullable: false),
-                    fournisseur_id = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_produit", x => x.id);
                     table.ForeignKey(
-                        name: "FK_produit_famille_produit_famille_produit_id",
-                        column: x => x.famille_produit_id,
-                        principalTable: "famille_produit",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_produit_fournisseur_fournisseur_id",
-                        column: x => x.fournisseur_id,
-                        principalTable: "fournisseur",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "promotion",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    nom = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    description = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    date_debut = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    date_fin = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    pourcentage = table.Column<double>(type: "double", nullable: false),
-                    produit_id = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_promotion", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_promotion_produit_produit_id",
-                        column: x => x.produit_id,
-                        principalTable: "produit",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "transaction_stock",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    quantite = table.Column<int>(type: "int", nullable: false),
-                    date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    type = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    produit_id = table.Column<int>(type: "int", nullable: false),
-                    prix_unitaire = table.Column<double>(type: "double", nullable: false),
-                    prix_total = table.Column<double>(type: "double", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_transaction_stock", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_transaction_stock_produit_produit_id",
+                        name: "FK_ligne_commande_fournisseur_produit_produit_id",
                         column: x => x.produit_id,
                         principalTable: "produit",
                         principalColumn: "id",
@@ -520,8 +568,8 @@ namespace ApiCube.Migrations
                 column: "promotion_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_promotion_produit_id",
-                table: "promotion",
+                name: "IX_stock_produit_id",
+                table: "stock",
                 column: "produit_id");
 
             migrationBuilder.CreateIndex(
@@ -529,41 +577,15 @@ namespace ApiCube.Migrations
                 table: "transaction_stock",
                 column: "produit_id");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_ligne_commande_client_produit_produit_id",
-                table: "ligne_commande_client",
-                column: "produit_id",
-                principalTable: "produit",
-                principalColumn: "id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_ligne_commande_fournisseur_produit_produit_id",
-                table: "ligne_commande_fournisseur",
-                column: "produit_id",
-                principalTable: "produit",
-                principalColumn: "id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_produit_promotion_promotion_id",
-                table: "produit",
-                column: "promotion_id",
-                principalTable: "promotion",
-                principalColumn: "id");
+            migrationBuilder.CreateIndex(
+                name: "IX_transaction_stock_stock_id",
+                table: "transaction_stock",
+                column: "stock_id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_produit_fournisseur_fournisseur_id",
-                table: "produit");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_promotion_produit_produit_id",
-                table: "promotion");
-
             migrationBuilder.DropTable(
                 name: "facture_client");
 
@@ -586,22 +608,25 @@ namespace ApiCube.Migrations
                 name: "commande_fournisseur");
 
             migrationBuilder.DropTable(
+                name: "stock");
+
+            migrationBuilder.DropTable(
                 name: "client");
 
             migrationBuilder.DropTable(
                 name: "employe");
 
             migrationBuilder.DropTable(
-                name: "role");
-
-            migrationBuilder.DropTable(
-                name: "fournisseur");
-
-            migrationBuilder.DropTable(
                 name: "produit");
 
             migrationBuilder.DropTable(
+                name: "role");
+
+            migrationBuilder.DropTable(
                 name: "famille_produit");
+
+            migrationBuilder.DropTable(
+                name: "fournisseur");
 
             migrationBuilder.DropTable(
                 name: "promotion");
