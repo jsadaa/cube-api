@@ -3,26 +3,26 @@ using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Domain.Factories;
 using ApiCube.Persistence.Repositories.FamilleProduit;
+using AutoMapper;
 
 namespace ApiCube.Application.Services.FamilleProduit;
 
 public class FamilleProduitService : IFamilleProduitService
 {
     private readonly IFamilleProduitRepository _familleProduitRepository;
-    private readonly FamilleProduitFactory _familleProduitFactory;
+    private readonly IMapper _mapper;
     
-    public FamilleProduitService(IFamilleProduitRepository familleProduitRepository, FamilleProduitFactory familleProduitFactory)
+    public FamilleProduitService(IFamilleProduitRepository familleProduitRepository, IMapper mapper)
     {
         _familleProduitRepository = familleProduitRepository;
-        _familleProduitFactory = familleProduitFactory;
+        _mapper = mapper;
     }
     
-    public BaseResponse AjouterUneFamilleProduit(AjouterFamilleProduitRequest familleProduitRequest)
+    public BaseResponse AjouterUneFamilleProduit(FamilleProduitRequestDTO familleProduitRequestDTO)
     {
         try
         {
-            Domain.Entities.FamilleProduit nouvelleFamilleProduit = _familleProduitFactory.CreerFamilleProduit(familleProduitRequest);
-            _familleProduitRepository.Ajouter(nouvelleFamilleProduit.ToRequestDTO());
+            _familleProduitRepository.Ajouter(familleProduitRequestDTO);
             
             BaseResponse response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
@@ -46,11 +46,12 @@ public class FamilleProduitService : IFamilleProduitService
     {
         try
         {
-            List<FamilleProduitDTO> famillesProduits = _familleProduitRepository.Lister();
+            List<Domain.Entities.FamilleProduit> famillesProduits = _familleProduitRepository.Lister();
+            List<FamilleProduitResponseDTO> famillesProduitsResponse = _mapper.Map<List<FamilleProduitResponseDTO>>(famillesProduits);
             
             BaseResponse response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: new { famillesProduits }
+                data: new { famillesProduitsResponse }
             );
             
             return response;

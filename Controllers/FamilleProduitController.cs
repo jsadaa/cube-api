@@ -24,15 +24,15 @@ namespace ApiCube.Controllers
         [HttpPost("ajouter")]
         [ProducesResponseType(typeof(string), 201)]
         [ProducesResponseType(typeof(string), 400)]
-        public IActionResult AjouterUneFamilleProduit([FromBody] AjouterFamilleProduitRequest ajouterFamilleProduitRequest)
+        public IActionResult AjouterUneFamilleProduit([FromBody] FamilleProduitRequestDTO familleProduitRequestDTO)
         {
-            BaseResponse response = _familleProduitService.AjouterUneFamilleProduit(ajouterFamilleProduitRequest);
+            BaseResponse response = _familleProduitService.AjouterUneFamilleProduit(familleProduitRequestDTO);
             
             return StatusCode(response.StatusCode, response.Data);
         }
         
         [HttpGet("lister")]
-        [ProducesResponseType(typeof(List<FamilleProduitDTO>), 200)]
+        [ProducesResponseType(typeof(List<FamilleProduitResponseDTO>), 200)]
         public IActionResult ListerLesFamillesProduits()
         {
             BaseResponse response = _familleProduitService.ListerLesFamillesProduits();

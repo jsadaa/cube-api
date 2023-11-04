@@ -1,115 +1,77 @@
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
+using ApiCube.Domain.Factories;
+using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
+using AutoMapper;
 
 namespace ApiCube.Persistence.Repositories.FamilleProduit;
 
 public class FamilleProduitRepository : IFamilleProduitRepository
 {
     private readonly ApiDbContext _context;
+    private readonly IMapper _mapper;
     
-    public FamilleProduitRepository(ApiDbContext context)
+    public FamilleProduitRepository(ApiDbContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
     
-    public int Ajouter(AjouterFamilleProduitRequest familleProduit)
+    public int Ajouter(FamilleProduitRequestDTO familleProduitRequestDTO)
     {
-        FamilleProduitModel nouvelleFamilleProduit = new FamilleProduitModel
-        {
-            Nom = familleProduit.Nom,
-            Description = familleProduit.Description
-        };
+        var nouvelleFamilleProduit = _mapper.Map<Domain.Entities.FamilleProduit>(familleProduitRequestDTO);
+        var nouvelleFamilleProduitModel = _mapper.Map<FamilleProduitModel>(nouvelleFamilleProduit);
         
-        _context.FamillesProduits.Add(nouvelleFamilleProduit);
+        _context.FamillesProduits.Add(nouvelleFamilleProduitModel);
         _context.SaveChanges();
         
-        return nouvelleFamilleProduit.Id;
+        return nouvelleFamilleProduitModel.Id;
     }
     
-    public List<FamilleProduitDTO> Lister()
+    public List<Domain.Entities.FamilleProduit> Lister()
     {
-        List<FamilleProduitDTO> famillesProduits = new List<FamilleProduitDTO>();
+        var famillesProduitModels = _context.FamillesProduits.ToList();
+        var famillesProduits = _mapper.Map<List<Domain.Entities.FamilleProduit>>(famillesProduitModels);
         
-        famillesProduits.AddRange(
-            _context.FamillesProduits
-                .Select(familleProduit => new FamilleProduitDTO
-                {
-                    Id = familleProduit.Id,
-                    Nom = familleProduit.Nom,
-                    Description = familleProduit.Description
-                })
-        );
-
         return famillesProduits;
     }
     
-    public FamilleProduitDTO? Trouver(int id)
+    public Domain.Entities.FamilleProduit? Trouver(int id)
     {
-        FamilleProduitModel? familleProduit = null;
-        familleProduit = _context.FamillesProduits.Find(id);
+        var familleProduitModel = _context.FamillesProduits.Find(id);
+        if (familleProduitModel == null) throw new FamilleProduitIntrouvable();
         
-        if (familleProduit == null)
-        {
-            return null;
-        }
-        
-        return new FamilleProduitDTO
-        {
-            Id = familleProduit.Id,
-            Nom = familleProduit.Nom,
-            Description = familleProduit.Description
-        };
+        return _mapper.Map<Domain.Entities.FamilleProduit>(familleProduitModel);
     }
     
-    public FamilleProduitDTO? Trouver(string nom)
+    public Domain.Entities.FamilleProduit Trouver(string nom)
     {
-        FamilleProduitModel? familleProduit = null;
-        familleProduit = _context.FamillesProduits.FirstOrDefault(familleProduit => familleProduit.Nom == nom);
+        var familleProduitModel = _context.FamillesProduits.FirstOrDefault(familleProduit => familleProduit.Nom == nom);
+        if (familleProduitModel == null) throw new FamilleProduitIntrouvable();
         
-        if (familleProduit == null)
-        {
-            return null;
-        }
-        
-        return new FamilleProduitDTO
-        {
-            Id = familleProduit.Id,
-            Nom = familleProduit.Nom,
-            Description = familleProduit.Description
-        };
+        return _mapper.Map<Domain.Entities.FamilleProduit>(familleProduitModel);
     }
     
-    public int? Modifier(int id, AjouterFamilleProduitRequest familleProduit)
+    public int? Modifier(int id, FamilleProduitRequestDTO familleProduitRequest)
     {
-        FamilleProduitModel? familleProduitAModifier = null;
-        familleProduitAModifier = _context.FamillesProduits.Find(id);
-
-        if (familleProduitAModifier == null)
-        {
-            return null;
-        }
+        var familleProduitModel = _context.FamillesProduits.Find(id);
+        if (familleProduitModel == null) throw new FamilleProduitIntrouvable();
         
-        familleProduitAModifier.Nom = familleProduit.Nom;
-        familleProduitAModifier.Description = familleProduit.Description;
+        var familleProduit = _mapper.Map<Domain.Entities.FamilleProduit>(familleProduitModel);
+        familleProduit.MettreAJour(familleProduitRequest.Nom, familleProduitRequest.Description);
         
-        _context.FamillesProduits.Update(familleProduitAModifier);
-        _context.SaveChanges();
+        _context.FamillesProduits.Update(_mapper.Map<FamilleProduitModel>(familleProduit));
         
-        return familleProduitAModifier.Id;
+        return familleProduitModel.Id;
     }
     
     public void Supprimer(int id)
     {
-        FamilleProduitModel? familleProduit = null;
-        familleProduit = _context.FamillesProduits.Find(id);
+        FamilleProduitModel? familleProduitModel = _context.FamillesProduits.Find(id);
+        if (familleProduitModel == null) throw new FamilleProduitIntrouvable();
         
-        if (familleProduit == null)
-        {
-            return;
-        }
-        
-        _context.FamillesProduits.Remove(familleProduit);
+        _context.FamillesProduits.Remove(familleProduitModel);
         _context.SaveChanges();
     }
 }

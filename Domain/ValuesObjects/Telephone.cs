@@ -2,8 +2,7 @@ namespace ApiCube.Domain.ValuesObjects;
 
 public class Telephone
 {
-    
-    public string Numero { get; set; }
+    private string Numero { get; set; }
     
     public Telephone(string numero)
     {

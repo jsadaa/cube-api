@@ -1,10 +1,12 @@
-
 using System.ComponentModel.DataAnnotations;
 
-namespace ApiCube.Application.DTOs.Requests;
+namespace ApiCube.Application.DTOs.Responses;
 
-public class AjouterFamilleProduitRequest
+public class FamilleProduitResponseDTO
 {
+    [Required]
+    public int Id { get; set; }
+    
     [Required]
     public string Nom { get; set; } = null!;
     

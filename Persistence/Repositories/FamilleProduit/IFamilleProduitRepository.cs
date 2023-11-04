@@ -6,14 +6,14 @@ namespace ApiCube.Persistence.Repositories.FamilleProduit;
 public interface IFamilleProduitRepository
 {
     
-    public int Ajouter(AjouterFamilleProduitRequest familleProduit);
+    public int Ajouter(FamilleProduitRequestDTO familleProduit);
     
-    public List<FamilleProduitDTO> Lister();
+    public List<Domain.Entities.FamilleProduit> Lister();
     
-    public FamilleProduitDTO? Trouver(int id);
-    public FamilleProduitDTO? Trouver(string nom);
+    public Domain.Entities.FamilleProduit? Trouver(int id);
+    public Domain.Entities.FamilleProduit Trouver(string nom);
     
-    public int? Modifier(int id, AjouterFamilleProduitRequest familleProduit);
+    public int? Modifier(int id, FamilleProduitRequestDTO familleProduitRequest);
     
     public void Supprimer(int id);
 }

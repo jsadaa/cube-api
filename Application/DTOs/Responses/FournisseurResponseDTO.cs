@@ -1,6 +1,6 @@
 namespace ApiCube.Application.DTOs.Responses;
 
-public class FournisseurDTO
+public class FournisseurResponseDTO
 {
     public int Id { get; set; }
     

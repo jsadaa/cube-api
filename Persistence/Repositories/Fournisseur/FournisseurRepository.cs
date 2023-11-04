@@ -1,120 +1,79 @@
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
+using ApiCube.Domain.Factories;
+using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
+using AutoMapper;
 
 namespace ApiCube.Persistence.Repositories.Fournisseur;
 
 public class FournisseurRepository : IFournisseurRepository
 {
     private readonly ApiDbContext _context;
+    private readonly IMapper _mapper;
+    private readonly FournisseurFactory _fournisseurFactory;
     
-    public FournisseurRepository(ApiDbContext context)
+    public FournisseurRepository(ApiDbContext context, IMapper mapper, FournisseurFactory fournisseurFactory)
     {
         _context = context;
+        _mapper = mapper;
+        _fournisseurFactory = fournisseurFactory;
     }
     
-    public int Ajouter(AjouterFournisseurRequest fournisseur)
+    public int Ajouter(FournisseurRequestDTO fournisseurRequestDTO)
     {
-        FournisseurModel nouveauFournisseur = new FournisseurModel
-        {
-            Nom = fournisseur.Nom,
-            Adresse = fournisseur.Adresse,
-            Telephone = fournisseur.Telephone,
-            Email = fournisseur.Email
-        };
+        var nouveauFournisseur = _fournisseurFactory.Creer(fournisseurRequestDTO);
+        var nouveauFournisseurModel = _mapper.Map<FournisseurModel>(nouveauFournisseur);
         
-        _context.Fournisseurs.Add(nouveauFournisseur);
+        _context.Fournisseurs.Add(nouveauFournisseurModel);
         _context.SaveChanges();
         
         return nouveauFournisseur.Id;
     }
     
-    public List<FournisseurDTO> Lister()
+    public List<Domain.Entities.Fournisseur> Lister()
     {
-        List<FournisseurDTO> fournisseurs = new List<FournisseurDTO>();
-        
-        fournisseurs.AddRange(
-            _context.Fournisseurs
-                .Select(fournisseur => new FournisseurDTO
-                {
-                    Id = fournisseur.Id,
-                    Nom = fournisseur.Nom,
-                    Adresse = fournisseur.Adresse,
-                    Telephone = fournisseur.Telephone,
-                    Email = fournisseur.Email
-                })
-        );
-        
-        return fournisseurs;
+        var fournisseursModels = _context.Fournisseurs.ToList();
+
+        return fournisseursModels.Select(fournisseurModel => _fournisseurFactory.Mapper(fournisseurModel)).ToList();
     }
     
-    public FournisseurDTO? Trouver(int id)
+    public Domain.Entities.Fournisseur? Trouver(int id)
     {
-        FournisseurModel? fournisseur = _context.Fournisseurs.Find(id);
+        var fournisseurModel = _context.Fournisseurs.Find(id);
+        if (fournisseurModel == null) throw new FournisseurIntrouvable();
         
-        if (fournisseur == null)
-        {
-            return null;
-        }
-        
-        return new FournisseurDTO
-        {
-            Id = fournisseur.Id,
-            Nom = fournisseur.Nom,
-            Adresse = fournisseur.Adresse,
-            Telephone = fournisseur.Telephone,
-            Email = fournisseur.Email
-        };
+        return _fournisseurFactory.Mapper(fournisseurModel);
     }
     
-    public FournisseurDTO? Trouver(string nom)
+    public Domain.Entities.Fournisseur? Trouver(string nom)
     {
-        FournisseurModel? fournisseur = _context.Fournisseurs.FirstOrDefault(fournisseur => fournisseur.Nom == nom);
+        var fournisseurModel = _context.Fournisseurs.FirstOrDefault(fournisseur => fournisseur.Nom == nom);
+        if (fournisseurModel == null) throw new FournisseurIntrouvable();
         
-        if (fournisseur == null)
-        {
-            return null;
-        }
-        
-        return new FournisseurDTO
-        {
-            Id = fournisseur.Id,
-            Nom = fournisseur.Nom,
-            Adresse = fournisseur.Adresse,
-            Telephone = fournisseur.Telephone,
-            Email = fournisseur.Email
-        };
+        return _fournisseurFactory.Mapper(fournisseurModel);
     }
     
-    public int? Modifier(int id, AjouterFournisseurRequest fournisseur)
+    public int? Modifier(int id, FournisseurRequestDTO fournisseurRequest)
     {
-        FournisseurModel? fournisseurAModifier = _context.Fournisseurs.Find(id);
+        var fournisseurModel = _context.Fournisseurs.Find(id);
+        if (fournisseurModel == null) throw new FournisseurIntrouvable();
         
-        if (fournisseurAModifier == null)
-        {
-            return null;
-        }
+        var fournisseur = _fournisseurFactory.Mapper(fournisseurModel);
+        fournisseur.MettreAJour(fournisseurRequest.Nom, fournisseurRequest.Adresse, fournisseurRequest.Telephone, fournisseurRequest.Email);
         
-        fournisseurAModifier.Nom = fournisseur.Nom;
-        fournisseurAModifier.Adresse = fournisseur.Adresse;
-        fournisseurAModifier.Telephone = fournisseur.Telephone;
-        fournisseurAModifier.Email = fournisseur.Email;
-        
+        _context.Fournisseurs.Update(_mapper.Map<FournisseurModel>(fournisseur));
         _context.SaveChanges();
         
-        return fournisseurAModifier.Id;
+        return fournisseur.Id;
     }
     
     public void Supprimer(int id)
     {
-        FournisseurModel? fournisseurASupprimer = _context.Fournisseurs.Find(id);
+        var fournisseur = _context.Fournisseurs.Find(id);
+        if (fournisseur == null) throw new FournisseurIntrouvable();
         
-        if (fournisseurASupprimer == null)
-        {
-            return;
-        }
-        
-        _context.Fournisseurs.Remove(fournisseurASupprimer);
+        _context.Fournisseurs.Remove(fournisseur);
         _context.SaveChanges();
     }
 }

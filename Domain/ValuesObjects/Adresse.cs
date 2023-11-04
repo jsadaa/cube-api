@@ -2,15 +2,15 @@ namespace ApiCube.Domain.ValuesObjects;
 
 public class Adresse
 {
-    public string Numero { get; set; }
-    
-    public string Rue { get; set; }
-    
-    public string CodePostal { get; set; }
-    
-    public string Ville { get; set; }
-    
-    public string Pays { get; set; }
+    private string Numero { get; set; }
+
+    private string Rue { get; set; }
+
+    private string CodePostal { get; set; }
+
+    private string Ville { get; set; }
+
+    private string Pays { get; set; }
     
     public Adresse(string numero, string rue, string codePostal, string ville, string pays)
     {
@@ -20,34 +20,9 @@ public class Adresse
         Ville = ville;
         Pays = pays;
     }
-    
-    public void MettreAJourNumero(string numero)
-    {
-        Numero = numero;
-    }
-    
-    public void MettreAJourRue(string rue)
-    {
-        Rue = rue;
-    }
-    
-    public void MettreAJourCodePostal(string codePostal)
-    {
-        CodePostal = codePostal;
-    }
-    
-    public void MettreAJourVille(string ville)
-    {
-        Ville = ville;
-    }
-    
-    public void MettreAJourPays(string pays)
-    {
-        Pays = pays;
-    }
   
     public override string ToString()
     {
-        return Numero + ", " + Rue + ", " + CodePostal + ", " + Ville + ", " + Pays;
+         return $"{Numero.Trim()} {Rue.Trim()} {CodePostal.Trim()} {Ville.Trim()} {Pays.Trim()}";
     }
 }

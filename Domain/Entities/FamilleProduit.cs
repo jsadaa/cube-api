@@ -34,27 +34,14 @@ public class FamilleProduit
         Produits.Remove(produit);
     }
     
+    public void MettreAJour(string nom, string description)
+    {
+        Nom = nom;
+        Description = description;
+    }
+    
     public ICollection<Produit?> ObtenirProduits()
     {
         return Produits;
-    }
-    
-    public FamilleProduitDTO ToResponseDTO()
-    {
-        return new FamilleProduitDTO
-        {
-            Id = Id,
-            Nom = Nom,
-            Description = Description
-        };
-    }
-    
-    public AjouterFamilleProduitRequest ToRequestDTO()
-    {
-        return new AjouterFamilleProduitRequest
-        {
-            Nom = Nom,
-            Description = Description
-        };
     }
 }

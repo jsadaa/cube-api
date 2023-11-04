@@ -9,7 +9,7 @@ public class Fournisseur
     public int Id { get; set; } = 0;
     
     public string Nom { get; set; }
-    
+
     public Adresse Adresse { get; set; }
     
     public Telephone Telephone { get; set; }
@@ -65,9 +65,9 @@ public class Fournisseur
         Email = email;
     }
     
-    public FournisseurDTO ToResponseDTO()
+    public FournisseurResponseDTO ToResponseDTO()
     {
-        return new FournisseurDTO
+        return new FournisseurResponseDTO
         {
             Id = Id,
             Nom = Nom,
@@ -77,9 +77,9 @@ public class Fournisseur
         };
     }
     
-    public AjouterFournisseurRequest ToRequestDTO()
+    public FournisseurRequestDTO ToRequestDTO()
     {
-        return new AjouterFournisseurRequest
+        return new FournisseurRequestDTO
         {
             Nom = Nom,
             Adresse = Adresse.ToString(),

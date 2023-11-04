@@ -3,7 +3,7 @@ using ApiCube.Application.Services.FamilleProduit;
 using ApiCube.Application.Services.Fournisseur;
 using ApiCube.Application.Services.Produit;
 using ApiCube.Application.Services.Stock;
-using ApiCube.Domain.Entities;
+using ApiCube.Configurations;
 using ApiCube.Domain.Enums.Stock;
 using ApiCube.Domain.Factories;
 using ApiCube.Persistence.Repositories.FamilleProduit;
@@ -26,21 +26,30 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
+// Configure AutoMapper
+builder.Services.AddAutoMapper(typeof(FamilleProduitMapperConfig), typeof(FournisseurMapperConfig));
+
+// Configure repositories
 builder.Services.AddScoped<IFamilleProduitRepository , FamilleProduitRepository>();
 builder.Services.AddScoped<IPromotionRepository , PromotionRepository>();
 builder.Services.AddScoped<IProduitRepository , ProduitRepository>();
+builder.Services.AddScoped<ITransactionStockRepository , TransactionStockRepository>();
+builder.Services.AddScoped<IFournisseurRepository , FournisseurRepository>();
+builder.Services.AddScoped<IStockRepository , StockRepository>();
+
+// Configure services
 builder.Services.AddScoped<IProduitService , ProduitService>();
 builder.Services.AddScoped<IFamilleProduitService , FamilleProduitService>();
-builder.Services.AddScoped<ITransactionStockRepository , TransactionStockRepository>();
+builder.Services.AddScoped<IFournisseurService , FournisseurService>();
+builder.Services.AddScoped<IStockService , StockService>();
+
+// Configure factories
 builder.Services.AddScoped<ProduitFactory>();
 builder.Services.AddScoped<TransactionStockFactory>();
-builder.Services.AddScoped<FamilleProduitFactory>();
 builder.Services.AddScoped<FournisseurFactory>();
-builder.Services.AddScoped<IFournisseurRepository , FournisseurRepository>();
-builder.Services.AddScoped<IFournisseurService , FournisseurService>();
-builder.Services.AddScoped<IStockRepository , StockRepository>();
-builder.Services.AddScoped<IStockService , StockService>();
 builder.Services.AddScoped<StockFactory>();
+
+// Configure enums mappers
 builder.Services.AddScoped<TypeTransactionStockMapper>();
 builder.Services.AddScoped<StatutStockMapper>();
 

@@ -3,6 +3,7 @@ using ApiCube.Application.DTOs.Responses;
 using ApiCube.Domain.Entities;
 using ApiCube.Persistence.Repositories.FamilleProduit;
 using ApiCube.Persistence.Repositories.Fournisseur;
+using AutoMapper;
 
 namespace ApiCube.Domain.Factories;
 
@@ -10,11 +11,13 @@ public class ProduitFactory
 {
     private readonly IFamilleProduitRepository _familleProduitRepository;
     private readonly IFournisseurRepository _fournisseurRepository;
+    private readonly IMapper _mapper;
 
-    public ProduitFactory(IFamilleProduitRepository familleProduitRepository, IFournisseurRepository fournisseurRepository)
+    public ProduitFactory(IFamilleProduitRepository familleProduitRepository, IFournisseurRepository fournisseurRepository, IMapper mapper)
     {
         _familleProduitRepository = familleProduitRepository;
         _fournisseurRepository = fournisseurRepository;
+        _mapper = mapper;
     }
     
     /// <summary>
@@ -25,24 +28,16 @@ public class ProduitFactory
     /// <exception cref="Exception"> Si la famille de produit ou le fournisseur n'existe pas </exception>
     public Produit CreerProduit(AjouterProduitRequest produitRequest)
     {
-        FamilleProduitDTO? familleProduitDTO = _familleProduitRepository.Trouver(produitRequest.FamilleProduitId);
-        FournisseurDTO? fournisseurDTO = _fournisseurRepository.Trouver(produitRequest.FournisseurId);
-        
-        if (familleProduitDTO == null) throw new Exception("La famille de produit n'existe pas");
-        if (fournisseurDTO == null) throw new Exception("Le fournisseur n'existe pas");
-        
-        FamilleProduit familleProduit = new FamilleProduit(
-            id: familleProduitDTO.Id,
-            nom: familleProduitDTO.Nom,
-            description: familleProduitDTO.Description
+        FamilleProduit familleProduit = _mapper.Map<FamilleProduit>(
+            _familleProduitRepository.Trouver(
+                produitRequest.FamilleProduitId
+            )
         );
         
-        Fournisseur fournisseur = new Fournisseur(
-            id: fournisseurDTO.Id,
-            nom: fournisseurDTO.Nom,
-            adresse: fournisseurDTO.Adresse,
-            telephone: fournisseurDTO.Telephone,
-            email: fournisseurDTO.Email
+        Fournisseur fournisseur = _mapper.Map<Fournisseur>(
+            _fournisseurRepository.Trouver(
+                produitRequest.FournisseurId
+            )
         );
         
         Produit nouveauProduit = new Produit(
@@ -64,24 +59,16 @@ public class ProduitFactory
     
     public Produit MapperProduit(ProduitDTO produitDTO)
     {
-        FamilleProduitDTO? familleProduitDTO = _familleProduitRepository.Trouver(produitDTO.FamilleProduitNom);
-        FournisseurDTO? fournisseurDTO = _fournisseurRepository.Trouver(produitDTO.FournisseurNom);
-        
-        if (familleProduitDTO == null) throw new Exception("La famille de produit n'existe pas");
-        if (fournisseurDTO == null) throw new Exception("Le fournisseur n'existe pas");
-        
-        FamilleProduit familleProduit = new FamilleProduit(
-            id: familleProduitDTO.Id,
-            nom: familleProduitDTO.Nom,
-            description: familleProduitDTO.Description
+        FamilleProduit familleProduit = _mapper.Map<FamilleProduit>(
+            _familleProduitRepository.Trouver(
+                produitDTO.FamilleProduitNom
+            )
         );
         
-        Fournisseur fournisseur = new Fournisseur(
-            id: fournisseurDTO.Id,
-            nom: fournisseurDTO.Nom,
-            adresse: fournisseurDTO.Adresse,
-            telephone: fournisseurDTO.Telephone,
-            email: fournisseurDTO.Email
+        Fournisseur fournisseur = _mapper.Map<Fournisseur>(
+            _fournisseurRepository.Trouver(
+                produitDTO.FournisseurNom
+            )
         );
         
         Produit produit = new Produit(

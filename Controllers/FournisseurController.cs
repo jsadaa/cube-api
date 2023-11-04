@@ -24,15 +24,15 @@ namespace ApiCube.Controllers
         [HttpPost("ajouter")]
         [ProducesResponseType(typeof(string), 201)]
         [ProducesResponseType(typeof(string), 400)]
-        public IActionResult AjouterUnFournisseur([FromBody] AjouterFournisseurRequest ajouterFournisseurRequest)
+        public IActionResult AjouterUnFournisseur([FromBody] FournisseurRequestDTO fournisseurRequestDTO)
         {
-            BaseResponse response = _fournisseurService.AjouterUnFournisseur(ajouterFournisseurRequest);
+            BaseResponse response = _fournisseurService.AjouterUnFournisseur(fournisseurRequestDTO);
             
             return StatusCode(response.StatusCode, response.Data);
         }
         
         [HttpGet("lister")]
-        [ProducesResponseType(typeof(List<FournisseurDTO>), 200)]
+        [ProducesResponseType(typeof(List<FournisseurResponseDTO>), 200)]
         public IActionResult ListerLesFournisseurs()
         {
             BaseResponse response = _fournisseurService.ListerLesFournisseurs();
