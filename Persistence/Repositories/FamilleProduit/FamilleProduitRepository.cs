@@ -68,7 +68,7 @@ public class FamilleProduitRepository : IFamilleProduitRepository
     
     public void Supprimer(int id)
     {
-        FamilleProduitModel? familleProduitModel = _context.FamillesProduits.Find(id);
+        var familleProduitModel = _context.FamillesProduits.Find(id);
         if (familleProduitModel == null) throw new FamilleProduitIntrouvable();
         
         _context.FamillesProduits.Remove(familleProduitModel);

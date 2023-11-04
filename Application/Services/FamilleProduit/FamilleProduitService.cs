@@ -24,7 +24,7 @@ public class FamilleProduitService : IFamilleProduitService
         {
             _familleProduitRepository.Ajouter(familleProduitRequestDTO);
             
-            BaseResponse response = new BaseResponse(
+            var response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
                 data: new { message = "Famille de produit ajoutée avec succès" }
             );
@@ -33,10 +33,10 @@ public class FamilleProduitService : IFamilleProduitService
         }
         catch (Exception e)
         {
-            BaseResponse response = new BaseResponse(
+            var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
                 data: new { message = e.Message }
-                );
+            );
             
             return response;
         }
@@ -46,10 +46,10 @@ public class FamilleProduitService : IFamilleProduitService
     {
         try
         {
-            List<Domain.Entities.FamilleProduit> famillesProduits = _familleProduitRepository.Lister();
-            List<FamilleProduitResponseDTO> famillesProduitsResponse = _mapper.Map<List<FamilleProduitResponseDTO>>(famillesProduits);
+            var famillesProduits = _familleProduitRepository.Lister();
+            var famillesProduitsResponse = _mapper.Map<List<FamilleProduitResponseDTO>>(famillesProduits);
             
-            BaseResponse response = new BaseResponse(
+            var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
                 data: new { famillesProduitsResponse }
             );
@@ -58,7 +58,7 @@ public class FamilleProduitService : IFamilleProduitService
         }
         catch (Exception e)
         {
-            BaseResponse response = new BaseResponse(
+            var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
                 data: new { message = e.Message }
             );

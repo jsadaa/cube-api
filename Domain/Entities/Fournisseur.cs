@@ -1,5 +1,3 @@
-using ApiCube.Application.DTOs.Requests;
-using ApiCube.Application.DTOs.Responses;
 using ApiCube.Domain.ValuesObjects;
 
 namespace ApiCube.Domain.Entities;
@@ -37,7 +35,7 @@ public class Fournisseur
     
     private Adresse ValiderEtFormaterAdresse(string adresse)
     {
-        string[] adresseSplit = adresse.Split(',');
+        var adresseSplit = adresse.Split(',');
         
         if (adresseSplit.Length != 5)
         {
@@ -63,28 +61,5 @@ public class Fournisseur
         Adresse = ValiderEtFormaterAdresse(adresse);
         Telephone = ValiderEtFormaterTelephone(telephone);
         Email = email;
-    }
-    
-    public FournisseurResponseDTO ToResponseDTO()
-    {
-        return new FournisseurResponseDTO
-        {
-            Id = Id,
-            Nom = Nom,
-            Adresse = Adresse.ToString(),
-            Telephone = Telephone.ToString(),
-            Email = Email,
-        };
-    }
-    
-    public FournisseurRequestDTO ToRequestDTO()
-    {
-        return new FournisseurRequestDTO
-        {
-            Nom = Nom,
-            Adresse = Adresse.ToString(),
-            Telephone = Telephone.ToString(),
-            Email = Email,
-        };
     }
 }

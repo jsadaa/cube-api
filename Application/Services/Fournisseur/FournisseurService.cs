@@ -25,10 +25,10 @@ public class FournisseurService : IFournisseurService
     {
         try
         {
-            Domain.Entities.Fournisseur nouveauFournisseur = _fournisseurFactory.Creer(fournisseurRequestDTO);
+            var nouveauFournisseur = _fournisseurFactory.Creer(fournisseurRequestDTO);
             _fournisseurRepository.Ajouter(_mapper.Map<FournisseurRequestDTO>(nouveauFournisseur));
             
-            BaseResponse response = new BaseResponse(
+            var response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
                 data: new { message = "Fournisseur ajouté avec succès" }
             );
@@ -37,7 +37,7 @@ public class FournisseurService : IFournisseurService
         }
         catch (Exception e)
         {
-            BaseResponse response = new BaseResponse(
+            var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
                 data: new { message = e.Message }
                 );
@@ -50,10 +50,10 @@ public class FournisseurService : IFournisseurService
     {
         try
         {
-            List<Domain.Entities.Fournisseur> fournisseurs = _fournisseurRepository.Lister();
-            List<FournisseurResponseDTO> fournisseursResponse= _mapper.Map<List<FournisseurResponseDTO>>(fournisseurs);
+            var fournisseurs = _fournisseurRepository.Lister();
+            var fournisseursResponse= _mapper.Map<List<FournisseurResponseDTO>>(fournisseurs);
             
-            BaseResponse response = new BaseResponse(
+            var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
                 data: new { fournisseursResponse }
             );
@@ -62,7 +62,7 @@ public class FournisseurService : IFournisseurService
         }
         catch (Exception e)
         {
-            BaseResponse response = new BaseResponse(
+            var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
                 data: new { message = e.Message }
                 );

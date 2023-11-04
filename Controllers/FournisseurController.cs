@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Services.Fournisseur;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiCube.Controllers
@@ -26,7 +21,7 @@ namespace ApiCube.Controllers
         [ProducesResponseType(typeof(string), 400)]
         public IActionResult AjouterUnFournisseur([FromBody] FournisseurRequestDTO fournisseurRequestDTO)
         {
-            BaseResponse response = _fournisseurService.AjouterUnFournisseur(fournisseurRequestDTO);
+            var response = _fournisseurService.AjouterUnFournisseur(fournisseurRequestDTO);
             
             return StatusCode(response.StatusCode, response.Data);
         }
@@ -35,7 +30,7 @@ namespace ApiCube.Controllers
         [ProducesResponseType(typeof(List<FournisseurResponseDTO>), 200)]
         public IActionResult ListerLesFournisseurs()
         {
-            BaseResponse response = _fournisseurService.ListerLesFournisseurs();
+            var response = _fournisseurService.ListerLesFournisseurs();
             
             return StatusCode(response.StatusCode, response.Data);
         }
