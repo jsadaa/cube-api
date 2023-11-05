@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ApiCube.Application.DTOs.Requests;
 
-public class AjouterPromotionRequest
+public class PromotionRequestDTO
 {
     [Required]
     public string Nom { get; set; } = null!;

@@ -1,7 +1,7 @@
 using System.Net;
+using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
-using ApiCube.Domain.Factories;
 using ApiCube.Persistence.Repositories.FamilleProduit;
 using AutoMapper;
 
@@ -22,7 +22,8 @@ public class FamilleProduitService : IFamilleProduitService
     {
         try
         {
-            _familleProduitRepository.Ajouter(familleProduitRequestDTO);
+            var nouvelleFamilleProduit = _mapper.Map<Domain.Entities.FamilleProduit>(familleProduitRequestDTO);
+            _familleProduitRepository.Ajouter(nouvelleFamilleProduit);
             
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
@@ -46,12 +47,12 @@ public class FamilleProduitService : IFamilleProduitService
     {
         try
         {
-            var famillesProduits = _familleProduitRepository.Lister();
-            var famillesProduitsResponse = _mapper.Map<List<FamilleProduitResponseDTO>>(famillesProduits);
+            var listeFamillesProduits = _familleProduitRepository.Lister();
+            var famillesProduits = _mapper.Map<List<FamilleProduitResponseDTO>>(listeFamillesProduits);
             
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: new { famillesProduitsResponse }
+                data: new { famillesProduits }
             );
             
             return response;

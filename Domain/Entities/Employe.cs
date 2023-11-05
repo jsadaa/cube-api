@@ -1,4 +1,5 @@
 using ApiCube.Domain.Enums.Administration;
+using ApiCube.Domain.Exceptions;
 using ApiCube.Domain.ValuesObjects;
 
 namespace ApiCube.Domain.Entities;
@@ -44,8 +45,8 @@ public class Employe
         Login = login;
         MotDePasse = motDePasse;
         Role = role;
-        Adresse = ValiderEtFormaterAdresse(adresse);
-        Telephone = ValiderEtFormaterTelephone(telephone);
+        Adresse = ExtraireAdresse(adresse);
+        Telephone = ExtraireTelephone(telephone);
     }
     
     public Employe(int id, string nom, string prenom, string adresse, string telephone, string email, DateTime dateEmbauche, DateTime dateDepart, string statut, double salaire, string login, string motDePasse, Role role)
@@ -61,27 +62,27 @@ public class Employe
         Login = login;
         MotDePasse = motDePasse;
         Role = role;
-        Adresse = ValiderEtFormaterAdresse(adresse);
-        Telephone = ValiderEtFormaterTelephone(telephone);
+        Adresse = ExtraireAdresse(adresse);
+        Telephone = ExtraireTelephone(telephone);
     }
 
-    private Adresse ValiderEtFormaterAdresse(string adresse)
+    private static Adresse ExtraireAdresse(string adresse)
     {
         string[] adresseSplit = adresse.Split(',');
         
         if (adresseSplit.Length != 5)
         {
-            throw new Exception("L'adresse doit être composée de 5 champs séparés par une virgule");
+            throw new AdresseNonValide();
         }
         
         return new Adresse(adresseSplit[0], adresseSplit[1], adresseSplit[2], adresseSplit[3], adresseSplit[4]);
     }
 
-    private Telephone ValiderEtFormaterTelephone(string telephone)
+    private static Telephone ExtraireTelephone(string telephone)
     {
         if (telephone.Length != 10)
         {
-            throw new Exception("Le numéro de téléphone doit être composé de 10 chiffres");
+            throw new NumeroTelephoneNonValide();
         }
         
         return new Telephone(telephone);

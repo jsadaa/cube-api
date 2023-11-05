@@ -1,4 +1,3 @@
-using ApiCube.Application.DTOs.Responses;
 using ApiCube.Domain.Enums.Stock;
 
 namespace ApiCube.Domain.Entities;
@@ -98,20 +97,5 @@ public class TransactionStock
     public bool EstUneSortieDeStock()
     {
         return EstUneSortie() && !EstUnePeremption();
-    }
-    
-    public TransactionStockDTO ToDTO()
-    {
-        return new TransactionStockDTO
-        {
-            Id = Id,
-            Quantite = Quantite,
-            Date = Date,
-            Type = Type.ToString(),
-            StockId = Stock.Id,
-            ProduitId = Produit.Id,
-            PrixUnitaire = PrixUnitaire,
-            PrixTotal = PrixTotal,
-        };
     }
 }

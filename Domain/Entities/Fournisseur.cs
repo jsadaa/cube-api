@@ -33,7 +33,7 @@ public class Fournisseur
         Email = email;
     }
     
-    private Adresse ValiderEtFormaterAdresse(string adresse)
+    private static Adresse ValiderEtFormaterAdresse(string adresse)
     {
         var adresseSplit = adresse.Split(',');
         
@@ -45,7 +45,7 @@ public class Fournisseur
         return new Adresse(adresseSplit[0], adresseSplit[1], adresseSplit[2], adresseSplit[3], adresseSplit[4]);
     }
 
-    private Telephone ValiderEtFormaterTelephone(string telephone)
+    private static Telephone ValiderEtFormaterTelephone(string telephone)
     {
         if (telephone.Length != 10)
         {

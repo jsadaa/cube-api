@@ -1,5 +1,7 @@
-using ApiCube.Application.DTOs.Responses;
+using ApiCube.Domain.Factories;
+using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiCube.Persistence.Repositories.TransactionStock;
@@ -7,23 +9,19 @@ namespace ApiCube.Persistence.Repositories.TransactionStock;
 public class TransactionStockRepository : ITransactionStockRepository
 {
     private readonly ApiDbContext _context;
+    private readonly IMapper _mapper;
+    private readonly TransactionStockFactory _transactionStockFactory;
     
-    public TransactionStockRepository(ApiDbContext context)
+    public TransactionStockRepository(ApiDbContext context, IMapper mapper, TransactionStockFactory transactionStockFactory)
     {
         _context = context;
+        _mapper = mapper;
+        _transactionStockFactory = transactionStockFactory;
     }
     
-    public int Ajouter(TransactionStockDTO transactionStock)
+    public int Ajouter(Domain.Entities.TransactionStock transactionStock)
     {
-        TransactionStockModel nouvelleTransactionStock = new TransactionStockModel
-        {
-            Quantite = transactionStock.Quantite,
-            Date = transactionStock.Date,
-            Type = transactionStock.Type,
-            ProduitId = transactionStock.ProduitId,
-            PrixUnitaire = transactionStock.PrixUnitaire,
-            PrixTotal = transactionStock.PrixTotal
-        };
+        var nouvelleTransactionStock = _mapper.Map<TransactionStockModel>(transactionStock);
         
         _context.TransactionsStock.Add(nouvelleTransactionStock);
         _context.SaveChanges();
@@ -31,85 +29,60 @@ public class TransactionStockRepository : ITransactionStockRepository
         return nouvelleTransactionStock.Id;
     }
 
-    public TransactionStockDTO? Trouver(int id)
+    public Domain.Entities.TransactionStock Trouver(int id)
     {
-        TransactionStockDTO? transactionStock = null;
-        
-        transactionStock = _context.TransactionsStock
+        var transactionStock = _context.TransactionsStock
             .Include(transactionStock => transactionStock.Produit)
-            .Select(transactionStock => new TransactionStockDTO
-            {
-                Id = transactionStock.Id,
-                Quantite = transactionStock.Quantite,
-                Date = transactionStock.Date,
-                Type = transactionStock.Type,
-                ProduitId = transactionStock.ProduitId,
-                PrixUnitaire = transactionStock.PrixUnitaire,
-                PrixTotal = transactionStock.PrixTotal
-            })
             .FirstOrDefault(transactionStock => transactionStock.Id == id);
         
-        return transactionStock;
+        if (transactionStock == null) throw new TransactionStockIntrouvable();
+        
+        return _mapper.Map<Domain.Entities.TransactionStock>(transactionStock);
     }
     
-    public List<TransactionStockDTO> Lister()
+    public Domain.Entities.TransactionStock Trouver(string nom)
     {
-        List<TransactionStockDTO> transactionsStock = new List<TransactionStockDTO>();
+        var transactionStock = _context.TransactionsStock
+            .Include(transactionStock => transactionStock.Produit)
+            .FirstOrDefault(transactionStock => transactionStock.Produit.Nom == nom);
 
-        transactionsStock.AddRange(
-            _context.TransactionsStock
-                .Include(transactionStock => transactionStock.Produit)
-                .Select(transactionStock => new TransactionStockDTO
-                {
-                    Id = transactionStock.Id,
-                    Quantite = transactionStock.Quantite,
-                    Date = transactionStock.Date,
-                    Type = transactionStock.Type,
-                    ProduitId = transactionStock.ProduitId,
-                    PrixUnitaire = transactionStock.PrixUnitaire,
-                    PrixTotal = transactionStock.PrixTotal
-                })
-        );
+        if (transactionStock == null) throw new TransactionStockIntrouvable();
         
-        return transactionsStock;
+        return _mapper.Map<Domain.Entities.TransactionStock>(transactionStock);
     }
     
-    public List<TransactionStockDTO> ListerParStock(int idStock)
+    public List<Domain.Entities.TransactionStock> Lister()
     {
-        List<TransactionStockDTO> transactionsStock = new List<TransactionStockDTO>();
+        var transactionsStock = _context.TransactionsStock
+            .Include(transactionStock => transactionStock.Produit)
+            .ToList();
+        
+        return transactionsStock.Select(transactionStock => _transactionStockFactory.Mapper(transactionStock)).ToList();
+    }
+    
+    public List<Domain.Entities.TransactionStock> ListerParStock(int idStock)
+    {
+        var transactionsStock = _context.TransactionsStock
+            .Include(transactionStock => transactionStock.Produit)
+            .Where(transactionStock => transactionStock.StockId == idStock)
+            .ToList();
+        
+        return transactionsStock.Select(transactionStock => _transactionStockFactory.Mapper(transactionStock)).ToList();
+    }
 
-        // TODO:
-        // search where transactionStock.Produit.StockId == idStock
-        
-        return transactionsStock;
-    }
-    
-    public int? Modifier(int id, TransactionStockDTO transactionStock)
+    public void Modifier(Domain.Entities.TransactionStock transactionStockModifiee)
     {
-        TransactionStockModel? transactionStockAModifier = null;
-        transactionStockAModifier = _context.TransactionsStock.Find(id);
+        var transactionStockModel = _mapper.Map<TransactionStockModel>(transactionStockModifiee);
         
-        if (transactionStockAModifier == null) return null;
-        
-        transactionStockAModifier.Quantite = transactionStock.Quantite;
-        transactionStockAModifier.Date = transactionStock.Date;
-        transactionStockAModifier.Type = transactionStock.Type;
-        transactionStockAModifier.ProduitId = transactionStock.ProduitId;
-        
-        _context.TransactionsStock.Update(transactionStockAModifier);
+        _context.TransactionsStock.Update(transactionStockModel);
         _context.SaveChanges();
-        
-        return transactionStockAModifier.Id;
     }
 
-    public void Supprimer(int id)
+    public void Supprimer(Domain.Entities.TransactionStock transactionStock)
     {
-        TransactionStockModel? transactionStockASupprimer = null;
-        transactionStockASupprimer = _context.TransactionsStock.Find(id);
-
-        if (transactionStockASupprimer == null) return;
+        var transactionStockModel = _mapper.Map<TransactionStockModel>(transactionStock);
         
-        _context.TransactionsStock.Remove(transactionStockASupprimer);
+        _context.TransactionsStock.Remove(transactionStockModel);
         _context.SaveChanges();
     }
 }

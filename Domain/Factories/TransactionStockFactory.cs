@@ -1,19 +1,22 @@
-using ApiCube.Application.DTOs.Responses;
 using ApiCube.Domain.Entities;
 using ApiCube.Domain.Enums.Stock;
+using ApiCube.Persistence.Models;
+using ApiCube.Persistence.Repositories.Stock;
 
 namespace ApiCube.Domain.Factories;
 
 public class TransactionStockFactory
 {
     private readonly TypeTransactionStockMapper _typeTransactionStockMapper;
+    private readonly IStockRepository _stockRepository;
     
-    public TransactionStockFactory(TypeTransactionStockMapper typeTransactionStockMapper)
+    public TransactionStockFactory(TypeTransactionStockMapper typeTransactionStockMapper, IStockRepository stockRepository)
     {
         _typeTransactionStockMapper = typeTransactionStockMapper;
+        _stockRepository = stockRepository;
     }
     
-    public TransactionStock CreerTransactionStock(Stock stock, TypeTransactionStock type)
+    public TransactionStock Creer(Stock stock, TypeTransactionStock type)
     {
         return new TransactionStock(
             quantite: stock.Quantite,
@@ -25,16 +28,18 @@ public class TransactionStockFactory
         );
     }
     
-    public TransactionStock MapperTransactionStock(Stock stock, TransactionStockDTO transactionStock)
+    public TransactionStock Mapper(TransactionStockModel transactionStockModel)
     {
+        Stock stock = _stockRepository.Trouver(transactionStockModel.StockId);
+        
         return new TransactionStock(
-            id: transactionStock.Id,
-            quantite: transactionStock.Quantite,
-            date: transactionStock.Date,
-            type: _typeTransactionStockMapper.Mapper(transactionStock.Type),
+            id: transactionStockModel.Id,
+            quantite: transactionStockModel.Quantite,
+            date: transactionStockModel.Date,
+            type: _typeTransactionStockMapper.Mapper(transactionStockModel.Type),
             stock: stock,
             produit: stock.Produit,
-            prixUnitaire: transactionStock.PrixUnitaire
+            prixUnitaire: transactionStockModel.PrixUnitaire
         );
     }
 

@@ -1,6 +1,10 @@
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
+using ApiCube.Domain.Factories;
+using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
+using AutoMapper;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiCube.Persistence.Repositories.Stock;
@@ -8,135 +12,76 @@ namespace ApiCube.Persistence.Repositories.Stock;
 public class StockRepository : IStockRepository
 {
     private readonly ApiDbContext _context;
+    private readonly StockFactory _stockFactory;
+    private readonly IMapper _mapper;
     
-    public StockRepository(ApiDbContext context)
+    public StockRepository(ApiDbContext context, StockFactory stockFactory, IMapper mapper)
     {
         _context = context;
+        _stockFactory = stockFactory;
+        _mapper = mapper;
     }
     
-    public int Ajouter(AjouterStockRequest stock)
+    public int Ajouter(Domain.Entities.Stock nouveauStock)
     {
-        StockModel nouveauStock = new StockModel
-        {
-            ProduitId = stock.ProduitId,
-            Quantite = stock.Quantite,
-            SeuilDisponibilite = stock.SeuilDisponibilite,
-            Statut = stock.Statut,
-            DateCreation = DateTime.Now,
-            DateModification = DateTime.Now
-        };
+        var nouveauStockModel = _mapper.Map<StockModel>(nouveauStock);
         
-        _context.Stocks.Add(nouveauStock);
+        _context.Stocks.Add(nouveauStockModel);
         _context.SaveChanges();
         
-        return nouveauStock.Id;
+        return nouveauStockModel.Id;
     }
     
-    public List<StockDTO?> Lister()
+    public List<Domain.Entities.Stock> Lister()
     {
-        List<StockDTO?> stocks = new List<StockDTO?>();
-        
-        stocks.AddRange(
-            _context.Stocks
-                .Include(stock => stock.Produit)
-                .Select(stock => new StockDTO
-                {
-                    Id = stock.Id,
-                    Quantite = stock.Quantite,
-                    SeuilDisponibilite = stock.SeuilDisponibilite,
-                    Statut = stock.Statut,
-                    Produit = new ProduitDTO
-                    {
-                        Id = stock.Produit.Id,
-                        Nom = stock.Produit.Nom,
-                        Description = stock.Produit.Description,
-                        Appellation = stock.Produit.Appellation,
-                        Cepage = stock.Produit.Cepage,
-                        Region = stock.Produit.Region,
-                        DegreAlcool = stock.Produit.DegreAlcool,
-                        FamilleProduitNom = stock.Produit.FamilleProduit.Nom,
-                        FournisseurNom = stock.Produit.Fournisseur.Nom,
-                        PrixAchat = stock.Produit.PrixAchat,
-                        PrixVente = stock.Produit.PrixVente,
-                        EnPromotion = stock.Produit.EnPromotion
-                    },
-                    DateCreation = stock.DateCreation,
-                    DatePeremption = stock.DatePeremption,
-                    DateModification = stock.DateModification,
-                    DateSuppression = stock.DateSuppression
-                })
-        );
-        
-        return stocks;
-    }
-    
-    public StockDTO? Trouver(int id)
-    {
-        StockModel? stock = null;
-        stock = _context.Stocks
+        var stocksModels = _context.Stocks
             .Include(stock => stock.Produit).ThenInclude(produitModel => produitModel.FamilleProduit)
             .Include(stockModel => stockModel.Produit).ThenInclude(produitModel => produitModel.Fournisseur)
+            .Include(stockModel => stockModel.TransactionsStock)
+            .ToList();
+        
+        return stocksModels.Select(stockModel => _stockFactory.Mapper(stockModel)).ToList();
+    }
+
+    public Domain.Entities.Stock Trouver(int id)
+    {
+        var stockModel = _context.Stocks
+            .Include(stock => stock.Produit).ThenInclude(produitModel => produitModel.FamilleProduit)
+            .Include(stockModel => stockModel.Produit).ThenInclude(produitModel => produitModel.Fournisseur)
+            .Include(stockModel => stockModel.TransactionsStock)
             .FirstOrDefault(stock => stock.Id == id);
         
-        if (stock == null)
-        {
-            return null;
-        }
+        if (stockModel == null) throw new StockIntrouvable();
         
-        return new StockDTO
-        {
-            Id = stock.Id,
-            Quantite = stock.Quantite,
-            SeuilDisponibilite = stock.SeuilDisponibilite,
-            Statut = stock.Statut,
-            Produit = new ProduitDTO
-            {
-                Id = stock.Produit.Id,
-                Nom = stock.Produit.Nom,
-                Description = stock.Produit.Description,
-                Appellation = stock.Produit.Appellation,
-                Cepage = stock.Produit.Cepage,
-                Region = stock.Produit.Region,
-                DegreAlcool = stock.Produit.DegreAlcool,
-                FamilleProduitNom = stock.Produit.FamilleProduit.Nom,
-                FournisseurNom = stock.Produit.Fournisseur.Nom,
-                PrixAchat = stock.Produit.PrixAchat,
-                PrixVente = stock.Produit.PrixVente,
-                EnPromotion = stock.Produit.EnPromotion
-            },
-            DateCreation = stock.DateCreation,
-            DatePeremption = stock.DatePeremption,
-            DateModification = stock.DateModification,
-            DateSuppression = stock.DateSuppression
-        };
+        return _stockFactory.Mapper(stockModel);
     }
-    
-    public int? Modifier(int id, AjouterStockRequest stock)
-    {
-        StockModel? stockAModifier = null;
-        stockAModifier = _context.Stocks.Find(id);
 
-        if (stockAModifier == null) return null;
+    public Domain.Entities.Stock Trouver(string nom)
+    {
+        var stockModel = _context.Stocks
+            .Include(stock => stock.Produit).ThenInclude(produitModel => produitModel.FamilleProduit)
+            .Include(stockModel => stockModel.Produit).ThenInclude(produitModel => produitModel.Fournisseur)
+            .Include(stockModel => stockModel.TransactionsStock)
+            .FirstOrDefault(stock => stock.Produit.Nom == nom);
         
-        stockAModifier.Quantite = stock.Quantite;
-        stockAModifier.SeuilDisponibilite = stock.SeuilDisponibilite;
-        stockAModifier.Statut = stock.Statut;
-        stockAModifier.DateModification = DateTime.Now;
+        if (stockModel == null) throw new StockIntrouvable();
         
-        _context.Stocks.Update(stockAModifier);
-        _context.SaveChanges();
-        
-        return stockAModifier.Id;
+        return _stockFactory.Mapper(stockModel);
     }
     
-    public void Supprimer(int id)
+    public void Modifier(Domain.Entities.Stock stockModifie)
     {
-        StockModel? stock = null;
-        stock = _context.Stocks.Find(id);
+        var stockModifieModel = _mapper.Map<StockModel>(stockModifie);
         
-        if (stock == null) return;
+        _context.Stocks.Update(stockModifieModel);
+        _context.SaveChanges();
+    }
+    
+    public void Supprimer(Domain.Entities.Stock stockASupprimer)
+    {
+        var stockASupprimerModel = _mapper.Map<StockModel>(stockASupprimer);
         
-        _context.Stocks.Remove(stock);
+        _context.Stocks.Remove(stockASupprimerModel);
         _context.SaveChanges();
     }
 }

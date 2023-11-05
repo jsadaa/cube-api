@@ -1,3 +1,5 @@
+using ApiCube.Domain.Exceptions;
+
 namespace ApiCube.Domain.Enums.Stock;
 
 public enum TypeTransactionStock
@@ -22,7 +24,7 @@ public class TypeTransactionStockMapper
             "Perte" => TypeTransactionStock.Perte,
             "Vol" => TypeTransactionStock.Vol,
             "Peremption" => TypeTransactionStock.Peremption,
-            _ => throw new Exception("Le type de transaction n'existe pas")
+            _ => throw new TypeTransactionStockInexistant()
         };
     }
 }

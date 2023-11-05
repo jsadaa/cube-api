@@ -1,19 +1,16 @@
-using ApiCube.Application.DTOs.Requests;
-using ApiCube.Application.DTOs.Responses;
-
 namespace ApiCube.Persistence.Repositories.FamilleProduit;
 
 public interface IFamilleProduitRepository
 {
     
-    public int Ajouter(FamilleProduitRequestDTO familleProduit);
+    public int Ajouter(Domain.Entities.FamilleProduit nouvelleFamilleProduit);
     
     public List<Domain.Entities.FamilleProduit> Lister();
     
-    public Domain.Entities.FamilleProduit? Trouver(int id);
+    public Domain.Entities.FamilleProduit Trouver(int id);
     public Domain.Entities.FamilleProduit Trouver(string nom);
     
-    public int? Modifier(int id, FamilleProduitRequestDTO familleProduitRequest);
+    public void Modifier(Domain.Entities.FamilleProduit familleProduitModifiee);
     
-    public void Supprimer(int id);
+    public void Supprimer(Domain.Entities.FamilleProduit familleProduitSupprimee);
 }

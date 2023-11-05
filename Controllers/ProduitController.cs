@@ -1,3 +1,4 @@
+using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Services.Produit;
@@ -19,15 +20,15 @@ public class ProduitController : ControllerBase
     [HttpPost("ajouter")]
     [ProducesResponseType(typeof(string), 201)]
     [ProducesResponseType(typeof(string), 400)]
-    public IActionResult AjouterUnProduitAuCatalogue([FromBody] AjouterProduitRequest ajouterProduit)
+    public IActionResult AjouterUnProduitAuCatalogue([FromBody] ProduitRequestDTO produitRequestDTO)
     {
-        BaseResponse response = _produitService.AjouterUnProduitAuCatalogue(ajouterProduit);
+        BaseResponse response = _produitService.AjouterUnProduitAuCatalogue(produitRequestDTO);
         
         return StatusCode(response.StatusCode, response.Data);
     }
     
     [HttpGet("lister")]
-    [ProducesResponseType(typeof(List<ProduitDTO>), 200)]
+    [ProducesResponseType(typeof(List<ProduitResponseDTO>), 200)]
     public IActionResult ListerLesProduits()
     {
         BaseResponse response = _produitService.ListerLesProduits();

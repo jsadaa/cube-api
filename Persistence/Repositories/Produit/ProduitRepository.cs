@@ -1,6 +1,7 @@
-using ApiCube.Application.DTOs.Requests;
-using ApiCube.Application.DTOs.Responses;
+using ApiCube.Domain.Factories;
+using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiCube.Persistence.Repositories.Produit;
@@ -8,132 +9,76 @@ namespace ApiCube.Persistence.Repositories.Produit;
 public class ProduitRepository : IProduitRepository
 {
     private readonly ApiDbContext _context;
+    private readonly ProduitFactory _produitFactory;
+    private readonly IMapper _mapper;
     
-    public ProduitRepository(ApiDbContext context)
+    public ProduitRepository(ApiDbContext context, ProduitFactory produitFactory, IMapper mapper)
     {
         _context = context;
+        _produitFactory = produitFactory;
+        _mapper = mapper;
     }
     
-    public int Ajouter(AjouterProduitRequest produit)
+    public int Ajouter(Domain.Entities.Produit nouveauProduit)
     {
-        ProduitModel nouveauProduit = new ProduitModel
-        {
-            Nom = produit.Nom,
-            Description = produit.Description,
-            Appellation = produit.Appellation,
-            Cepage = produit.Cepage,
-            Region = produit.Region,
-            DegreAlcool = produit.DegreAlcool,
-            FamilleProduitId = produit.FamilleProduitId,
-            FournisseurId = produit.FournisseurId,
-            PrixAchat = produit.PrixAchat,
-            PrixVente = produit.PrixVente,
-            EnPromotion = produit.EnPromotion
-        };
+        var nouveauProduitModel = _mapper.Map<ProduitModel>(nouveauProduit);
         
-        _context.Produits.Add(nouveauProduit);
+        _context.Produits.Add(nouveauProduitModel);
         _context.SaveChanges();
         
-        return nouveauProduit.Id;
+        return nouveauProduitModel.Id;
     }
     
-    public List<ProduitDTO> Lister()
+    public List<Domain.Entities.Produit> Lister()
     {
-        List<ProduitDTO> produits = new List<ProduitDTO>();
-        
-        produits.AddRange(
-            _context.Produits
-                .Include(produit => produit.FamilleProduit)
-                .Include(produit => produit.Fournisseur)
-                .Select(produit => new ProduitDTO
-                {
-                    Id = produit.Id,
-                    Nom = produit.Nom,
-                    Description = produit.Description,
-                    Appellation = produit.Appellation,
-                    Cepage = produit.Cepage,
-                    Region = produit.Region,
-                    DegreAlcool = produit.DegreAlcool,
-                    FamilleProduitNom = produit.FamilleProduit.Nom,
-                    FournisseurNom = produit.Fournisseur.Nom,
-                    PrixAchat = produit.PrixAchat,
-                    PrixVente = produit.PrixVente,
-                    EnPromotion = produit.EnPromotion
-                })
-        );
-
-        return produits;
-    }
-        
-    
-    public ProduitDTO? Trouver(int id)
-    {
-        ProduitModel? produit = null;
-        produit = _context.Produits
+        var produitsModels = _context.Produits
             .Include(produit => produit.FamilleProduit)
             .Include(produit => produit.Fournisseur)
+            .Include(produit => produit.Promotion)
+            .ToList();
+        
+        return produitsModels.Select(produitModel => _produitFactory.Mapper(produitModel)).ToList();
+    }
+    
+    public Domain.Entities.Produit Trouver(int id)
+    {
+        var produitModel = _context.Produits
+            .Include(produit => produit.FamilleProduit)
+            .Include(produit => produit.Fournisseur)
+            .Include(produit => produit.Promotion)
             .FirstOrDefault(produit => produit.Id == id);
-
-        if (produit == null) return null;
-            
-        ProduitDTO produitDTO = new ProduitDTO
-        {
-            Id = produit.Id,
-            Nom = produit.Nom,
-            Description = produit.Description,
-            Appellation = produit.Appellation,
-            Cepage = produit.Cepage,
-            Region = produit.Region,
-            DegreAlcool = produit.DegreAlcool,
-            FamilleProduitNom = produit.FamilleProduit.Nom,
-            FournisseurNom = produit.Fournisseur.Nom,
-            PrixAchat = produit.PrixAchat,
-            PrixVente = produit.PrixVente,
-            EnPromotion = produit.EnPromotion
-        };
         
-        return produitDTO;
+        if (produitModel == null) throw new ProduitIntrouvable();
+        
+        return _produitFactory.Mapper(produitModel);
+    }
+    
+    public Domain.Entities.Produit Trouver(string nom)
+    {
+        var produitModel = _context.Produits
+            .Include(produit => produit.FamilleProduit)
+            .Include(produit => produit.Fournisseur)
+            .Include(produit => produit.Promotion)
+            .FirstOrDefault(produit => produit.Nom == nom);
+        
+        if (produitModel == null) throw new ProduitIntrouvable();
+        
+        return _produitFactory.Mapper(produitModel);
     }
 
-    public int? Modifier(int id, AjouterProduitRequest produit)
+    public void Modifier(Domain.Entities.Produit produitModifie)
     {
-        ProduitModel? produitAModifier = null;
-        produitAModifier = _context.Produits.Find(id);
+        var produitModel = _mapper.Map<ProduitModel>(produitModifie);
         
-        if (produitAModifier == null)
-        {
-            return null;
-        }
-        
-        produitAModifier.Nom = produit.Nom;
-        produitAModifier.Description = produit.Description;
-        produitAModifier.Appellation = produit.Appellation;
-        produitAModifier.Cepage = produit.Cepage;
-        produitAModifier.Region = produit.Region;
-        produitAModifier.DegreAlcool = produit.DegreAlcool;
-        produitAModifier.FamilleProduitId = produit.FamilleProduitId;
-        produitAModifier.FournisseurId = produit.FournisseurId;
-        produitAModifier.PrixAchat = produit.PrixAchat;
-        produitAModifier.PrixVente = produit.PrixVente;
-        produitAModifier.EnPromotion = produit.EnPromotion;
-        
-        _context.Produits.Update(produitAModifier);
+        _context.Produits.Update(produitModel);
         _context.SaveChanges();
-        
-        return produitAModifier.Id;
     }
 
-    public void Supprimer(int id)
+    public void Supprimer(Domain.Entities.Produit produitASupprimer)
     {
-        ProduitModel? produit = null;
-        produit = _context.Produits.Find(id);
+        var produitModel = _mapper.Map<ProduitModel>(produitASupprimer);
         
-        if (produit == null)
-        {
-            return;
-        }
-        
-        _context.Produits.Remove(produit);
+        _context.Produits.Remove(produitModel);
         _context.SaveChanges();
     }
 }

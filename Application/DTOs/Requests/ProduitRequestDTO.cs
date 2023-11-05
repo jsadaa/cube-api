@@ -1,11 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ApiCube.Application.DTOs.Responses;
+namespace ApiCube.Application.DTOs.Requests;
 
-public class ProduitDTO
+public class ProduitRequestDTO
 {
-    [Required]
-    public int Id { get; set; }
     
     [Required]
     public string Nom { get; set; }
@@ -35,8 +33,8 @@ public class ProduitDTO
     public bool EnPromotion { get; set; }
     
     [Required]
-    public string FamilleProduitNom { get; set; } = null!;
+    public int FamilleProduitId { get; set; }
     
     [Required]
-    public string FournisseurNom { get; set; } = null!;
+    public int FournisseurId { get; set; }
 }

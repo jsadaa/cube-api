@@ -9,7 +9,6 @@ using ApiCube.Domain.Factories;
 using ApiCube.Persistence.Repositories.FamilleProduit;
 using ApiCube.Persistence.Repositories.Fournisseur;
 using ApiCube.Persistence.Repositories.Produit;
-using ApiCube.Persistence.Repositories.Promotion;
 using ApiCube.Persistence.Repositories.Stock;
 using ApiCube.Persistence.Repositories.TransactionStock;
 using Microsoft.EntityFrameworkCore;
@@ -27,11 +26,16 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
 });
 
 // Configure AutoMapper
-builder.Services.AddAutoMapper(typeof(FamilleProduitMapperConfig), typeof(FournisseurMapperConfig));
+builder.Services.AddAutoMapper(
+    typeof(FamilleProduitMapperConfig), 
+    typeof(FournisseurMapperConfig), 
+    typeof(ProduitMapperConfig), 
+    typeof(StockMapperConfig), 
+    typeof(TransactionStockMapperConfig)
+);
 
 // Configure repositories
 builder.Services.AddScoped<IFamilleProduitRepository , FamilleProduitRepository>();
-builder.Services.AddScoped<IPromotionRepository , PromotionRepository>();
 builder.Services.AddScoped<IProduitRepository , ProduitRepository>();
 builder.Services.AddScoped<ITransactionStockRepository , TransactionStockRepository>();
 builder.Services.AddScoped<IFournisseurRepository , FournisseurRepository>();

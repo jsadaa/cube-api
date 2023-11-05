@@ -1,5 +1,3 @@
-using ApiCube.Application.DTOs.Requests;
-using ApiCube.Application.DTOs.Responses;
 using ApiCube.Domain.Enums.Stock;
 
 namespace ApiCube.Domain.Entities;
@@ -106,36 +104,5 @@ public class Stock
     public void AjouterTransaction(TransactionStock transactionStock)
     {
         Transactions.Add(transactionStock);
-    }
-    
-    public AjouterStockRequest ToRequestDTO()
-    {
-        return new AjouterStockRequest
-        {
-            Quantite = Quantite,
-            SeuilDisponibilite = SeuilDisponibilite,
-            Statut = Statut.ToString(),
-            ProduitId = Produit.Id,
-            DateCreation = DateCreation,
-            DatePeremption = DatePeremption,
-            DateModification = DateModification,
-            DateSuppression = DateSuppression
-        };
-    }
-    
-    public StockDTO ToResponseDTO()
-    {
-        return new StockDTO
-        {
-            Id = Id,
-            Quantite = Quantite,
-            SeuilDisponibilite = SeuilDisponibilite,
-            Statut = Statut.ToString(),
-            Produit = Produit.ToResponseDTO(),
-            DateCreation = DateCreation,
-            DatePeremption = DatePeremption,
-            DateModification = DateModification,
-            DateSuppression = DateSuppression
-        };
     }
 }

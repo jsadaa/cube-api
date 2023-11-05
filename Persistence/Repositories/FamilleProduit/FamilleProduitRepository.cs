@@ -1,6 +1,3 @@
-using ApiCube.Application.DTOs.Requests;
-using ApiCube.Application.DTOs.Responses;
-using ApiCube.Domain.Factories;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
 using AutoMapper;
@@ -18,9 +15,8 @@ public class FamilleProduitRepository : IFamilleProduitRepository
         _mapper = mapper;
     }
     
-    public int Ajouter(FamilleProduitRequestDTO familleProduitRequestDTO)
+    public int Ajouter(Domain.Entities.FamilleProduit nouvelleFamilleProduit)
     {
-        var nouvelleFamilleProduit = _mapper.Map<Domain.Entities.FamilleProduit>(familleProduitRequestDTO);
         var nouvelleFamilleProduitModel = _mapper.Map<FamilleProduitModel>(nouvelleFamilleProduit);
         
         _context.FamillesProduits.Add(nouvelleFamilleProduitModel);
@@ -37,7 +33,7 @@ public class FamilleProduitRepository : IFamilleProduitRepository
         return famillesProduits;
     }
     
-    public Domain.Entities.FamilleProduit? Trouver(int id)
+    public Domain.Entities.FamilleProduit Trouver(int id)
     {
         var familleProduitModel = _context.FamillesProduits.Find(id);
         if (familleProduitModel == null) throw new FamilleProduitIntrouvable();
@@ -53,23 +49,18 @@ public class FamilleProduitRepository : IFamilleProduitRepository
         return _mapper.Map<Domain.Entities.FamilleProduit>(familleProduitModel);
     }
     
-    public int? Modifier(int id, FamilleProduitRequestDTO familleProduitRequest)
+    public void Modifier(Domain.Entities.FamilleProduit familleProduitModifiee)
     {
-        var familleProduitModel = _context.FamillesProduits.Find(id);
-        if (familleProduitModel == null) throw new FamilleProduitIntrouvable();
+        var familleProduitModel = _mapper.Map<FamilleProduitModel>(familleProduitModifiee);
         
-        var familleProduit = _mapper.Map<Domain.Entities.FamilleProduit>(familleProduitModel);
-        familleProduit.MettreAJour(familleProduitRequest.Nom, familleProduitRequest.Description);
-        
-        _context.FamillesProduits.Update(_mapper.Map<FamilleProduitModel>(familleProduit));
-        
-        return familleProduitModel.Id;
+        _context.FamillesProduits.Update(familleProduitModel);
+        _context.SaveChanges();
     }
     
-    public void Supprimer(int id)
+    
+    public void Supprimer(Domain.Entities.FamilleProduit familleProduitASupprimer)
     {
-        var familleProduitModel = _context.FamillesProduits.Find(id);
-        if (familleProduitModel == null) throw new FamilleProduitIntrouvable();
+        var familleProduitModel = _mapper.Map<FamilleProduitModel>(familleProduitASupprimer);
         
         _context.FamillesProduits.Remove(familleProduitModel);
         _context.SaveChanges();

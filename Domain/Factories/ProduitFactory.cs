@@ -1,6 +1,6 @@
 using ApiCube.Application.DTOs.Requests;
-using ApiCube.Application.DTOs.Responses;
 using ApiCube.Domain.Entities;
+using ApiCube.Persistence.Models;
 using ApiCube.Persistence.Repositories.FamilleProduit;
 using ApiCube.Persistence.Repositories.Fournisseur;
 using AutoMapper;
@@ -20,36 +20,21 @@ public class ProduitFactory
         _mapper = mapper;
     }
     
-    /// <summary>
-    /// Créer un produit à partir d'une requête
-    /// </summary>
-    /// <param name="produitRequest"> La requête </param>
-    /// <returns> Produit </returns>
-    /// <exception cref="Exception"> Si la famille de produit ou le fournisseur n'existe pas </exception>
-    public Produit CreerProduit(AjouterProduitRequest produitRequest)
+    public Produit Creer(ProduitRequestDTO produitRequestDTO)
     {
-        FamilleProduit familleProduit = _mapper.Map<FamilleProduit>(
-            _familleProduitRepository.Trouver(
-                produitRequest.FamilleProduitId
-            )
-        );
-        
-        Fournisseur fournisseur = _mapper.Map<Fournisseur>(
-            _fournisseurRepository.Trouver(
-                produitRequest.FournisseurId
-            )
-        );
+        FamilleProduit familleProduit = _familleProduitRepository.Trouver(produitRequestDTO.FamilleProduitId);
+        Fournisseur fournisseur = _fournisseurRepository.Trouver(produitRequestDTO.FournisseurId);
         
         Produit nouveauProduit = new Produit(
-            nom: produitRequest.Nom,
-            description: produitRequest.Description,
-            appellation: produitRequest.Appellation,
-            cepage: produitRequest.Cepage,
-            region: produitRequest.Region,
-            degreAlcool: produitRequest.DegreAlcool,
-            prixAchat: produitRequest.PrixAchat,
-            prixVente: produitRequest.PrixVente,
-            enPromotion: produitRequest.EnPromotion,
+            nom: produitRequestDTO.Nom,
+            description: produitRequestDTO.Description,
+            appellation: produitRequestDTO.Appellation,
+            cepage: produitRequestDTO.Cepage,
+            region: produitRequestDTO.Region,
+            degreAlcool: produitRequestDTO.DegreAlcool,
+            prixAchat: produitRequestDTO.PrixAchat,
+            prixVente: produitRequestDTO.PrixVente,
+            enPromotion: produitRequestDTO.EnPromotion,
             familleProduit: familleProduit,
             fournisseur: fournisseur
         );
@@ -57,31 +42,22 @@ public class ProduitFactory
         return nouveauProduit;
     }
     
-    public Produit MapperProduit(ProduitDTO produitDTO)
+    public Produit Mapper(ProduitModel produitModel)
     {
-        FamilleProduit familleProduit = _mapper.Map<FamilleProduit>(
-            _familleProduitRepository.Trouver(
-                produitDTO.FamilleProduitNom
-            )
-        );
-        
-        Fournisseur fournisseur = _mapper.Map<Fournisseur>(
-            _fournisseurRepository.Trouver(
-                produitDTO.FournisseurNom
-            )
-        );
+        FamilleProduit familleProduit = _familleProduitRepository.Trouver(produitModel.FamilleProduitId);
+        Fournisseur fournisseur = _fournisseurRepository.Trouver(produitModel.FournisseurId);
         
         Produit produit = new Produit(
-            id: produitDTO.Id,
-            nom: produitDTO.Nom,
-            description: produitDTO.Description,
-            appellation: produitDTO.Appellation,
-            cepage: produitDTO.Cepage,
-            region: produitDTO.Region,
-            degreAlcool: produitDTO.DegreAlcool,
-            prixAchat: produitDTO.PrixAchat,
-            prixVente: produitDTO.PrixVente,
-            enPromotion: produitDTO.EnPromotion,
+            id: produitModel.Id,
+            nom: produitModel.Nom,
+            description: produitModel.Description,
+            appellation: produitModel.Appellation,
+            cepage: produitModel.Cepage,
+            region: produitModel.Region,
+            degreAlcool: produitModel.DegreAlcool,
+            prixAchat: produitModel.PrixAchat,
+            prixVente: produitModel.PrixVente,
+            enPromotion: produitModel.EnPromotion,
             familleProduit: familleProduit,
             fournisseur: fournisseur
         );

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ApiCube.Application.DTOs.Responses;
 
-public class PromotionDTO
+public class PromotionResponseDTO
 {
     [Required]
     public int Id { get; set; }

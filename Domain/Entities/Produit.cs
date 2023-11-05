@@ -1,6 +1,3 @@
-using ApiCube.Application.DTOs.Requests;
-using ApiCube.Application.DTOs.Responses;
-
 namespace ApiCube.Domain.Entities;
 
 public class Produit
@@ -77,38 +74,16 @@ public class Produit
         return EstEnPromotion() ? CalculerPrixAvecPromotion() : PrixVente;
     }
     
-    public ProduitDTO ToResponseDTO()
+    public void MettreAJour(string nom, string description, string appellation, string cepage, string region, double degreAlcool, double prixAchat, double prixVente, bool enPromotion)
     {
-        return new ProduitDTO
-        {
-            Id = Id,
-            Nom = Nom,
-            Description = Description,
-            Appellation = Appellation,
-            Cepage = Cepage,
-            Region = Region,
-            DegreAlcool = DegreAlcool,
-            PrixAchat = PrixAchat,
-            PrixVente = PrixVente,
-            FamilleProduitNom = FamilleProduit.Nom,
-            FournisseurNom = Fournisseur.Nom
-        };
-    }
-    
-    public AjouterProduitRequest ToRequestDTO()
-    {
-        return new AjouterProduitRequest
-        {
-            Nom = Nom,
-            Description = Description,
-            Appellation = Appellation,
-            Cepage = Cepage,
-            Region = Region,
-            DegreAlcool = DegreAlcool,
-            PrixAchat = PrixAchat,
-            PrixVente = PrixVente,
-            FamilleProduitId = FamilleProduit.Id,
-            FournisseurId = Fournisseur.Id
-        };
+        Nom = nom;
+        Description = description;
+        Appellation = appellation;
+        Cepage = cepage;
+        Region = region;
+        DegreAlcool = degreAlcool;
+        PrixAchat = prixAchat;
+        PrixVente = prixVente;
+        EnPromotion = enPromotion;
     }
 }

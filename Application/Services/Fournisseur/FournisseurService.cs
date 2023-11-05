@@ -1,4 +1,5 @@
 using System.Net;
+using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Domain.Factories;
@@ -26,7 +27,7 @@ public class FournisseurService : IFournisseurService
         try
         {
             var nouveauFournisseur = _fournisseurFactory.Creer(fournisseurRequestDTO);
-            _fournisseurRepository.Ajouter(_mapper.Map<FournisseurRequestDTO>(nouveauFournisseur));
+            _fournisseurRepository.Ajouter(nouveauFournisseur);
             
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
@@ -50,12 +51,12 @@ public class FournisseurService : IFournisseurService
     {
         try
         {
-            var fournisseurs = _fournisseurRepository.Lister();
-            var fournisseursResponse= _mapper.Map<List<FournisseurResponseDTO>>(fournisseurs);
+            var listeFournisseurs = _fournisseurRepository.Lister();
+            var fournisseurs = _mapper.Map<List<FournisseurResponseDTO>>(listeFournisseurs);
             
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: new { fournisseursResponse }
+                data: new { fournisseurs }
             );
             
             return response;
@@ -65,7 +66,7 @@ public class FournisseurService : IFournisseurService
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
                 data: new { message = e.Message }
-                );
+            );
             
             return response;
         }

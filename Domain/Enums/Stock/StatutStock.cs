@@ -1,3 +1,5 @@
+using ApiCube.Domain.Exceptions;
+
 namespace ApiCube.Domain.Enums.Stock;
 
 public enum StatutStock
@@ -36,7 +38,7 @@ public class StatutStockMapper
             "Vole" => StatutStock.Vole,
             "Casse" => StatutStock.Casse,
             "Autre" => StatutStock.Autre,
-            _ => throw new Exception("Le statut n'existe pas")
+            _ => throw new StatutStockInexistant()
         };
     }
 }

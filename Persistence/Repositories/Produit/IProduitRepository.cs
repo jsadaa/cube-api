@@ -1,17 +1,16 @@
-using ApiCube.Application.DTOs.Requests;
-using ApiCube.Application.DTOs.Responses;
-
 namespace ApiCube.Persistence.Repositories.Produit;
 
 public interface IProduitRepository
 {
-    public int Ajouter(AjouterProduitRequest produit);
+    public int Ajouter(Domain.Entities.Produit nouveauProduit);
     
-    public List<ProduitDTO> Lister();
+    public List<Domain.Entities.Produit> Lister();
     
-    public ProduitDTO? Trouver(int id);
+    public Domain.Entities.Produit Trouver(int id);
     
-    public int? Modifier(int id, AjouterProduitRequest produit);
+    public Domain.Entities.Produit Trouver(string nom);
     
-    public void Supprimer(int id);
+    public void Modifier(Domain.Entities.Produit produitModifie);
+    
+    public void Supprimer(Domain.Entities.Produit produitSupprime);
 }

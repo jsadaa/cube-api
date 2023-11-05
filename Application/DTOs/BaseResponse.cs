@@ -1,6 +1,6 @@
 using System.Net;
 
-namespace ApiCube.Application.DTOs.Responses;
+namespace ApiCube.Application.DTOs;
 
 public class BaseResponse
 {

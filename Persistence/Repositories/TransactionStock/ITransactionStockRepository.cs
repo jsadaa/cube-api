@@ -4,10 +4,11 @@ namespace ApiCube.Persistence.Repositories.TransactionStock;
 
 public interface ITransactionStockRepository
 {
-    public int Ajouter(TransactionStockDTO transactionStock);
-    public TransactionStockDTO? Trouver(int id);
-    public List<TransactionStockDTO> Lister();
-    public List<TransactionStockDTO> ListerParStock(int idStock);
-    public int? Modifier(int id, TransactionStockDTO transactionStock);
-    public void Supprimer(int id);
+    public int Ajouter(Domain.Entities.TransactionStock nouveauTransactionStock);
+    public Domain.Entities.TransactionStock Trouver(int id);
+    public Domain.Entities.TransactionStock Trouver(string nom);
+    public List<Domain.Entities.TransactionStock> Lister();
+    public List<Domain.Entities.TransactionStock> ListerParStock(int stockId);
+    public void Modifier(Domain.Entities.TransactionStock transactionStock);
+    public void Supprimer(Domain.Entities.TransactionStock transactionStock);
 }

@@ -1,12 +1,13 @@
 using System.Net;
+using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
-using ApiCube.Domain.Entities;
 using ApiCube.Domain.Enums.Stock;
 using ApiCube.Domain.Factories;
 using ApiCube.Persistence.Repositories.Produit;
 using ApiCube.Persistence.Repositories.Stock;
 using ApiCube.Persistence.Repositories.TransactionStock;
+using AutoMapper;
 
 namespace ApiCube.Application.Services.Stock;
 
@@ -17,37 +18,36 @@ public class StockService : IStockService
     private readonly IStockRepository _stockRepository;
     private readonly StockFactory _stockFactory;
     private readonly TransactionStockFactory _transactionStockFactory;
+    private readonly IMapper _mapper;
     
     public StockService(
-        IProduitRepository produitRepository,
+        IProduitRepository produitRepository, 
         ITransactionStockRepository transactionStockRepository, 
         IStockRepository stockRepository, 
-        StockFactory stockFactory,
-        TransactionStockFactory transactionStockFactory
-        )
+        StockFactory stockFactory, 
+        TransactionStockFactory transactionStockFactory, 
+        IMapper mapper
+    )
     {
         _produitRepository = produitRepository;
         _transactionStockRepository = transactionStockRepository;
         _stockRepository = stockRepository;
         _stockFactory = stockFactory;
         _transactionStockFactory = transactionStockFactory;
+        _mapper = mapper;
     }
     
-    public BaseResponse AjouterUnStockDeProduit(AjouterStockRequest stockRequest)
+    public BaseResponse AjouterUnStockDeProduit(StockRequestDTO stockRequestDTO)
     {
         try
         {
-            Domain.Entities.Stock nouveauStock = _stockFactory.CréerStock(stockRequest);
-            TransactionStock transactionStock = _transactionStockFactory.CreerTransactionStock(
-                nouveauStock, 
-                TypeTransactionStock.Achat
-            );
+            var nouveauStock = _stockFactory.Creer(stockRequestDTO);
+            var nouvelleTransactionStock = _transactionStockFactory.Creer(nouveauStock, TypeTransactionStock.Achat);
             
-            nouveauStock.AjouterTransaction(transactionStock);
-            transactionStock.Stock.Id = _stockRepository.Ajouter(nouveauStock.ToRequestDTO());
-            _transactionStockRepository.Ajouter(transactionStock.ToDTO());
+            _stockRepository.Ajouter(nouveauStock);
+            _transactionStockRepository.Ajouter(nouvelleTransactionStock);
             
-            BaseResponse response = new BaseResponse(
+            var response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
                 data: new { message = "Stock ajouté avec succès" }
             );
@@ -56,7 +56,7 @@ public class StockService : IStockService
         }
         catch (Exception e)
         {
-            BaseResponse response = new BaseResponse(
+            var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
                 data: new { message = e.Message }
             );
@@ -69,18 +69,19 @@ public class StockService : IStockService
     {
         try
         {
-            List<StockDTO> stocks = _stockRepository.Lister();
+            var listeStocks = _stockRepository.Lister();
+            var stocks = _mapper.Map<List<StockResponseDTO>>(listeStocks);
             
-            BaseResponse response = new BaseResponse(
+            var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: stocks
+                data: new { stocks }
             );
             
             return response;
         }
         catch (Exception e)
         {
-            BaseResponse response = new BaseResponse(
+            var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
                 data: new { message = e.Message }
             );

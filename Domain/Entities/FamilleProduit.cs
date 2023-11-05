@@ -1,6 +1,3 @@
-using ApiCube.Application.DTOs.Requests;
-using ApiCube.Application.DTOs.Responses;
-
 namespace ApiCube.Domain.Entities;
 
 public class FamilleProduit
