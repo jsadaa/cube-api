@@ -1,12 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ApiCube.Application.DTOs.Responses;
+namespace ApiCube.Application.DTOs;
 
-public class TransactionStockDTO
+public class TransactionStockInnerDTO
 {
-    [Required]
-    public int Id { get; set; }
-    
     [Required]
     public int Quantite { get; set; }
     
@@ -27,4 +24,10 @@ public class TransactionStockDTO
    
     [Required]
     public double PrixTotal { get; set; }
+    
+    [Required]
+    public int QuantiteAvant { get; set; }
+    
+    [Required]
+    public int QuantiteApres { get; set; }
 }

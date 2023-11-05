@@ -1,3 +1,5 @@
+using ApiCube.Application.DTOs;
+using ApiCube.Application.DTOs.Requests;
 using ApiCube.Domain.Entities;
 using ApiCube.Domain.Enums.Stock;
 using ApiCube.Persistence.Models;
@@ -16,15 +18,19 @@ public class TransactionStockFactory
         _stockRepository = stockRepository;
     }
     
-    public TransactionStock Creer(Stock stock, TypeTransactionStock type)
+    public TransactionStock Creer(TransactionStockInnerDTO transactionStockInnerDTO)
     {
+        Stock stock = _stockRepository.Trouver(transactionStockInnerDTO.StockId);
+        
         return new TransactionStock(
-            quantite: stock.Quantite,
-            date: DateTime.Now,
-            type: type,
+            quantite: transactionStockInnerDTO.Quantite,
+            date: transactionStockInnerDTO.Date,
+            type: _typeTransactionStockMapper.Mapper(transactionStockInnerDTO.Type),
             stock: stock,
             produit: stock.Produit,
-            prixUnitaire: stock.Produit.PrixAchat
+            prixUnitaire: transactionStockInnerDTO.PrixUnitaire,
+            quantiteAvant: transactionStockInnerDTO.QuantiteAvant,
+            quantiteApres: transactionStockInnerDTO.QuantiteApres
         );
     }
     
@@ -39,7 +45,9 @@ public class TransactionStockFactory
             type: _typeTransactionStockMapper.Mapper(transactionStockModel.Type),
             stock: stock,
             produit: stock.Produit,
-            prixUnitaire: transactionStockModel.PrixUnitaire
+            prixUnitaire: transactionStockModel.PrixUnitaire,
+            quantiteAvant: transactionStockModel.QuantiteAvant,
+            quantiteApres: transactionStockModel.QuantiteApres
         );
     }
 

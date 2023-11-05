@@ -46,4 +46,12 @@ public class TransactionStockModel
     [Column("prix_total")]
     [Required]
     public double PrixTotal { get; set; }
+    
+    [Column("quantite_avant")]
+    [Required]
+    public int QuantiteAvant { get; set; }
+    
+    [Column("quantite_apres")]
+    [Required]
+    public int QuantiteApres { get; set; }
 }

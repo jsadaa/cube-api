@@ -21,7 +21,11 @@ public class TransactionStock
     
     public double PrixTotal { get; set; }
     
-    public TransactionStock(int id, int quantite, DateTime date, TypeTransactionStock type, Produit produit, Stock stock, double prixUnitaire)
+    public int QuantiteAvant { get; set; }
+    
+    public int QuantiteApres { get; set; }
+    
+    public TransactionStock(int id, int quantite, DateTime date, TypeTransactionStock type, Produit produit, Stock stock, double prixUnitaire, int quantiteAvant, int quantiteApres)
     {
         Id = id;
         Quantite = quantite;
@@ -31,9 +35,11 @@ public class TransactionStock
         Stock = stock;
         PrixUnitaire = prixUnitaire;
         PrixTotal = CalculerPrixTotal();
+        QuantiteAvant = quantiteAvant;
+        QuantiteApres = quantiteApres;
     }
     
-    public TransactionStock(int quantite, DateTime date, TypeTransactionStock type, Produit produit, Stock stock, double prixUnitaire)
+    public TransactionStock(int quantite, DateTime date, TypeTransactionStock type, Produit produit, Stock stock, double prixUnitaire, int quantiteAvant, int quantiteApres)
     {
         Quantite = quantite;
         Date = date;
@@ -42,6 +48,8 @@ public class TransactionStock
         Stock = stock;
         PrixUnitaire = prixUnitaire;
         PrixTotal = CalculerPrixTotal();
+        QuantiteAvant = quantiteAvant;
+        QuantiteApres = quantiteApres;
     }
     
     public double CalculerPrixTotal()
