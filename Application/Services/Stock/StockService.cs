@@ -42,7 +42,10 @@ public class StockService : IStockService
         try
         {
             var nouveauStock = _stockFactory.Creer(stockRequestDTO);
-            var transactionStockDTO = new TransactionStockInnerDTO
+            _stockRepository.Ajouter(nouveauStock);
+            
+            var nouvelleTransactionStock = _transactionStockFactory.Creer(
+                new TransactionStockInnerDTO
             {
                 Quantite = stockRequestDTO.Quantite,
                 Date = DateTime.Now,
@@ -53,11 +56,7 @@ public class StockService : IStockService
                 PrixTotal = nouveauStock.Produit.PrixAchat * stockRequestDTO.Quantite,
                 QuantiteAvant = 0,
                 QuantiteApres = stockRequestDTO.Quantite
-            };
-            
-            var nouvelleTransactionStock = _transactionStockFactory.Creer(transactionStockDTO);
-            
-            _stockRepository.Ajouter(nouveauStock);
+            });
             _transactionStockRepository.Ajouter(nouvelleTransactionStock);
             
             var response = new BaseResponse(
