@@ -16,17 +16,17 @@ public class StockService : IStockService
     private readonly IProduitRepository _produitRepository;
     private readonly ITransactionStockRepository _transactionStockRepository;
     private readonly IStockRepository _stockRepository;
+    private readonly IMapper _mapper;
     private readonly StockFactory _stockFactory;
     private readonly TransactionStockFactory _transactionStockFactory;
-    private readonly IMapper _mapper;
     
     public StockService(
         IProduitRepository produitRepository, 
         ITransactionStockRepository transactionStockRepository, 
         IStockRepository stockRepository, 
+        IMapper mapper,
         StockFactory stockFactory, 
-        TransactionStockFactory transactionStockFactory, 
-        IMapper mapper
+        TransactionStockFactory transactionStockFactory
     )
     {
         _produitRepository = produitRepository;
@@ -42,20 +42,20 @@ public class StockService : IStockService
         try
         {
             var nouveauStock = _stockFactory.Creer(stockRequestDTO);
-            _stockRepository.Ajouter(nouveauStock);
+            var stockId = _stockRepository.Ajouter(nouveauStock);
             
             var nouvelleTransactionStock = _transactionStockFactory.Creer(
                 new TransactionStockInnerDTO
             {
-                Quantite = stockRequestDTO.Quantite,
+                Quantite = nouveauStock.Quantite,
                 Date = DateTime.Now,
                 Type = TypeTransactionStock.Achat.ToString(),
-                ProduitId = stockRequestDTO.ProduitId,
-                StockId = nouveauStock.Id,
+                ProduitId = nouveauStock.Produit.Id,
+                StockId = stockId,
                 PrixUnitaire = nouveauStock.Produit.PrixAchat,
-                PrixTotal = nouveauStock.Produit.PrixAchat * stockRequestDTO.Quantite,
+                PrixTotal = nouveauStock.Produit.PrixAchat * nouveauStock.Quantite,
                 QuantiteAvant = 0,
-                QuantiteApres = stockRequestDTO.Quantite
+                QuantiteApres = nouveauStock.Quantite
             });
             _transactionStockRepository.Ajouter(nouvelleTransactionStock);
             
