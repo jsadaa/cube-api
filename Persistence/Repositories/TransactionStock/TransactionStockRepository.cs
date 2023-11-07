@@ -1,4 +1,10 @@
-using ApiCube.Domain.Factories;
+using ApiCube.Domain.Enums.Stock;
+using ApiCube.Domain.Mappers;
+using ApiCube.Domain.Mappers.FamilleProduit;
+using ApiCube.Domain.Mappers.Fournisseur;
+using ApiCube.Domain.Mappers.Produit;
+using ApiCube.Domain.Mappers.Stock;
+using ApiCube.Domain.Mappers.TransactionStock;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
 using AutoMapper;
@@ -10,13 +16,23 @@ public class TransactionStockRepository : ITransactionStockRepository
 {
     private readonly ApiDbContext _context;
     private readonly IMapper _mapper;
-    private readonly TransactionStockFactory _transactionStockFactory;
+    private readonly ITransactionStockMapper _transactionStockMapper;
+    private readonly IFamilleProduitMapper _familleProduitMapper;
+    private readonly IFournisseurMapper _fournisseurMapper;
+    private readonly IStockMapper _stockMapper;
+    private readonly IProduitMapper _produitMapper;
+    private readonly TypeTransactionStockMapper _typeTransactionStockMapper;
     
-    public TransactionStockRepository(ApiDbContext context, IMapper mapper, TransactionStockFactory transactionStockFactory)
+    public TransactionStockRepository(ApiDbContext context, IMapper mapper, ITransactionStockMapper transactionStockMapper, IFamilleProduitMapper familleProduitMapper, IFournisseurMapper fournisseurMapper, IStockMapper stockMapper, IProduitMapper produitMapper, TypeTransactionStockMapper typeTransactionStockMapper)
     {
         _context = context;
         _mapper = mapper;
-        _transactionStockFactory = transactionStockFactory;
+        _transactionStockMapper = transactionStockMapper;
+        _familleProduitMapper = familleProduitMapper;
+        _fournisseurMapper = fournisseurMapper;
+        _stockMapper = stockMapper;
+        _produitMapper = produitMapper;
+        _typeTransactionStockMapper = typeTransactionStockMapper;
     }
     
     public int Ajouter(Domain.Entities.TransactionStock transactionStock)
@@ -32,42 +48,72 @@ public class TransactionStockRepository : ITransactionStockRepository
     public Domain.Entities.TransactionStock Trouver(int id)
     {
         var transactionStock = _context.TransactionsStock
-            .Include(transactionStock => transactionStock.Produit)
+            .Include(transactionStock => transactionStock.Stock)
+            .Include(transactionStock => transactionStock.Stock.Produit)
+            .Include(transactionStock => transactionStock.Stock.Produit.FamilleProduit)
+            .Include(transactionStock => transactionStock.Stock.Produit.Fournisseur)
             .FirstOrDefault(transactionStock => transactionStock.Id == id);
         
         if (transactionStock == null) throw new TransactionStockIntrouvable();
         
-        return _mapper.Map<Domain.Entities.TransactionStock>(transactionStock);
-    }
-    
-    public Domain.Entities.TransactionStock Trouver(string nom)
-    {
-        var transactionStock = _context.TransactionsStock
-            .Include(transactionStock => transactionStock.Produit)
-            .FirstOrDefault(transactionStock => transactionStock.Produit.Nom == nom);
+        var familleProduit = _familleProduitMapper.Mapper(transactionStock.Stock.Produit.FamilleProduit);
+        var fournisseur = _fournisseurMapper.Mapper(transactionStock.Stock.Produit.Fournisseur);
+        var produit = _produitMapper.Mapper(transactionStock.Stock.Produit, familleProduit, fournisseur);
+        var stock = _stockMapper.MapperSansTransactionsStock(transactionStock.Stock, produit);
+        var typeTransactionStock = _typeTransactionStockMapper.Mapper(transactionStock.Type);
 
-        if (transactionStock == null) throw new TransactionStockIntrouvable();
-        
-        return _mapper.Map<Domain.Entities.TransactionStock>(transactionStock);
+        return _transactionStockMapper.Mapper(transactionStock, stock, typeTransactionStock); 
     }
     
     public List<Domain.Entities.TransactionStock> Lister()
     {
-        var transactionsStock = _context.TransactionsStock
-            .Include(transactionStock => transactionStock.Produit)
+        var transactionsStockModels = _context.TransactionsStock
+            .Include(transactionStock => transactionStock.Stock)
+            .Include(transactionStock => transactionStock.Stock.Produit)
+            .Include(transactionStock => transactionStock.Stock.Produit.FamilleProduit)
+            .Include(transactionStock => transactionStock.Stock.Produit.Fournisseur)
             .ToList();
         
-        return transactionsStock.Select(transactionStock => _transactionStockFactory.Mapper(transactionStock)).ToList();
+        List<Domain.Entities.TransactionStock> transactionsStockMapped = new();
+        
+        foreach (var transactionStock in transactionsStockModels)
+        {
+            var familleProduit = _familleProduitMapper.Mapper(transactionStock.Stock.Produit.FamilleProduit);
+            var fournisseur = _fournisseurMapper.Mapper(transactionStock.Stock.Produit.Fournisseur);
+            var produit = _produitMapper.Mapper(transactionStock.Stock.Produit, familleProduit, fournisseur);
+            var stock = _stockMapper.MapperSansTransactionsStock(transactionStock.Stock, produit);
+            var typeTransactionStock = _typeTransactionStockMapper.Mapper(transactionStock.Type);
+            
+            transactionsStockMapped.Add(_transactionStockMapper.Mapper(transactionStock, stock, typeTransactionStock));
+        }
+        
+        return transactionsStockMapped;
     }
     
     public List<Domain.Entities.TransactionStock> ListerParStock(int idStock)
     {
         var transactionsStock = _context.TransactionsStock
-            .Include(transactionStock => transactionStock.Produit)
-            .Where(transactionStock => transactionStock.StockId == idStock)
+            .Include(transactionStock => transactionStock.Stock)
+            .Include(transactionStock => transactionStock.Stock.Produit)
+            .Include(transactionStock => transactionStock.Stock.Produit.FamilleProduit)
+            .Include(transactionStock => transactionStock.Stock.Produit.Fournisseur)
+            .Where(transactionStock => transactionStock.Stock.Id == idStock)
             .ToList();
         
-        return transactionsStock.Select(transactionStock => _transactionStockFactory.Mapper(transactionStock)).ToList();
+        List<Domain.Entities.TransactionStock> transactionsStockMapped = new();
+        
+        foreach (var transactionStock in transactionsStock)
+        {
+            var familleProduit = _familleProduitMapper.Mapper(transactionStock.Stock.Produit.FamilleProduit);
+            var fournisseur = _fournisseurMapper.Mapper(transactionStock.Stock.Produit.Fournisseur);
+            var produit = _produitMapper.Mapper(transactionStock.Stock.Produit, familleProduit, fournisseur);
+            var stock = _stockMapper.MapperSansTransactionsStock(transactionStock.Stock, produit);
+            var typeTransactionStock = _typeTransactionStockMapper.Mapper(transactionStock.Type);
+            
+            transactionsStockMapped.Add(_transactionStockMapper.Mapper(transactionStock, stock, typeTransactionStock));
+        }
+        
+        return transactionsStockMapped;
     }
 
     public void Modifier(Domain.Entities.TransactionStock transactionStockModifiee)

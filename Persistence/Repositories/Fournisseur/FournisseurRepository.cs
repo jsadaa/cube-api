@@ -1,4 +1,5 @@
-using ApiCube.Domain.Factories;
+using ApiCube.Domain.Mappers;
+using ApiCube.Domain.Mappers.Fournisseur;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
 using AutoMapper;
@@ -9,13 +10,13 @@ public class FournisseurRepository : IFournisseurRepository
 {
     private readonly ApiDbContext _context;
     private readonly IMapper _mapper;
-    private readonly FournisseurFactory _fournisseurFactory;
+    private readonly IFournisseurMapper _fournisseurMapper;
     
-    public FournisseurRepository(ApiDbContext context, IMapper mapper, FournisseurFactory fournisseurFactory)
+    public FournisseurRepository(ApiDbContext context, IMapper mapper, IFournisseurMapper fournisseurMapper)
     {
         _context = context;
         _mapper = mapper;
-        _fournisseurFactory = fournisseurFactory;
+        _fournisseurMapper = fournisseurMapper;
     }
     
     public int Ajouter(Domain.Entities.Fournisseur nouveauFournisseur)
@@ -32,7 +33,7 @@ public class FournisseurRepository : IFournisseurRepository
     {
         var fournisseursModels = _context.Fournisseurs.ToList();
 
-        return fournisseursModels.Select(fournisseurModel => _fournisseurFactory.Mapper(fournisseurModel)).ToList();
+        return fournisseursModels.Select(fournisseurModel => _fournisseurMapper.Mapper(fournisseurModel)).ToList();
     }
     
     public Domain.Entities.Fournisseur Trouver(int id)
@@ -40,7 +41,7 @@ public class FournisseurRepository : IFournisseurRepository
         var fournisseurModel = _context.Fournisseurs.Find(id);
         if (fournisseurModel == null) throw new FournisseurIntrouvable();
         
-        return _fournisseurFactory.Mapper(fournisseurModel);
+        return _fournisseurMapper.Mapper(fournisseurModel);
     }
     
     public Domain.Entities.Fournisseur Trouver(string nom)
@@ -48,7 +49,7 @@ public class FournisseurRepository : IFournisseurRepository
         var fournisseurModel = _context.Fournisseurs.FirstOrDefault(fournisseur => fournisseur.Nom == nom);
         if (fournisseurModel == null) throw new FournisseurIntrouvable();
         
-        return _fournisseurFactory.Mapper(fournisseurModel);
+        return _fournisseurMapper.Mapper(fournisseurModel);
     }
     
     public void Modifier(Domain.Entities.Fournisseur fournisseurModifie)

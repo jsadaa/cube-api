@@ -19,8 +19,8 @@ public class Fournisseur
     public Fournisseur(string nom, string adresse, string telephone, string email)
     {
         Nom = nom;
-        Adresse = ValiderEtFormaterAdresse(adresse);
-        Telephone = ValiderEtFormaterTelephone(telephone);
+        Adresse = ExtraireAdresse(adresse);
+        Telephone = ExtraireTelephone(telephone);
         Email = email;
     }
     
@@ -28,12 +28,12 @@ public class Fournisseur
     {
         Id = id;
         Nom = nom;
-        Adresse = ValiderEtFormaterAdresse(adresse);
-        Telephone = ValiderEtFormaterTelephone(telephone);
+        Adresse = ExtraireAdresse(adresse);
+        Telephone = ExtraireTelephone(telephone);
         Email = email;
     }
     
-    private static Adresse ValiderEtFormaterAdresse(string adresse)
+    private static Adresse ExtraireAdresse(string adresse)
     {
         var adresseSplit = adresse.Split(',');
         
@@ -45,7 +45,7 @@ public class Fournisseur
         return new Adresse(adresseSplit[0], adresseSplit[1], adresseSplit[2], adresseSplit[3], adresseSplit[4]);
     }
 
-    private static Telephone ValiderEtFormaterTelephone(string telephone)
+    private static Telephone ExtraireTelephone(string telephone)
     {
         if (telephone.Length != 10)
         {
@@ -58,8 +58,8 @@ public class Fournisseur
     public void MettreAJour(string nom, string adresse, string telephone, string email)
     {
         Nom = nom;
-        Adresse = ValiderEtFormaterAdresse(adresse);
-        Telephone = ValiderEtFormaterTelephone(telephone);
+        Adresse = ExtraireAdresse(adresse);
+        Telephone = ExtraireTelephone(telephone);
         Email = email;
     }
 }

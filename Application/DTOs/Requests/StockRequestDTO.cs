@@ -11,8 +11,6 @@ public class StockRequestDTO
     [Required]
     public int SeuilDisponibilite { get; set; }
     
-    public string Statut { get; set; }
-    
     [Required]
     public int ProduitId { get; set; }
     

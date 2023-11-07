@@ -2,7 +2,10 @@ using System.Net;
 using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
-using ApiCube.Domain.Factories;
+using ApiCube.Domain.Mappers;
+using ApiCube.Domain.Mappers.Produit;
+using ApiCube.Persistence.Repositories.FamilleProduit;
+using ApiCube.Persistence.Repositories.Fournisseur;
 using ApiCube.Persistence.Repositories.Produit;
 using AutoMapper;
 
@@ -11,21 +14,34 @@ namespace ApiCube.Application.Services.Produit;
 public class ProduitService : IProduitService
 {
     private readonly IProduitRepository _produitRepository;
-    private readonly ProduitFactory _produitFactory;
+    private readonly IFamilleProduitRepository _familleProduitRepository;
+    private readonly IFournisseurRepository _fournisseurRepository;
     private readonly IMapper _mapper;
+    private readonly IProduitMapper _produitMapper;
     
-    public ProduitService(IProduitRepository produitRepository, ProduitFactory produitFactory, IMapper mapper)
+    public ProduitService(
+        IProduitRepository produitRepository,
+        IFamilleProduitRepository familleProduitRepository,
+        IFournisseurRepository fournisseurRepository,
+        IMapper mapper,
+        IProduitMapper produitMapper
+    )
     {
         _produitRepository = produitRepository;
-        _produitFactory = produitFactory;
+        _familleProduitRepository = familleProduitRepository;
+        _fournisseurRepository = fournisseurRepository;
         _mapper = mapper;
+        _produitMapper = produitMapper;
     }
 
     public BaseResponse AjouterUnProduitAuCatalogue(ProduitRequestDTO produitRequestDTO)
     {
         try
         {
-            var nouveauProduit = _produitFactory.Creer(produitRequestDTO);
+            var fournisseur = _fournisseurRepository.Trouver(produitRequestDTO.FournisseurId);
+            var familleProduit = _familleProduitRepository.Trouver(produitRequestDTO.FamilleProduitId);
+            
+            var nouveauProduit = _produitMapper.Mapper(produitRequestDTO, familleProduit, fournisseur);
             _produitRepository.Ajouter(nouveauProduit);
             
             var response = new BaseResponse(
@@ -55,7 +71,7 @@ public class ProduitService : IProduitService
             
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: new { produits }
+                data: produits
             );
             
             return response;

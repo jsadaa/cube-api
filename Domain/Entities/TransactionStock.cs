@@ -5,7 +5,7 @@ namespace ApiCube.Domain.Entities;
 public class TransactionStock
 {
     
-    public int Id { get; set; }
+    public int Id { get; set; } = 0;
     
     public int Quantite { get; set; }
     
@@ -13,9 +13,7 @@ public class TransactionStock
     
     public TypeTransactionStock Type { get; set; }
     
-    public Produit Produit { get; set; }
-    
-    public Stock Stock { get; set; }
+    public Stock Stock { get; set; } 
     
     public double PrixUnitaire { get; set; }
     
@@ -25,13 +23,12 @@ public class TransactionStock
     
     public int QuantiteApres { get; set; }
     
-    public TransactionStock(int id, int quantite, DateTime date, TypeTransactionStock type, Produit produit, Stock stock, double prixUnitaire, int quantiteAvant, int quantiteApres)
+    public TransactionStock(int id, int quantite, DateTime date, TypeTransactionStock type, Stock stock, double prixUnitaire, int quantiteAvant, int quantiteApres)
     {
         Id = id;
         Quantite = quantite;
         Date = date;
         Type = type;
-        Produit = produit;
         Stock = stock;
         PrixUnitaire = prixUnitaire;
         PrixTotal = CalculerPrixTotal();
@@ -39,12 +36,11 @@ public class TransactionStock
         QuantiteApres = quantiteApres;
     }
     
-    public TransactionStock(int quantite, DateTime date, TypeTransactionStock type, Produit produit, Stock stock, double prixUnitaire, int quantiteAvant, int quantiteApres)
+    public TransactionStock(int quantite, DateTime date, TypeTransactionStock type, Stock stock, double prixUnitaire, int quantiteAvant, int quantiteApres)
     {
         Quantite = quantite;
         Date = date;
         Type = type;
-        Produit = produit;
         Stock = stock;
         PrixUnitaire = prixUnitaire;
         PrixTotal = CalculerPrixTotal();

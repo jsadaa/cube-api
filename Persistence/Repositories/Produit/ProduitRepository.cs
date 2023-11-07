@@ -1,4 +1,7 @@
-using ApiCube.Domain.Factories;
+using ApiCube.Domain.Mappers;
+using ApiCube.Domain.Mappers.FamilleProduit;
+using ApiCube.Domain.Mappers.Fournisseur;
+using ApiCube.Domain.Mappers.Produit;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
 using AutoMapper;
@@ -9,13 +12,17 @@ namespace ApiCube.Persistence.Repositories.Produit;
 public class ProduitRepository : IProduitRepository
 {
     private readonly ApiDbContext _context;
-    private readonly ProduitFactory _produitFactory;
+    private readonly IProduitMapper _produitMapper;
+    private readonly IFamilleProduitMapper _familleProduitMapper;
+    private readonly IFournisseurMapper _fournisseurMapper;
     private readonly IMapper _mapper;
     
-    public ProduitRepository(ApiDbContext context, ProduitFactory produitFactory, IMapper mapper)
+    public ProduitRepository(ApiDbContext context, IProduitMapper produitMapper, IFamilleProduitMapper familleProduitMapper, IFournisseurMapper fournisseurMapper, IMapper mapper)
     {
         _context = context;
-        _produitFactory = produitFactory;
+        _produitMapper = produitMapper;
+        _familleProduitMapper = familleProduitMapper;
+        _fournisseurMapper = fournisseurMapper;
         _mapper = mapper;
     }
     
@@ -36,8 +43,19 @@ public class ProduitRepository : IProduitRepository
             .Include(produit => produit.Fournisseur)
             .Include(produit => produit.Promotion)
             .ToList();
+
+        var produits = new List<Domain.Entities.Produit>();
+
+        foreach (var produitModel in produitsModels)
+        {
+            var familleProduitModel = _familleProduitMapper.Mapper(produitModel.FamilleProduit);
+            var fournisseurModel = _fournisseurMapper.Mapper(produitModel.Fournisseur);
+            var produit = _produitMapper.Mapper(produitModel, familleProduitModel, fournisseurModel);
+            
+            produits.Add(produit);
+        }
         
-        return produitsModels.Select(produitModel => _produitFactory.Mapper(produitModel)).ToList();
+        return produits;
     }
     
     public Domain.Entities.Produit Trouver(int id)
@@ -50,7 +68,11 @@ public class ProduitRepository : IProduitRepository
         
         if (produitModel == null) throw new ProduitIntrouvable();
         
-        return _produitFactory.Mapper(produitModel);
+        var familleProduitModel = _familleProduitMapper.Mapper(produitModel.FamilleProduit);
+        var fournisseurModel = _fournisseurMapper.Mapper(produitModel.Fournisseur);
+        var produit = _produitMapper.Mapper(produitModel, familleProduitModel, fournisseurModel);
+        
+        return produit;
     }
     
     public Domain.Entities.Produit Trouver(string nom)
@@ -63,7 +85,11 @@ public class ProduitRepository : IProduitRepository
         
         if (produitModel == null) throw new ProduitIntrouvable();
         
-        return _produitFactory.Mapper(produitModel);
+        var familleProduitModel = _familleProduitMapper.Mapper(produitModel.FamilleProduit);
+        var fournisseurModel = _fournisseurMapper.Mapper(produitModel.Fournisseur);
+        var produit = _produitMapper.Mapper(produitModel, familleProduitModel, fournisseurModel);
+        
+        return produit;
     }
 
     public void Modifier(Domain.Entities.Produit produitModifie)

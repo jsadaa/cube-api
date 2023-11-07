@@ -5,7 +5,12 @@ using ApiCube.Application.Services.Produit;
 using ApiCube.Application.Services.Stock;
 using ApiCube.Configurations;
 using ApiCube.Domain.Enums.Stock;
-using ApiCube.Domain.Factories;
+using ApiCube.Domain.Mappers;
+using ApiCube.Domain.Mappers.FamilleProduit;
+using ApiCube.Domain.Mappers.Fournisseur;
+using ApiCube.Domain.Mappers.Produit;
+using ApiCube.Domain.Mappers.Stock;
+using ApiCube.Domain.Mappers.TransactionStock;
 using ApiCube.Persistence.Repositories.FamilleProduit;
 using ApiCube.Persistence.Repositories.Fournisseur;
 using ApiCube.Persistence.Repositories.Produit;
@@ -26,6 +31,9 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
 });
 
 // Configure AutoMapper
+// Note: Apart DTO to Data Model mapping and vice versa,
+// AutoMapper don't manage DTO to Domain Entity mapping, only Domain Entity to DTO.
+// There's specific mappers for that (see below)
 builder.Services.AddAutoMapper(
     typeof(FamilleProduitMapperConfig), 
     typeof(FournisseurMapperConfig), 
@@ -33,6 +41,13 @@ builder.Services.AddAutoMapper(
     typeof(StockMapperConfig), 
     typeof(TransactionStockMapperConfig)
 );
+
+// Configure Mappers
+builder.Services.AddScoped<IProduitMapper , ProduitMapper>();
+builder.Services.AddScoped<ITransactionStockMapper , TransactionStockMapper>();
+builder.Services.AddScoped<IFournisseurMapper , FournisseurMapper>();
+builder.Services.AddScoped<IStockMapper , StockMapper>();
+builder.Services.AddScoped<IFamilleProduitMapper , FamilleProduitMapper>();
 
 // Configure repositories
 builder.Services.AddScoped<IFamilleProduitRepository , FamilleProduitRepository>();
@@ -46,12 +61,6 @@ builder.Services.AddScoped<IProduitService , ProduitService>();
 builder.Services.AddScoped<IFamilleProduitService , FamilleProduitService>();
 builder.Services.AddScoped<IFournisseurService , FournisseurService>();
 builder.Services.AddScoped<IStockService , StockService>();
-
-// Configure factories
-builder.Services.AddScoped<ProduitFactory>();
-builder.Services.AddScoped<TransactionStockFactory>();
-builder.Services.AddScoped<FournisseurFactory>();
-builder.Services.AddScoped<StockFactory>();
 
 // Configure enums mappers
 builder.Services.AddScoped<TypeTransactionStockMapper>();

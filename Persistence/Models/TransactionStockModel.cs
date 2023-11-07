@@ -25,13 +25,6 @@ public class TransactionStockModel
     [StringLength(50)]
     public string Type { get; set; }
     
-    [Column("produit_id")]
-    [Required]
-    public int ProduitId { get; set; }
-    
-    [ForeignKey("ProduitId")]
-    public ProduitModel Produit { get; set; }
-    
     [Column("stock_id")]
     [Required]
     public int StockId { get; set; }

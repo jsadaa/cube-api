@@ -5,7 +5,7 @@ namespace ApiCube.Persistence.Repositories.Stock;
 
 public interface IStockRepository
 {
-    public int Ajouter(Domain.Entities.Stock nouveauStock);
+    public Domain.Entities.Stock Ajouter(Domain.Entities.Stock nouveauStock);
     public List<Domain.Entities.Stock> Lister();
     public Domain.Entities.Stock Trouver(int id);
     public Domain.Entities.Stock Trouver(string nom);

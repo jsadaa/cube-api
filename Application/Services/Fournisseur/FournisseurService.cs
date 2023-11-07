@@ -2,7 +2,8 @@ using System.Net;
 using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
-using ApiCube.Domain.Factories;
+using ApiCube.Domain.Mappers;
+using ApiCube.Domain.Mappers.Fournisseur;
 using ApiCube.Persistence.Repositories.Fournisseur;
 using AutoMapper;
 
@@ -12,13 +13,13 @@ public class FournisseurService : IFournisseurService
 {
     
     private readonly IFournisseurRepository _fournisseurRepository;
-    private readonly FournisseurFactory _fournisseurFactory;
+    private readonly IFournisseurMapper _fournisseurMapper;
     private readonly IMapper _mapper;
     
-    public FournisseurService(IFournisseurRepository fournisseurRepository, FournisseurFactory fournisseurFactory, IMapper mapper)
+    public FournisseurService(IFournisseurRepository fournisseurRepository, IFournisseurMapper fournisseurMapper, IMapper mapper)
     {
         _fournisseurRepository = fournisseurRepository;
-        _fournisseurFactory = fournisseurFactory;
+        _fournisseurMapper = fournisseurMapper;
         _mapper = mapper;
     }
     
@@ -26,7 +27,8 @@ public class FournisseurService : IFournisseurService
     {
         try
         {
-            var nouveauFournisseur = _fournisseurFactory.Creer(fournisseurRequestDTO);
+            var nouveauFournisseur = _fournisseurMapper.Mapper(fournisseurRequestDTO);
+                
             _fournisseurRepository.Ajouter(nouveauFournisseur);
             
             var response = new BaseResponse(
@@ -56,7 +58,7 @@ public class FournisseurService : IFournisseurService
             
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: new { fournisseurs }
+                data: fournisseurs 
             );
             
             return response;

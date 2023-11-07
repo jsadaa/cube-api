@@ -110,7 +110,7 @@ public class Employe
     
     public bool EstGestionnaire()
     {
-        return Role == Role.ResponsableStock || Role == Role.ResponsableAchat || Role == Role.ResponsableVente || Role == Role.ResponsableClient || Role == Role.ResponsableFournisseur;
+        return Role is Role.ResponsableStock or Role.ResponsableAchat or Role.ResponsableVente or Role.ResponsableClient or Role.ResponsableFournisseur;
     }
     
     public bool EstResponsableStock()

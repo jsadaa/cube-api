@@ -4,13 +4,13 @@ namespace ApiCube.Domain.Entities;
 
 public class Stock
 {
-    public int Id { get; set; }
+    public int Id { get; set; } = 0;
     
     public int Quantite { get; set; }
     
     public int SeuilDisponibilite { get; set; }
     
-    public StatutStock Statut { get; set; }
+    public StatutStock Statut { get; set; } = StatutStock.EnStock;
     
     public Produit Produit { get; set; }
     
@@ -24,31 +24,31 @@ public class Stock
     
     public DateTime? DateSuppression { get; set; }
     
-    public Stock(int id, int quantite, int seuilDisponibilite, StatutStock statut, Produit produit, List<TransactionStock> transactionStocks, DateTime dateCreation, DateTime datePeremption, DateTime dateModification, DateTime? dateSuppression)
+    public Stock(int id, int quantite, int seuilDisponibilite, Produit produit, List<TransactionStock> transactionStocks, DateTime dateCreation, DateTime datePeremption, DateTime dateModification, DateTime? dateSuppression)
     {
         Id = id;
         Quantite = quantite;
         SeuilDisponibilite = seuilDisponibilite;
-        Statut = statut;
         Produit = produit;
         Transactions = transactionStocks;
         DateCreation = dateCreation;
         DatePeremption = datePeremption;
         DateModification = dateModification;
         DateSuppression = dateSuppression;
+        AdapterStatut();
     }
     
-    public Stock(int quantite, int seuilDisponibilite, StatutStock statut, Produit produit, List<TransactionStock> transactionStocks, DateTime dateCreation, DateTime datePeremption, DateTime dateModification, DateTime? dateSuppression)
+    public Stock(int quantite, int seuilDisponibilite, Produit produit, List<TransactionStock> transactionStocks, DateTime dateCreation, DateTime datePeremption, DateTime dateModification, DateTime? dateSuppression)
     {
         Quantite = quantite;
         SeuilDisponibilite = seuilDisponibilite;
-        Statut = statut;
         Produit = produit;
         Transactions = transactionStocks;
         DateCreation = dateCreation;
         DatePeremption = datePeremption;
         DateModification = dateModification;
         DateSuppression = dateSuppression;
+        AdapterStatut();
     }
     
     public bool EstDisponible()
@@ -70,14 +70,14 @@ public class Stock
     {
         return EstDisponible() && !EstPerime() && !EstEnRupture();
     }
-    
-    public void AjouterQuantite(int quantite)
+
+    private void AjouterQuantite(int quantite)
     {
         Quantite += quantite;
         AdapterStatut();
     }
-    
-    public void RetirerQuantite(int quantite)
+
+    private void RetirerQuantite(int quantite)
     {
         Quantite -= quantite;
         AdapterStatut();
@@ -104,5 +104,9 @@ public class Stock
     public void AjouterTransaction(TransactionStock transactionStock)
     {
         Transactions.Add(transactionStock);
+        if (transactionStock.EstUneSortie()) RetirerQuantite(transactionStock.Quantite);
+        else if (transactionStock.EstUneEntree()) AjouterQuantite(transactionStock.Quantite);
+        else return;
+        AdapterStatut();
     }
 }

@@ -2,6 +2,8 @@ using System.Net;
 using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
+using ApiCube.Domain.Mappers;
+using ApiCube.Domain.Mappers.FamilleProduit;
 using ApiCube.Persistence.Repositories.FamilleProduit;
 using AutoMapper;
 
@@ -10,11 +12,13 @@ namespace ApiCube.Application.Services.FamilleProduit;
 public class FamilleProduitService : IFamilleProduitService
 {
     private readonly IFamilleProduitRepository _familleProduitRepository;
+    private readonly IFamilleProduitMapper _familleProduitMapper;
     private readonly IMapper _mapper;
     
-    public FamilleProduitService(IFamilleProduitRepository familleProduitRepository, IMapper mapper)
+    public FamilleProduitService(IFamilleProduitRepository familleProduitRepository, IFamilleProduitMapper familleProduitMapper, IMapper mapper)
     {
         _familleProduitRepository = familleProduitRepository;
+        _familleProduitMapper = familleProduitMapper;
         _mapper = mapper;
     }
     
@@ -22,7 +26,8 @@ public class FamilleProduitService : IFamilleProduitService
     {
         try
         {
-            var nouvelleFamilleProduit = _mapper.Map<Domain.Entities.FamilleProduit>(familleProduitRequestDTO);
+            var nouvelleFamilleProduit = _familleProduitMapper.Mapper(familleProduitRequestDTO);
+            
             _familleProduitRepository.Ajouter(nouvelleFamilleProduit);
             
             var response = new BaseResponse(
@@ -52,7 +57,7 @@ public class FamilleProduitService : IFamilleProduitService
             
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: new { famillesProduits }
+                data: famillesProduits
             );
             
             return response;
