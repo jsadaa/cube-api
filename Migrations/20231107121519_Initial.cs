@@ -311,20 +311,15 @@ namespace ApiCube.Migrations
                     date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     type = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    produit_id = table.Column<int>(type: "int", nullable: false),
                     stock_id = table.Column<int>(type: "int", nullable: false),
                     prix_unitaire = table.Column<double>(type: "double", nullable: false),
-                    prix_total = table.Column<double>(type: "double", nullable: false)
+                    prix_total = table.Column<double>(type: "double", nullable: false),
+                    quantite_avant = table.Column<int>(type: "int", nullable: false),
+                    quantite_apres = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_transaction_stock", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_transaction_stock_produit_produit_id",
-                        column: x => x.produit_id,
-                        principalTable: "produit",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_transaction_stock_stock_stock_id",
                         column: x => x.stock_id,
@@ -570,11 +565,6 @@ namespace ApiCube.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_stock_produit_id",
                 table: "stock",
-                column: "produit_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_transaction_stock_produit_id",
-                table: "transaction_stock",
                 column: "produit_id");
 
             migrationBuilder.CreateIndex(

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiCube.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20231103222754_Initial")]
+    [Migration("20231107121519_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -712,13 +712,17 @@ namespace ApiCube.Migrations
                         .HasColumnType("double")
                         .HasColumnName("prix_unitaire");
 
-                    b.Property<int>("ProduitId")
-                        .HasColumnType("int")
-                        .HasColumnName("produit_id");
-
                     b.Property<int>("Quantite")
                         .HasColumnType("int")
                         .HasColumnName("quantite");
+
+                    b.Property<int>("QuantiteApres")
+                        .HasColumnType("int")
+                        .HasColumnName("quantite_apres");
+
+                    b.Property<int>("QuantiteAvant")
+                        .HasColumnType("int")
+                        .HasColumnName("quantite_avant");
 
                     b.Property<int>("StockId")
                         .HasColumnType("int")
@@ -731,8 +735,6 @@ namespace ApiCube.Migrations
                         .HasColumnName("type");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProduitId");
 
                     b.HasIndex("StockId");
 
@@ -914,19 +916,11 @@ namespace ApiCube.Migrations
 
             modelBuilder.Entity("ApiCube.Persistence.Models.TransactionStockModel", b =>
                 {
-                    b.HasOne("ApiCube.Persistence.Models.ProduitModel", "Produit")
-                        .WithMany()
-                        .HasForeignKey("ProduitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ApiCube.Persistence.Models.StockModel", "Stock")
                         .WithMany("TransactionsStock")
                         .HasForeignKey("StockId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Produit");
 
                     b.Navigation("Stock");
                 });
