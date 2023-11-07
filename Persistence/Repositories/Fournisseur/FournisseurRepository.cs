@@ -2,6 +2,7 @@ using ApiCube.Domain.Mappers.Fournisseur;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApiCube.Persistence.Repositories.Fournisseur;
 
@@ -28,14 +29,14 @@ public class FournisseurRepository : IFournisseurRepository
 
     public List<Domain.Entities.Fournisseur> Lister()
     {
-        var fournisseursModels = _context.Fournisseurs.ToList();
+        var fournisseursModels = _context.Fournisseurs.AsNoTracking().ToList();
 
         return fournisseursModels.Select(fournisseurModel => _fournisseurMapper.Mapper(fournisseurModel)).ToList();
     }
 
     public Domain.Entities.Fournisseur Trouver(int id)
     {
-        var fournisseurModel = _context.Fournisseurs.Find(id);
+        var fournisseurModel = _context.Fournisseurs.AsNoTracking().FirstOrDefault(fournisseur => fournisseur.Id == id);
         if (fournisseurModel == null) throw new FournisseurIntrouvable();
 
         return _fournisseurMapper.Mapper(fournisseurModel);
@@ -43,7 +44,7 @@ public class FournisseurRepository : IFournisseurRepository
 
     public Domain.Entities.Fournisseur Trouver(string nom)
     {
-        var fournisseurModel = _context.Fournisseurs.FirstOrDefault(fournisseur => fournisseur.Nom == nom);
+        var fournisseurModel = _context.Fournisseurs.AsNoTracking().FirstOrDefault(fournisseur => fournisseur.Nom == nom);
         if (fournisseurModel == null) throw new FournisseurIntrouvable();
 
         return _fournisseurMapper.Mapper(fournisseurModel);

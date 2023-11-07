@@ -2,6 +2,7 @@ using ApiCube.Domain.Mappers.FamilleProduit;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApiCube.Persistence.Repositories.FamilleProduit;
 
@@ -28,7 +29,7 @@ public class FamilleProduitRepository : IFamilleProduitRepository
 
     public List<Domain.Entities.FamilleProduit> Lister()
     {
-        var famillesProduitModels = _context.FamillesProduits.ToList();
+        var famillesProduitModels = _context.FamillesProduits.AsNoTracking().ToList();
         var famillesProduits = new List<Domain.Entities.FamilleProduit>();
 
         foreach (var familleProduitModel in famillesProduitModels)
@@ -42,7 +43,7 @@ public class FamilleProduitRepository : IFamilleProduitRepository
 
     public Domain.Entities.FamilleProduit Trouver(int id)
     {
-        var familleProduitModel = _context.FamillesProduits.Find(id);
+        var familleProduitModel = _context.FamillesProduits.AsNoTracking().FirstOrDefault(familleProduit => familleProduit.Id == id);
         if (familleProduitModel == null) throw new FamilleProduitIntrouvable();
 
         return _familleProduitMapper.Mapper(familleProduitModel);
@@ -50,7 +51,7 @@ public class FamilleProduitRepository : IFamilleProduitRepository
 
     public Domain.Entities.FamilleProduit Trouver(string nom)
     {
-        var familleProduitModel = _context.FamillesProduits.FirstOrDefault(familleProduit => familleProduit.Nom == nom);
+        var familleProduitModel = _context.FamillesProduits.AsNoTracking().FirstOrDefault(familleProduit => familleProduit.Nom == nom);
         if (familleProduitModel == null) throw new FamilleProduitIntrouvable();
 
         return _familleProduitMapper.Mapper(familleProduitModel);

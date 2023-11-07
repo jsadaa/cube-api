@@ -1,6 +1,7 @@
 using ApiCube.Domain.Mappers.FamilleProduit;
 using ApiCube.Domain.Mappers.Fournisseur;
 using ApiCube.Domain.Mappers.Produit;
+using ApiCube.Domain.Mappers.Promotion;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
 using AutoMapper;
@@ -14,15 +15,18 @@ public class ProduitRepository : IProduitRepository
     private readonly IProduitMapper _produitMapper;
     private readonly IFamilleProduitMapper _familleProduitMapper;
     private readonly IFournisseurMapper _fournisseurMapper;
+    private readonly IPromotionMapper _promotionMapper;
     private readonly IMapper _mapper;
 
     public ProduitRepository(ApiDbContext context, IProduitMapper produitMapper,
-        IFamilleProduitMapper familleProduitMapper, IFournisseurMapper fournisseurMapper, IMapper mapper)
+        IFamilleProduitMapper familleProduitMapper, IFournisseurMapper fournisseurMapper,
+        IPromotionMapper promotionMapper, IMapper mapper)
     {
         _context = context;
         _produitMapper = produitMapper;
         _familleProduitMapper = familleProduitMapper;
         _fournisseurMapper = fournisseurMapper;
+        _promotionMapper = promotionMapper;
         _mapper = mapper;
     }
 
@@ -37,6 +41,7 @@ public class ProduitRepository : IProduitRepository
     public List<Domain.Entities.Produit> Lister()
     {
         var produitsModels = _context.Produits
+            .AsNoTracking()
             .Include(produit => produit.FamilleProduit)
             .Include(produit => produit.Fournisseur)
             .Include(produit => produit.Promotion)
@@ -48,7 +53,10 @@ public class ProduitRepository : IProduitRepository
         {
             var familleProduitModel = _familleProduitMapper.Mapper(produitModel.FamilleProduit);
             var fournisseurModel = _fournisseurMapper.Mapper(produitModel.Fournisseur);
-            var produit = _produitMapper.Mapper(produitModel, familleProduitModel, fournisseurModel);
+            var produit = produitModel.Promotion != null
+                ? _produitMapper.Mapper(produitModel, familleProduitModel, fournisseurModel,
+                    _promotionMapper.Mapper(produitModel.Promotion))
+                : _produitMapper.Mapper(produitModel, familleProduitModel, fournisseurModel);
 
             produits.Add(produit);
         }
@@ -59,6 +67,7 @@ public class ProduitRepository : IProduitRepository
     public Domain.Entities.Produit Trouver(int id)
     {
         var produitModel = _context.Produits
+            .AsNoTracking()
             .Include(produit => produit.FamilleProduit)
             .Include(produit => produit.Fournisseur)
             .Include(produit => produit.Promotion)
@@ -68,7 +77,10 @@ public class ProduitRepository : IProduitRepository
 
         var familleProduitModel = _familleProduitMapper.Mapper(produitModel.FamilleProduit);
         var fournisseurModel = _fournisseurMapper.Mapper(produitModel.Fournisseur);
-        var produit = _produitMapper.Mapper(produitModel, familleProduitModel, fournisseurModel);
+        var produit = produitModel.Promotion != null
+            ? _produitMapper.Mapper(produitModel, familleProduitModel, fournisseurModel,
+                _promotionMapper.Mapper(produitModel.Promotion))
+            : _produitMapper.Mapper(produitModel, familleProduitModel, fournisseurModel);
 
         return produit;
     }
@@ -76,6 +88,7 @@ public class ProduitRepository : IProduitRepository
     public Domain.Entities.Produit Trouver(string nom)
     {
         var produitModel = _context.Produits
+            .AsNoTracking()
             .Include(produit => produit.FamilleProduit)
             .Include(produit => produit.Fournisseur)
             .Include(produit => produit.Promotion)
@@ -85,7 +98,10 @@ public class ProduitRepository : IProduitRepository
 
         var familleProduitModel = _familleProduitMapper.Mapper(produitModel.FamilleProduit);
         var fournisseurModel = _fournisseurMapper.Mapper(produitModel.Fournisseur);
-        var produit = _produitMapper.Mapper(produitModel, familleProduitModel, fournisseurModel);
+        var produit = produitModel.Promotion != null
+            ? _produitMapper.Mapper(produitModel, familleProduitModel, fournisseurModel,
+                _promotionMapper.Mapper(produitModel.Promotion))
+            : _produitMapper.Mapper(produitModel, familleProduitModel, fournisseurModel);
 
         return produit;
     }

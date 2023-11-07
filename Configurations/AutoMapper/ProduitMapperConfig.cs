@@ -21,11 +21,11 @@ public class ProduitMapperConfig : Profile
         CreateMap<Produit, ProduitResponseDTO>()
             .ForMember(dest => dest.FamilleProduitNom, opt => opt.MapFrom(src => src.FamilleProduit.Nom))
             .ForMember(dest => dest.FournisseurNom, opt => opt.MapFrom(src => src.Fournisseur.Nom))
-            .ForMember(dest => dest.EnPromotion, opt => opt.MapFrom(src => src.Promotion != null));
+            .ForMember(dest => dest.EnPromotion, opt => opt.MapFrom(src => src.EnPromotion));
         CreateMap<ProduitModel, ProduitResponseDTO>()
             .ForMember(dest => dest.FamilleProduitNom, opt => opt.MapFrom(src => src.FamilleProduit.Nom))
             .ForMember(dest => dest.FournisseurNom, opt => opt.MapFrom(src => src.Fournisseur.Nom))
-            .ForMember(dest => dest.EnPromotion, opt => opt.MapFrom(src => src.Promotion != null));
+            .ForMember(dest => dest.EnPromotion, opt => opt.MapFrom(src => src.EnPromotion));
         CreateMap<ProduitRequestDTO, ProduitModel>();
     }
 }

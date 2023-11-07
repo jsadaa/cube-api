@@ -22,7 +22,7 @@ public class StockMapper : IStockMapper
         return stock;
     }
 
-    public Entities.Stock MapperSansTransactionsStock(StockModel stockModel, Entities.Produit produit)
+    public Entities.Stock Mapper(StockModel stockModel, Entities.Produit produit)
     {
         var stock = new Entities.Stock(
             id: stockModel.Id,

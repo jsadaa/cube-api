@@ -1,3 +1,5 @@
+using ApiCube.Domain.Exceptions;
+
 namespace ApiCube.Domain.Entities;
 
 public class Produit
@@ -49,10 +51,40 @@ public class Produit
         FamilleProduit = familleProduit;
         Fournisseur = fournisseur;
     }
+    
+    public Produit(int id, string nom, string description, string appellation, string cepage, string region,
+        double degreAlcool, bool enPromotion, double prixAchat, double prixVente, FamilleProduit familleProduit,
+        Fournisseur fournisseur, Promotion promotion)
+    {
+        Id = id;
+        Nom = nom;
+        Description = description;
+        Appellation = appellation;
+        Cepage = cepage;
+        Region = region;
+        DegreAlcool = degreAlcool;
+        PrixAchat = prixAchat;
+        PrixVente = prixVente;
+        EnPromotion = enPromotion;
+        FamilleProduit = familleProduit;
+        Fournisseur = fournisseur;
+        Promotion = promotion;
+    }
 
     public void AppliquerPromotion(Promotion promotion)
     {
         Promotion = promotion;
+        EnPromotion = true;
+        PrixVente = CalculerPrixDeVente();
+    }
+    
+    public void SupprimerPromotion()
+    {
+        if (Promotion == null) throw new ProduitNonEnPromotion();
+        var pourcentageReduction = Promotion.Pourcentage / 100;
+        PrixVente /= (1 - pourcentageReduction);
+        Promotion = null;
+        EnPromotion = false;
     }
 
     public bool EstEnPromotion()

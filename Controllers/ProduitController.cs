@@ -55,4 +55,49 @@ public class ProduitController : ControllerBase
 
         return StatusCode(response.StatusCode, response.Data);
     }
+    
+    /// <summary>
+    /// Appliquer une promotion sur un produit
+    /// </summary>
+    /// <param name="produitId"></param>
+    /// <param name="promotionId"></param>
+    /// <returns></returns>
+    /// <response code="200">La promotion a été appliquée avec succès</response>
+    /// <response code="400">La promotion n'a pas pu être appliquée</response>
+    /// <response code="404">Le produit n'a pas été trouvé</response>
+    /// <response code="500">Erreur interne</response>
+    [HttpPut("{produitId:int}/appliquer-promotion/{promotionId:int}")]
+    [ProducesResponseType(typeof(string), 200)]
+    [ProducesResponseType(typeof(string), 400)]
+    [ProducesResponseType(typeof(string), 404)]
+    [ProducesResponseType(typeof(string), 500)]
+    [Produces("application/json")]
+    public IActionResult AppliquerUnePromotionSurUnProduit(int produitId, int promotionId)
+    {
+        BaseResponse response = _produitService.AppliquerUnePromotion(produitId, promotionId);
+
+        return StatusCode(response.StatusCode, response.Data);
+    }
+    
+    /// <summary>
+    /// Supprimer une promotion d'un produit
+    /// </summary>
+    /// <param name="produitId"></param>
+    /// <returns></returns>
+    /// <response code="200">La promotion a été supprimée avec succès</response>
+    /// <response code="400">La promotion n'a pas pu être supprimée</response>
+    /// <response code="404">Le produit n'a pas été trouvé</response>
+    /// <response code="500">Erreur interne</response>
+    [HttpPut("{produitId:int}/supprimer-promotion")]
+    [ProducesResponseType(typeof(string), 200)]
+    [ProducesResponseType(typeof(string), 400)]
+    [ProducesResponseType(typeof(string), 404)]
+    [ProducesResponseType(typeof(string), 500)]
+    [Produces("application/json")]
+    public IActionResult RetirerUnePromotionSurUnProduit(int produitId)
+    {
+        BaseResponse response = _produitService.RetirerUnePromotion(produitId);
+
+        return StatusCode(response.StatusCode, response.Data);
+    }
 }

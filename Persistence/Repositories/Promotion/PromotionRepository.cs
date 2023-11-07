@@ -2,6 +2,7 @@ using ApiCube.Domain.Mappers.Promotion;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApiCube.Persistence.Repositories.Promotion;
 
@@ -28,14 +29,14 @@ public class PromotionRepository : IPromotionRepository
     
     public List<Domain.Entities.Promotion> Lister()
     {
-        var promotionsModels = _context.Promotions.ToList();
+        var promotionsModels = _context.Promotions.AsNoTracking().ToList();
 
         return promotionsModels.Select(promotionModel => _promotionMapper.Mapper(promotionModel)).ToList();
     }
     
     public Domain.Entities.Promotion Trouver(int id)
     {
-        var promotionModel = _context.Promotions.Find(id);
+        var promotionModel = _context.Promotions.AsNoTracking().FirstOrDefault(promotion => promotion.Id == id);
 
         if (promotionModel == null) throw new PromotionIntrouvable();
         

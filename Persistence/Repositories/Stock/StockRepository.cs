@@ -39,6 +39,7 @@ public class StockRepository : IStockRepository
     public List<Domain.Entities.Stock> Lister()
     {
         var stocksModels = _context.Stocks
+            .AsNoTracking()
             .Include(stock => stock.Produit).ThenInclude(produitModel => produitModel.FamilleProduit)
             .Include(stockModel => stockModel.Produit).ThenInclude(produitModel => produitModel.Fournisseur)
             .Include(stockModel => stockModel.TransactionsStock)
@@ -51,7 +52,7 @@ public class StockRepository : IStockRepository
             var familleProduit = _familleProduitMapper.Mapper(stockModel.Produit.FamilleProduit);
             var fournisseur = _fournisseurMapper.Mapper(stockModel.Produit.Fournisseur);
             var produit = _produitMapper.Mapper(stockModel.Produit, familleProduit, fournisseur);
-            var stock = _stockMapper.MapperSansTransactionsStock(stockModel, produit);
+            var stock = _stockMapper.Mapper(stockModel, produit);
 
             stocks.Add(stock);
         }
@@ -62,6 +63,7 @@ public class StockRepository : IStockRepository
     public Domain.Entities.Stock Trouver(int id)
     {
         var stockModel = _context.Stocks
+            .AsNoTracking()
             .Include(stock => stock.Produit).ThenInclude(produitModel => produitModel.FamilleProduit)
             .Include(stockModel => stockModel.Produit).ThenInclude(produitModel => produitModel.Fournisseur)
             .Include(stockModel => stockModel.TransactionsStock)
@@ -72,7 +74,7 @@ public class StockRepository : IStockRepository
         var familleProduit = _familleProduitMapper.Mapper(stockModel.Produit.FamilleProduit);
         var fournisseur = _fournisseurMapper.Mapper(stockModel.Produit.Fournisseur);
         var produit = _produitMapper.Mapper(stockModel.Produit, familleProduit, fournisseur);
-        var stock = _stockMapper.MapperSansTransactionsStock(stockModel, produit);
+        var stock = _stockMapper.Mapper(stockModel, produit);
 
         return stock;
     }
@@ -80,6 +82,7 @@ public class StockRepository : IStockRepository
     public Domain.Entities.Stock Trouver(string nom)
     {
         var stockModel = _context.Stocks
+            .AsNoTracking()
             .Include(stock => stock.Produit).ThenInclude(produitModel => produitModel.FamilleProduit)
             .Include(stockModel => stockModel.Produit).ThenInclude(produitModel => produitModel.Fournisseur)
             .Include(stockModel => stockModel.TransactionsStock)
@@ -90,7 +93,7 @@ public class StockRepository : IStockRepository
         var familleProduit = _familleProduitMapper.Mapper(stockModel.Produit.FamilleProduit);
         var fournisseur = _fournisseurMapper.Mapper(stockModel.Produit.Fournisseur);
         var produit = _produitMapper.Mapper(stockModel.Produit, familleProduit, fournisseur);
-        var stock = _stockMapper.MapperSansTransactionsStock(stockModel, produit);
+        var stock = _stockMapper.Mapper(stockModel, produit);
 
         return stock;
     }

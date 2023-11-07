@@ -48,6 +48,7 @@ public class TransactionStockRepository : ITransactionStockRepository
     public Domain.Entities.TransactionStock Trouver(int id)
     {
         var transactionStock = _context.TransactionsStock
+            .AsNoTracking()
             .Include(transactionStock => transactionStock.Stock)
             .Include(transactionStock => transactionStock.Stock.Produit)
             .Include(transactionStock => transactionStock.Stock.Produit.FamilleProduit)
@@ -59,7 +60,7 @@ public class TransactionStockRepository : ITransactionStockRepository
         var familleProduit = _familleProduitMapper.Mapper(transactionStock.Stock.Produit.FamilleProduit);
         var fournisseur = _fournisseurMapper.Mapper(transactionStock.Stock.Produit.Fournisseur);
         var produit = _produitMapper.Mapper(transactionStock.Stock.Produit, familleProduit, fournisseur);
-        var stock = _stockMapper.MapperSansTransactionsStock(transactionStock.Stock, produit);
+        var stock = _stockMapper.Mapper(transactionStock.Stock, produit);
         var typeTransactionStock = _typeTransactionStockMapper.Mapper(transactionStock.Type);
 
         return _transactionStockMapper.Mapper(transactionStock, stock, typeTransactionStock);
@@ -68,6 +69,7 @@ public class TransactionStockRepository : ITransactionStockRepository
     public List<Domain.Entities.TransactionStock> Lister()
     {
         var transactionsStockModels = _context.TransactionsStock
+            .AsNoTracking()
             .Include(transactionStock => transactionStock.Stock)
             .Include(transactionStock => transactionStock.Stock.Produit)
             .Include(transactionStock => transactionStock.Stock.Produit.FamilleProduit)
@@ -81,7 +83,7 @@ public class TransactionStockRepository : ITransactionStockRepository
             var familleProduit = _familleProduitMapper.Mapper(transactionStock.Stock.Produit.FamilleProduit);
             var fournisseur = _fournisseurMapper.Mapper(transactionStock.Stock.Produit.Fournisseur);
             var produit = _produitMapper.Mapper(transactionStock.Stock.Produit, familleProduit, fournisseur);
-            var stock = _stockMapper.MapperSansTransactionsStock(transactionStock.Stock, produit);
+            var stock = _stockMapper.Mapper(transactionStock.Stock, produit);
             var typeTransactionStock = _typeTransactionStockMapper.Mapper(transactionStock.Type);
 
             transactionsStockMapped.Add(_transactionStockMapper.Mapper(transactionStock, stock, typeTransactionStock));
@@ -93,6 +95,7 @@ public class TransactionStockRepository : ITransactionStockRepository
     public List<Domain.Entities.TransactionStock> ListerParStock(int idStock)
     {
         var transactionsStock = _context.TransactionsStock
+            .AsNoTracking()
             .Include(transactionStock => transactionStock.Stock)
             .Include(transactionStock => transactionStock.Stock.Produit)
             .Include(transactionStock => transactionStock.Stock.Produit.FamilleProduit)
@@ -107,7 +110,7 @@ public class TransactionStockRepository : ITransactionStockRepository
             var familleProduit = _familleProduitMapper.Mapper(transactionStock.Stock.Produit.FamilleProduit);
             var fournisseur = _fournisseurMapper.Mapper(transactionStock.Stock.Produit.Fournisseur);
             var produit = _produitMapper.Mapper(transactionStock.Stock.Produit, familleProduit, fournisseur);
-            var stock = _stockMapper.MapperSansTransactionsStock(transactionStock.Stock, produit);
+            var stock = _stockMapper.Mapper(transactionStock.Stock, produit);
             var typeTransactionStock = _typeTransactionStockMapper.Mapper(transactionStock.Type);
 
             transactionsStockMapped.Add(_transactionStockMapper.Mapper(transactionStock, stock, typeTransactionStock));
