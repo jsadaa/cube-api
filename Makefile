@@ -5,6 +5,9 @@
 db-migrate :
 	dotnet ef database update
 
+db-migrate-remove :
+	dotnet ef migrations remove
+
 db-migrate-rollback :
 	dotnet ef database update 0
 	
@@ -29,14 +32,22 @@ db-reset :
 # Infra #
 #########
 
-install-dotnet :
+install-dotnet-on-debian :
+	sudo apt-get install apt-transport-https
+	sudo apt-get update
 	sudo apt-get install dotnet-sdk-7.1
+
+install-dotnet-on-mac :
+	brew cask install dotnet
 
 install-ef :
 	dotnet tool install --global dotnet-ef
 
-install-mariadb :
+install-mariadb-on-debian :
 	sudo apt-get install mariadb-server
+
+install-mariadb-on-mac :
+	brew install mariadb
 
 ###########
 # Install #
