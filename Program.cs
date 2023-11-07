@@ -78,7 +78,6 @@ builder.Services.AddSwaggerGen(
         var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
     }
-    
 );
 
 var app = builder.Build();
@@ -91,10 +90,7 @@ if (app.Environment.IsDevelopment())
     );
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiCube v1"));
     app.UseReDoc(
-        options =>
-        {
-            options.Path = "/redoc";
-        }
+        options => { options.Path = "/redoc"; }
     );
 }
 
