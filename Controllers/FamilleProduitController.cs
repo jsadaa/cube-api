@@ -2,7 +2,6 @@ using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Services.FamilleProduit;
 using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
 
 namespace ApiCube.Controllers
 {

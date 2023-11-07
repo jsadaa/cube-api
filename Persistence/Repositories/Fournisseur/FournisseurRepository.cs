@@ -44,7 +44,8 @@ public class FournisseurRepository : IFournisseurRepository
 
     public Domain.Entities.Fournisseur Trouver(string nom)
     {
-        var fournisseurModel = _context.Fournisseurs.AsNoTracking().FirstOrDefault(fournisseur => fournisseur.Nom == nom);
+        var fournisseurModel =
+            _context.Fournisseurs.AsNoTracking().FirstOrDefault(fournisseur => fournisseur.Nom == nom);
         if (fournisseurModel == null) throw new FournisseurIntrouvable();
 
         return _fournisseurMapper.Mapper(fournisseurModel);

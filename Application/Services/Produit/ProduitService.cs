@@ -108,7 +108,7 @@ public class ProduitService : IProduitService
             return response;
         }
     }
-    
+
     public BaseResponse AppliquerUnePromotion(int produitId, int promotionId)
     {
         try
@@ -145,7 +145,7 @@ public class ProduitService : IProduitService
             return response;
         }
     }
-    
+
     public BaseResponse RetirerUnePromotion(int produitId)
     {
         try

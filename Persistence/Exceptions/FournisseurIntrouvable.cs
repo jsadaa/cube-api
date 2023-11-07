@@ -1,5 +1,3 @@
-using ApiCube.Domain.Entities;
-
 namespace ApiCube.Persistence.Exceptions;
 
 public class FournisseurIntrouvable : Exception

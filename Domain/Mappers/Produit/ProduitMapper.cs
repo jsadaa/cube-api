@@ -21,10 +21,10 @@ public class ProduitMapper : IProduitMapper
             familleProduit: familleProduit,
             fournisseur: fournisseur
         );
-        
+
         return produit;
     }
-    
+
     public Entities.Produit Mapper(ProduitModel produitModel, Entities.FamilleProduit familleProduit,
         Entities.Fournisseur fournisseur, Entities.Promotion promotion)
     {
@@ -43,7 +43,7 @@ public class ProduitMapper : IProduitMapper
             fournisseur: fournisseur,
             promotion: promotion
         );
-        
+
         return produit;
     }
 }

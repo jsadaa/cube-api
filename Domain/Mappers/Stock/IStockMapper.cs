@@ -1,4 +1,3 @@
-using ApiCube.Application.DTOs.Requests;
 using ApiCube.Persistence.Models;
 
 namespace ApiCube.Domain.Mappers.Stock;

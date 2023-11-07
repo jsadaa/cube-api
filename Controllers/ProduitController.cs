@@ -55,7 +55,7 @@ public class ProduitController : ControllerBase
 
         return StatusCode(response.StatusCode, response.Data);
     }
-    
+
     /// <summary>
     /// Appliquer une promotion sur un produit
     /// </summary>
@@ -78,7 +78,7 @@ public class ProduitController : ControllerBase
 
         return StatusCode(response.StatusCode, response.Data);
     }
-    
+
     /// <summary>
     /// Supprimer une promotion d'un produit
     /// </summary>

@@ -10,12 +10,12 @@ namespace ApiCube.Controllers
     public class PromotionController : ControllerBase
     {
         private readonly IPromotionService _promotionService;
-        
+
         public PromotionController(IPromotionService promotionService)
         {
             _promotionService = promotionService;
         }
-        
+
         /// <summary>
         /// Ajouter une promotion
         /// </summary>

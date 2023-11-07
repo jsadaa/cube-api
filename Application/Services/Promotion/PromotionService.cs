@@ -9,10 +9,9 @@ namespace ApiCube.Application.Services.Promotion;
 
 public class PromotionService : IPromotionService
 {
-    
     private readonly IPromotionRepository _promotionRepository;
     private readonly IMapper _mapper;
-    
+
     public PromotionService(
         IPromotionRepository promotionRepository,
         IMapper mapper
@@ -21,7 +20,7 @@ public class PromotionService : IPromotionService
         _promotionRepository = promotionRepository;
         _mapper = mapper;
     }
-    
+
     public BaseResponse AjouterUnePromotion(PromotionRequestDTO promotionRequestDTO)
     {
         try
@@ -34,12 +33,12 @@ public class PromotionService : IPromotionService
                 pourcentage: promotionRequestDTO.Pourcentage
             );
             _promotionRepository.Ajouter(nouvellePromotion);
-            
+
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
                 data: new { message = "Promotion ajoutée avec succès" }
             );
-            
+
             return response;
         }
         catch (Exception e)
@@ -48,23 +47,23 @@ public class PromotionService : IPromotionService
                 statusCode: HttpStatusCode.InternalServerError,
                 data: new { message = e.Message }
             );
-            
+
             return response;
         }
     }
-    
+
     public BaseResponse ListerLesPromotions()
     {
         try
         {
             var listePromotions = _promotionRepository.Lister();
             var promotions = _mapper.Map<List<PromotionResponseDTO>>(listePromotions);
-            
+
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
                 data: promotions
             );
-            
+
             return response;
         }
         catch (Exception e)
@@ -73,7 +72,7 @@ public class PromotionService : IPromotionService
                 statusCode: HttpStatusCode.InternalServerError,
                 data: new { message = e.Message }
             );
-            
+
             return response;
         }
     }
