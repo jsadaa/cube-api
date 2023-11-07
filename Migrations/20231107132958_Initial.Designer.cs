@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiCube.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20231107121519_Initial")]
+    [Migration("20231107132958_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -34,6 +34,12 @@ namespace ApiCube.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)")
                         .HasColumnName("adresse");
+
+                    b.Property<string>("CodePostal")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("code_postal");
 
                     b.Property<DateTime>("DateInscription")
                         .HasColumnType("datetime(6)")
@@ -67,6 +73,12 @@ namespace ApiCube.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("password");
 
+                    b.Property<string>("Pays")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("pays");
+
                     b.Property<int>("PointsFidelite")
                         .HasColumnType("int")
                         .HasColumnName("points_fidelite");
@@ -98,6 +110,12 @@ namespace ApiCube.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("telephone");
+
+                    b.Property<string>("Ville")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("ville");
 
                     b.HasKey("Id");
 
@@ -187,12 +205,6 @@ namespace ApiCube.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<string>("Adresse")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)")
-                        .HasColumnName("adresse");
-
                     b.Property<DateTime>("DateDepart")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date_depart");
@@ -240,21 +252,11 @@ namespace ApiCube.Migrations
                     b.Property<int?>("RoleModelId")
                         .HasColumnType("int");
 
-                    b.Property<double>("Salaire")
-                        .HasColumnType("double")
-                        .HasColumnName("salaire");
-
                     b.Property<string>("Statut")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("statut");
-
-                    b.Property<string>("Telephone")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("telephone");
 
                     b.HasKey("Id");
 
@@ -408,6 +410,12 @@ namespace ApiCube.Migrations
                         .HasColumnType("varchar(200)")
                         .HasColumnName("adresse");
 
+                    b.Property<string>("CodePostal")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("code_postal");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -420,11 +428,23 @@ namespace ApiCube.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("nom");
 
+                    b.Property<string>("Pays")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("pays");
+
                     b.Property<string>("Telephone")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("telephone");
+
+                    b.Property<string>("Ville")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("ville");
 
                     b.HasKey("Id");
 
