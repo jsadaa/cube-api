@@ -47,7 +47,7 @@ public class ProduitService : IProduitService
                 degreAlcool: produitRequestDTO.DegreAlcool,
                 prixAchat: produitRequestDTO.PrixAchat,
                 prixVente: produitRequestDTO.PrixVente,
-                enPromotion: produitRequestDTO.EnPromotion,
+                enPromotion: false,
                 fournisseur: fournisseur,
                 familleProduit: familleProduit
             );

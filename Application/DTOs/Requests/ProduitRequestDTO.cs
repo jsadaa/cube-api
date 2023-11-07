@@ -20,8 +20,6 @@ public class ProduitRequestDTO
 
     [Required] public double PrixVente { get; set; }
 
-    [Required] public bool EnPromotion { get; set; }
-
     [Required] public int FamilleProduitId { get; set; }
 
     [Required] public int FournisseurId { get; set; }
