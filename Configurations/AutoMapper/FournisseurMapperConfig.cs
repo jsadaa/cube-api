@@ -4,7 +4,7 @@ using ApiCube.Domain.Entities;
 using ApiCube.Persistence.Models;
 using AutoMapper;
 
-namespace ApiCube.Configurations;
+namespace ApiCube.Configurations.AutoMapper;
 
 public class FournisseurMapperConfig : Profile
 {

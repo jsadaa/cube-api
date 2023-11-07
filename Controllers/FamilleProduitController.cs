@@ -6,7 +6,7 @@ using NSwag.Annotations;
 
 namespace ApiCube.Controllers
 {
-    [Route("api/familles_produits")]
+    [Route("api/famillesproduits")]
     [ApiController]
     public class FamilleProduitController : ControllerBase
     {
