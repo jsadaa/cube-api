@@ -26,6 +26,11 @@ public class EmployeModel
     [StringLength(50)]
     public string Email { get; set; }
 
+    [Column("mot_de_passe")]
+    [Required]
+    [StringLength(50)]
+    public string MotDePasse { get; set; }
+
     [Column("date_embauche")] [Required] public DateTime DateEmbauche { get; set; }
 
     [Column("date_depart")] [Required] public DateTime DateDepart { get; set; }
@@ -34,16 +39,6 @@ public class EmployeModel
     [Required]
     [StringLength(50)]
     public string Statut { get; set; }
-
-    [Column("login")]
-    [Required]
-    [StringLength(50)]
-    public string Login { get; set; }
-
-    [Column("mot_de_passe")]
-    [Required]
-    [StringLength(50)]
-    public string MotDePasse { get; set; }
 
     [Column("role")]
     [Required]

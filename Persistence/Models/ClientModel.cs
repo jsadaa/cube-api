@@ -51,6 +51,11 @@ public class ClientModel
     [StringLength(50)]
     public string Email { get; set; }
 
+    [Column("password")]
+    [Required]
+    [StringLength(50)]
+    public string Password { get; set; }
+
     [Column("date_naissance")] [Required] public DateTime DateNaissance { get; set; }
 
     [Column("date_inscription")]
@@ -61,16 +66,6 @@ public class ClientModel
     [Required]
     [StringLength(50)]
     public string Statut { get; set; }
-
-    [Column("login")]
-    [Required]
-    [StringLength(50)]
-    public string Login { get; set; }
-
-    [Column("password")]
-    [Required]
-    [StringLength(50)]
-    public string Password { get; set; }
 
     [Column("solde")] [Required] public double Solde { get; set; }
 
