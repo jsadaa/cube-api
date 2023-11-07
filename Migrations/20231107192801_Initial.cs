@@ -37,13 +37,11 @@ namespace ApiCube.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     email = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    password = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     date_naissance = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     date_inscription = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     statut = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    login = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    password = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     solde = table.Column<double>(type: "double", nullable: false),
                     points_fidelite = table.Column<int>(type: "int", nullable: false),
@@ -194,13 +192,11 @@ namespace ApiCube.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     email = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    mot_de_passe = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     date_embauche = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     date_depart = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     statut = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    login = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    mot_de_passe = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     role = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -480,6 +476,12 @@ namespace ApiCube.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
+                name: "IX_client_email",
+                table: "client",
+                column: "email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_commande_client_client_id",
                 table: "commande_client",
                 column: "client_id");
@@ -498,6 +500,12 @@ namespace ApiCube.Migrations
                 name: "IX_commande_fournisseur_fournisseur_id",
                 table: "commande_fournisseur",
                 column: "fournisseur_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_employe_nom_prenom_email",
+                table: "employe",
+                columns: new[] { "nom", "prenom", "email" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_employe_RoleModelId",
@@ -535,6 +543,18 @@ namespace ApiCube.Migrations
                 column: "fournisseur_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_famille_produit_nom",
+                table: "famille_produit",
+                column: "nom",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_fournisseur_nom_email",
+                table: "fournisseur",
+                columns: new[] { "nom", "email" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ligne_commande_client_commande_client_id",
                 table: "ligne_commande_client",
                 column: "commande_client_id");
@@ -565,14 +585,27 @@ namespace ApiCube.Migrations
                 column: "fournisseur_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_produit_nom",
+                table: "produit",
+                column: "nom",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_produit_promotion_id",
                 table: "produit",
                 column: "promotion_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_role_nom",
+                table: "role",
+                column: "nom",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_stock_produit_id",
                 table: "stock",
-                column: "produit_id");
+                column: "produit_id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_transaction_stock_stock_id",

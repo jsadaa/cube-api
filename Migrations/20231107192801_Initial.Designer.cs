@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiCube.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20231107132958_Initial")]
+    [Migration("20231107192801_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -54,12 +54,6 @@ namespace ApiCube.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("email");
-
-                    b.Property<string>("Login")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("login");
 
                     b.Property<string>("Nom")
                         .IsRequired()
@@ -118,6 +112,9 @@ namespace ApiCube.Migrations
                         .HasColumnName("ville");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("client");
                 });
@@ -219,12 +216,6 @@ namespace ApiCube.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("email");
 
-                    b.Property<string>("Login")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("login");
-
                     b.Property<string>("MotDePasse")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -261,6 +252,9 @@ namespace ApiCube.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("RoleModelId");
+
+                    b.HasIndex("Nom", "Prenom", "Email")
+                        .IsUnique();
 
                     b.ToTable("employe");
                 });
@@ -394,6 +388,9 @@ namespace ApiCube.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Nom")
+                        .IsUnique();
+
                     b.ToTable("famille_produit");
                 });
 
@@ -447,6 +444,9 @@ namespace ApiCube.Migrations
                         .HasColumnName("ville");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Nom", "Email")
+                        .IsUnique();
 
                     b.ToTable("fournisseur");
                 });
@@ -602,6 +602,9 @@ namespace ApiCube.Migrations
 
                     b.HasIndex("FournisseurId");
 
+                    b.HasIndex("Nom")
+                        .IsUnique();
+
                     b.HasIndex("PromotionId");
 
                     b.ToTable("produit");
@@ -658,6 +661,9 @@ namespace ApiCube.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Nom")
+                        .IsUnique();
+
                     b.ToTable("role");
                 });
 
@@ -708,7 +714,8 @@ namespace ApiCube.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProduitId");
+                    b.HasIndex("ProduitId")
+                        .IsUnique();
 
                     b.ToTable("stock");
                 });
