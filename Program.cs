@@ -1,3 +1,4 @@
+using System.Reflection;
 using ApiCube;
 using ApiCube.Application.Services.FamilleProduit;
 using ApiCube.Application.Services.Fournisseur;
@@ -22,6 +23,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddOpenApiDocument();
 
 // Configure Entity Framework Core to use MySQL
 builder.Services.AddDbContext<ApiDbContext>(options =>
@@ -69,16 +71,39 @@ builder.Services.AddScoped<StatutStockMapper>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new() { Title = "ApiCube", Version = "v1" }); });
+builder.Services.AddSwaggerGen(
+    c =>
+    {
+        c.SwaggerDoc("v1", new() { Title = "ApiCube", Version = "v1" });
+        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+    }
+    
+);
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
+    app.UseSwagger(
+        c => c.SerializeAsV2 = true
+    );
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiCube v1"));
+    app.UseReDoc(
+        options =>
+        {
+            options.Path = "/redoc";
+        }
+    );
 }
+
+// save the swagger.json file in the root of the project
+app.UseSwagger(c =>
+{
+    c.SerializeAsV2 = true;
+    c.RouteTemplate = "swagger/{documentName}/swagger.json";
+});
 
 app.UseHttpsRedirection();
 
