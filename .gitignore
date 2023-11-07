@@ -13,3 +13,4 @@ riderModule.iml
 *.sln.iml
 .DS_Store
 out/
+Mock.json
