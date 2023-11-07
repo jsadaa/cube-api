@@ -32,6 +32,8 @@ public class Produit
         EnPromotion = enPromotion;
         FamilleProduit = familleProduit;
         Fournisseur = fournisseur;
+
+        VerifierValiditePromotion();
     }
 
     public Produit(int id, string nom, string description, string appellation, string cepage, string region,
@@ -50,8 +52,10 @@ public class Produit
         EnPromotion = enPromotion;
         FamilleProduit = familleProduit;
         Fournisseur = fournisseur;
+
+        VerifierValiditePromotion();
     }
-    
+
     public Produit(int id, string nom, string description, string appellation, string cepage, string region,
         double degreAlcool, bool enPromotion, double prixAchat, double prixVente, FamilleProduit familleProduit,
         Fournisseur fournisseur, Promotion promotion)
@@ -69,15 +73,22 @@ public class Produit
         FamilleProduit = familleProduit;
         Fournisseur = fournisseur;
         Promotion = promotion;
+
+        VerifierValiditePromotion();
+    }
+
+    public void VerifierValiditePromotion()
+    {
+        if (Promotion != null && !Promotion.EstValide()) SupprimerPromotion();
     }
 
     public void AppliquerPromotion(Promotion promotion)
     {
         Promotion = promotion;
         EnPromotion = true;
-        PrixVente = CalculerPrixDeVente();
+        PrixVente = CalculerPrixAvecPromotion();
     }
-    
+
     public void SupprimerPromotion()
     {
         if (Promotion == null) throw new ProduitNonEnPromotion();
@@ -96,17 +107,9 @@ public class Produit
     {
         double prix = PrixVente;
 
-        if (Promotion != null)
-        {
-            prix = PrixVente - (PrixVente * Promotion.Pourcentage / 100);
-        }
+        if (Promotion != null) prix = PrixVente - (PrixVente * Promotion.Pourcentage / 100);
 
         return prix;
-    }
-
-    public double CalculerPrixDeVente()
-    {
-        return EstEnPromotion() ? CalculerPrixAvecPromotion() : PrixVente;
     }
 
     public void MettreAJour(string nom, string description, string appellation, string cepage, string region,
@@ -121,5 +124,7 @@ public class Produit
         PrixAchat = prixAchat;
         PrixVente = prixVente;
         EnPromotion = enPromotion;
+
+        VerifierValiditePromotion();
     }
 }
