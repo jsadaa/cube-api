@@ -2,7 +2,7 @@ namespace ApiCube.Persistence.Repositories.TransactionStock;
 
 public interface ITransactionStockRepository
 {
-    public int Ajouter(Domain.Entities.TransactionStock nouveauTransactionStock);
+    public void Ajouter(Domain.Entities.TransactionStock nouveauTransactionStock);
     public Domain.Entities.TransactionStock Trouver(int id);
     public List<Domain.Entities.TransactionStock> Lister();
     public List<Domain.Entities.TransactionStock> ListerParStock(int stockId);

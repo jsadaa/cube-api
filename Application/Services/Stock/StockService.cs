@@ -4,7 +4,6 @@ using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Domain.Entities;
 using ApiCube.Domain.Enums.Stock;
-using ApiCube.Domain.Mappers.Stock;
 using ApiCube.Persistence.Repositories.Produit;
 using ApiCube.Persistence.Repositories.Stock;
 using AutoMapper;
@@ -16,28 +15,36 @@ public class StockService : IStockService
     private readonly IStockRepository _stockRepository;
     private readonly IProduitRepository _produitRepository;
     private readonly IMapper _mapper;
-    private readonly IStockMapper _stockMapper;
-    
+
     public StockService(
-        IStockRepository stockRepository, 
+        IStockRepository stockRepository,
         IProduitRepository produitRepository,
-        IMapper mapper,
-        IStockMapper stockMapper
+        IMapper mapper
     )
     {
         _stockRepository = stockRepository;
-        _stockMapper = stockMapper;
         _produitRepository = produitRepository;
         _mapper = mapper;
     }
-    
+
     public BaseResponse AjouterUnStockDeProduit(StockRequestDTO stockRequestDTO)
     {
         try
         {
             var produit = _produitRepository.Trouver(stockRequestDTO.ProduitId);
-            var nouveauStock = _stockMapper.MapperSansTransactionsStock(stockRequestDTO, produit);
-            
+
+            // on met la quantité à 0 car elle sera mise à jour lors de la première transaction
+            var nouveauStock = new Domain.Entities.Stock(
+                quantite: 0,
+                seuilDisponibilite: stockRequestDTO.SeuilDisponibilite,
+                produit: produit,
+                transactionStocks: new List<TransactionStock>(),
+                dateCreation: DateTime.Now,
+                datePeremption: stockRequestDTO.DatePeremption,
+                dateModification: DateTime.Now,
+                dateSuppression: null
+            );
+
             // Ajout d'une transaction stock pour l'achat initial
             var nouvelleTransactionStock = new TransactionStock(
                 quantite: stockRequestDTO.Quantite,
@@ -48,15 +55,15 @@ public class StockService : IStockService
                 quantiteAvant: 0,
                 quantiteApres: stockRequestDTO.Quantite
             );
-            
+
             nouveauStock.AjouterTransaction(nouvelleTransactionStock);
             _stockRepository.Ajouter(nouveauStock);
-            
+
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
                 data: new { message = "Stock ajouté avec succès" }
             );
-            
+
             return response;
         }
         catch (Exception e)
@@ -65,23 +72,23 @@ public class StockService : IStockService
                 statusCode: HttpStatusCode.InternalServerError,
                 data: new { message = e.Message }
             );
-            
+
             return response;
         }
     }
-    
+
     public BaseResponse ListerLesStocks()
     {
         try
         {
             var listeStocks = _stockRepository.Lister();
             var stocks = _mapper.Map<List<StockResponseDTO>>(listeStocks);
-            
+
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
                 data: stocks
             );
-            
+
             return response;
         }
         catch (Exception e)
@@ -90,7 +97,7 @@ public class StockService : IStockService
                 statusCode: HttpStatusCode.InternalServerError,
                 data: new { message = e.Message }
             );
-            
+
             return response;
         }
     }

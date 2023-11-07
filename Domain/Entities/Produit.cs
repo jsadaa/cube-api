@@ -15,8 +15,9 @@ public class Produit
     public Promotion? Promotion { get; set; }
     public FamilleProduit FamilleProduit { get; set; }
     public Fournisseur Fournisseur { get; set; }
-    
-    public Produit(string nom, string description,string appellation, string cepage, string region, double degreAlcool, bool enPromotion, double prixAchat, double prixVente, FamilleProduit familleProduit, Fournisseur fournisseur)
+
+    public Produit(string nom, string description, string appellation, string cepage, string region, double degreAlcool,
+        bool enPromotion, double prixAchat, double prixVente, FamilleProduit familleProduit, Fournisseur fournisseur)
     {
         Nom = nom;
         Description = description;
@@ -30,8 +31,10 @@ public class Produit
         FamilleProduit = familleProduit;
         Fournisseur = fournisseur;
     }
-    
-    public Produit(int id, string nom, string description,string appellation, string cepage, string region, double degreAlcool, bool enPromotion, double prixAchat, double prixVente, FamilleProduit familleProduit, Fournisseur fournisseur)
+
+    public Produit(int id, string nom, string description, string appellation, string cepage, string region,
+        double degreAlcool, bool enPromotion, double prixAchat, double prixVente, FamilleProduit familleProduit,
+        Fournisseur fournisseur)
     {
         Id = id;
         Nom = nom;
@@ -46,35 +49,36 @@ public class Produit
         FamilleProduit = familleProduit;
         Fournisseur = fournisseur;
     }
-    
+
     public void AppliquerPromotion(Promotion promotion)
     {
         Promotion = promotion;
     }
-    
+
     public bool EstEnPromotion()
     {
         return EnPromotion && Promotion != null;
     }
-    
+
     private double CalculerPrixAvecPromotion()
     {
         double prix = PrixVente;
-        
+
         if (Promotion != null)
         {
             prix = PrixVente - (PrixVente * Promotion.Pourcentage / 100);
         }
-        
+
         return prix;
     }
-    
+
     public double CalculerPrixDeVente()
     {
         return EstEnPromotion() ? CalculerPrixAvecPromotion() : PrixVente;
     }
-    
-    public void MettreAJour(string nom, string description, string appellation, string cepage, string region, double degreAlcool, double prixAchat, double prixVente, bool enPromotion)
+
+    public void MettreAJour(string nom, string description, string appellation, string cepage, string region,
+        double degreAlcool, double prixAchat, double prixVente, bool enPromotion)
     {
         Nom = nom;
         Description = description;

@@ -1,11 +1,8 @@
-using ApiCube.Application.DTOs.Requests;
-using ApiCube.Application.DTOs.Responses;
-
 namespace ApiCube.Persistence.Repositories.Stock;
 
 public interface IStockRepository
 {
-    public Domain.Entities.Stock Ajouter(Domain.Entities.Stock nouveauStock);
+    public void Ajouter(Domain.Entities.Stock nouveauStock);
     public List<Domain.Entities.Stock> Lister();
     public Domain.Entities.Stock Trouver(int id);
     public Domain.Entities.Stock Trouver(string nom);

@@ -1,11 +1,9 @@
-using ApiCube.Domain.Mappers;
 using ApiCube.Domain.Mappers.FamilleProduit;
 using ApiCube.Domain.Mappers.Fournisseur;
 using ApiCube.Domain.Mappers.Produit;
 using ApiCube.Domain.Mappers.Stock;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
-using ApiCube.Persistence.Repositories.TransactionStock;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,8 +17,9 @@ public class StockRepository : IStockRepository
     private readonly IFamilleProduitMapper _familleProduitMapper;
     private readonly IFournisseurMapper _fournisseurMapper;
     private readonly IMapper _mapper;
-    
-    public StockRepository(ApiDbContext context, IStockMapper stockMapper, IProduitMapper produitMapper, IFamilleProduitMapper familleProduitMapper, IFournisseurMapper fournisseurMapper, IMapper mapper)
+
+    public StockRepository(ApiDbContext context, IStockMapper stockMapper, IProduitMapper produitMapper,
+        IFamilleProduitMapper familleProduitMapper, IFournisseurMapper fournisseurMapper, IMapper mapper)
     {
         _context = context;
         _stockMapper = stockMapper;
@@ -29,17 +28,12 @@ public class StockRepository : IStockRepository
         _fournisseurMapper = fournisseurMapper;
         _mapper = mapper;
     }
-    
-    public Domain.Entities.Stock Ajouter(Domain.Entities.Stock nouveauStock)
+
+    public void Ajouter(Domain.Entities.Stock nouveauStock)
     {
         var nouveauStockModel = _mapper.Map<StockModel>(nouveauStock);
-        var nouvelleTransactionStockModel = _mapper.Map<TransactionStockModel>(nouveauStock.Transactions.First());
-        
         _context.Stocks.Add(nouveauStockModel);
-        _context.TransactionsStock.Add(nouvelleTransactionStockModel);
         _context.SaveChanges();
-        
-        return _stockMapper.MapperSansTransactionsStock(nouveauStockModel, nouveauStock.Produit);
     }
 
     public List<Domain.Entities.Stock> Lister()
@@ -51,20 +45,20 @@ public class StockRepository : IStockRepository
             .ToList();
 
         var stocks = new List<Domain.Entities.Stock>();
-        
+
         foreach (var stockModel in stocksModels)
         {
             var familleProduit = _familleProduitMapper.Mapper(stockModel.Produit.FamilleProduit);
             var fournisseur = _fournisseurMapper.Mapper(stockModel.Produit.Fournisseur);
             var produit = _produitMapper.Mapper(stockModel.Produit, familleProduit, fournisseur);
             var stock = _stockMapper.MapperSansTransactionsStock(stockModel, produit);
-            
+
             stocks.Add(stock);
         }
-        
+
         return stocks;
     }
-    
+
     public Domain.Entities.Stock Trouver(int id)
     {
         var stockModel = _context.Stocks
@@ -72,14 +66,14 @@ public class StockRepository : IStockRepository
             .Include(stockModel => stockModel.Produit).ThenInclude(produitModel => produitModel.Fournisseur)
             .Include(stockModel => stockModel.TransactionsStock)
             .FirstOrDefault(stock => stock.Id == id);
-        
+
         if (stockModel == null) throw new StockIntrouvable();
-        
+
         var familleProduit = _familleProduitMapper.Mapper(stockModel.Produit.FamilleProduit);
         var fournisseur = _fournisseurMapper.Mapper(stockModel.Produit.Fournisseur);
         var produit = _produitMapper.Mapper(stockModel.Produit, familleProduit, fournisseur);
         var stock = _stockMapper.MapperSansTransactionsStock(stockModel, produit);
-        
+
         return stock;
     }
 
@@ -90,29 +84,29 @@ public class StockRepository : IStockRepository
             .Include(stockModel => stockModel.Produit).ThenInclude(produitModel => produitModel.Fournisseur)
             .Include(stockModel => stockModel.TransactionsStock)
             .FirstOrDefault(stock => stock.Produit.Nom == nom);
-        
+
         if (stockModel == null) throw new StockIntrouvable();
-        
+
         var familleProduit = _familleProduitMapper.Mapper(stockModel.Produit.FamilleProduit);
         var fournisseur = _fournisseurMapper.Mapper(stockModel.Produit.Fournisseur);
         var produit = _produitMapper.Mapper(stockModel.Produit, familleProduit, fournisseur);
         var stock = _stockMapper.MapperSansTransactionsStock(stockModel, produit);
-        
+
         return stock;
     }
-    
+
     public void Modifier(Domain.Entities.Stock stockModifie)
     {
         var stockModifieModel = _mapper.Map<StockModel>(stockModifie);
-        
+
         _context.Stocks.Update(stockModifieModel);
         _context.SaveChanges();
     }
-    
+
     public void Supprimer(Domain.Entities.Stock stockASupprimer)
     {
         var stockASupprimerModel = _mapper.Map<StockModel>(stockASupprimer);
-        
+
         _context.Stocks.Remove(stockASupprimerModel);
         _context.SaveChanges();
     }

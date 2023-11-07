@@ -2,8 +2,6 @@ using System.Net;
 using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
-using ApiCube.Domain.Mappers;
-using ApiCube.Domain.Mappers.Produit;
 using ApiCube.Persistence.Repositories.FamilleProduit;
 using ApiCube.Persistence.Repositories.Fournisseur;
 using ApiCube.Persistence.Repositories.Produit;
@@ -17,21 +15,18 @@ public class ProduitService : IProduitService
     private readonly IFamilleProduitRepository _familleProduitRepository;
     private readonly IFournisseurRepository _fournisseurRepository;
     private readonly IMapper _mapper;
-    private readonly IProduitMapper _produitMapper;
-    
+
     public ProduitService(
         IProduitRepository produitRepository,
         IFamilleProduitRepository familleProduitRepository,
         IFournisseurRepository fournisseurRepository,
-        IMapper mapper,
-        IProduitMapper produitMapper
+        IMapper mapper
     )
     {
         _produitRepository = produitRepository;
         _familleProduitRepository = familleProduitRepository;
         _fournisseurRepository = fournisseurRepository;
         _mapper = mapper;
-        _produitMapper = produitMapper;
     }
 
     public BaseResponse AjouterUnProduitAuCatalogue(ProduitRequestDTO produitRequestDTO)
@@ -40,15 +35,27 @@ public class ProduitService : IProduitService
         {
             var fournisseur = _fournisseurRepository.Trouver(produitRequestDTO.FournisseurId);
             var familleProduit = _familleProduitRepository.Trouver(produitRequestDTO.FamilleProduitId);
-            
-            var nouveauProduit = _produitMapper.Mapper(produitRequestDTO, familleProduit, fournisseur);
+
+            var nouveauProduit = new Domain.Entities.Produit(
+                nom: produitRequestDTO.Nom,
+                description: produitRequestDTO.Description,
+                appellation: produitRequestDTO.Appellation,
+                cepage: produitRequestDTO.Cepage,
+                region: produitRequestDTO.Region,
+                degreAlcool: produitRequestDTO.DegreAlcool,
+                prixAchat: produitRequestDTO.PrixAchat,
+                prixVente: produitRequestDTO.PrixVente,
+                enPromotion: produitRequestDTO.EnPromotion,
+                fournisseur: fournisseur,
+                familleProduit: familleProduit
+            );
             _produitRepository.Ajouter(nouveauProduit);
-            
+
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
                 data: new { message = "Produit ajouté au stock avec succès" }
             );
-            
+
             return response;
         }
         catch (Exception e)
@@ -57,23 +64,23 @@ public class ProduitService : IProduitService
                 statusCode: HttpStatusCode.InternalServerError,
                 data: new { message = e.Message }
             );
-            
+
             return response;
         }
     }
-    
+
     public BaseResponse ListerLesProduits()
     {
         try
         {
             var listeProduits = _produitRepository.Lister();
             var produits = _mapper.Map<List<ProduitResponseDTO>>(listeProduits);
-            
+
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
                 data: produits
             );
-            
+
             return response;
         }
         catch (Exception e)
@@ -82,7 +89,7 @@ public class ProduitService : IProduitService
                 statusCode: HttpStatusCode.InternalServerError,
                 data: new { message = e.Message }
             );
-            
+
             return response;
         }
     }

@@ -7,6 +7,6 @@ namespace ApiCube.Application.Services.Produit;
 public interface IProduitService
 {
     public BaseResponse AjouterUnProduitAuCatalogue(ProduitRequestDTO produitRequestDTO);
-    
+
     public BaseResponse ListerLesProduits();
 }

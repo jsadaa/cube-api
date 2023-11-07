@@ -27,7 +27,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<ApiDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)).EnableSensitiveDataLogging();
 });
 
 // Configure AutoMapper
@@ -35,32 +35,33 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
 // AutoMapper don't manage DTO to Domain Entity mapping, only Domain Entity to DTO.
 // There's specific mappers for that (see below)
 builder.Services.AddAutoMapper(
-    typeof(FamilleProduitMapperConfig), 
-    typeof(FournisseurMapperConfig), 
-    typeof(ProduitMapperConfig), 
-    typeof(StockMapperConfig), 
-    typeof(TransactionStockMapperConfig)
+    typeof(FamilleProduitMapperConfig),
+    typeof(FournisseurMapperConfig),
+    typeof(ProduitMapperConfig),
+    typeof(StockMapperConfig),
+    typeof(TransactionStockMapperConfig),
+    typeof(AdresseMapperConfig)
 );
 
 // Configure Mappers
-builder.Services.AddScoped<IProduitMapper , ProduitMapper>();
-builder.Services.AddScoped<ITransactionStockMapper , TransactionStockMapper>();
-builder.Services.AddScoped<IFournisseurMapper , FournisseurMapper>();
-builder.Services.AddScoped<IStockMapper , StockMapper>();
-builder.Services.AddScoped<IFamilleProduitMapper , FamilleProduitMapper>();
+builder.Services.AddScoped<IProduitMapper, ProduitMapper>();
+builder.Services.AddScoped<ITransactionStockMapper, TransactionStockMapper>();
+builder.Services.AddScoped<IFournisseurMapper, FournisseurMapper>();
+builder.Services.AddScoped<IStockMapper, StockMapper>();
+builder.Services.AddScoped<IFamilleProduitMapper, FamilleProduitMapper>();
 
 // Configure repositories
-builder.Services.AddScoped<IFamilleProduitRepository , FamilleProduitRepository>();
-builder.Services.AddScoped<IProduitRepository , ProduitRepository>();
-builder.Services.AddScoped<ITransactionStockRepository , TransactionStockRepository>();
-builder.Services.AddScoped<IFournisseurRepository , FournisseurRepository>();
-builder.Services.AddScoped<IStockRepository , StockRepository>();
+builder.Services.AddScoped<IFamilleProduitRepository, FamilleProduitRepository>();
+builder.Services.AddScoped<IProduitRepository, ProduitRepository>();
+builder.Services.AddScoped<ITransactionStockRepository, TransactionStockRepository>();
+builder.Services.AddScoped<IFournisseurRepository, FournisseurRepository>();
+builder.Services.AddScoped<IStockRepository, StockRepository>();
 
 // Configure services
-builder.Services.AddScoped<IProduitService , ProduitService>();
-builder.Services.AddScoped<IFamilleProduitService , FamilleProduitService>();
-builder.Services.AddScoped<IFournisseurService , FournisseurService>();
-builder.Services.AddScoped<IStockService , StockService>();
+builder.Services.AddScoped<IProduitService, ProduitService>();
+builder.Services.AddScoped<IFamilleProduitService, FamilleProduitService>();
+builder.Services.AddScoped<IFournisseurService, FournisseurService>();
+builder.Services.AddScoped<IStockService, StockService>();
 
 // Configure enums mappers
 builder.Services.AddScoped<TypeTransactionStockMapper>();
@@ -68,10 +69,7 @@ builder.Services.AddScoped<StatutStockMapper>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen( c =>
-{
-    c.SwaggerDoc("v1", new() { Title = "ApiCube", Version = "v1" });
-});
+builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new() { Title = "ApiCube", Version = "v1" }); });
 
 var app = builder.Build();
 
