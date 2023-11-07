@@ -6,6 +6,8 @@ using ApiCube.Persistence.Repositories.FamilleProduit;
 using ApiCube.Persistence.Repositories.Fournisseur;
 using ApiCube.Persistence.Repositories.Produit;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
 
 namespace ApiCube.Application.Services.Produit;
 
@@ -54,6 +56,15 @@ public class ProduitService : IProduitService
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
                 data: new { message = "Produit ajouté au stock avec succès" }
+            );
+
+            return response;
+        }
+        catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.Conflict,
+                data: new { message = "Ce produit existe déjà dans le stock" }
             );
 
             return response;

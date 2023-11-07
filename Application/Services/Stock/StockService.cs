@@ -7,6 +7,8 @@ using ApiCube.Domain.Enums.Stock;
 using ApiCube.Persistence.Repositories.Produit;
 using ApiCube.Persistence.Repositories.Stock;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
 
 namespace ApiCube.Application.Services.Stock;
 
@@ -62,6 +64,15 @@ public class StockService : IStockService
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
                 data: new { message = "Stock ajouté avec succès" }
+            );
+
+            return response;
+        }
+        catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.Conflict,
+                data: new { message = "Ce stock existe déjà" }
             );
 
             return response;

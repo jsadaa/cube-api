@@ -4,6 +4,8 @@ using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Persistence.Repositories.FamilleProduit;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
 
 namespace ApiCube.Application.Services.FamilleProduit;
 
@@ -32,6 +34,15 @@ public class FamilleProduitService : IFamilleProduitService
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
                 data: new { message = "Famille de produit ajoutée avec succès" }
+            );
+
+            return response;
+        }
+        catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.Conflict,
+                data: new { message = "Cette famille de produit existe déjà" }
             );
 
             return response;

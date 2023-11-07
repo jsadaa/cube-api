@@ -74,4 +74,35 @@ public class ApiDbContext : DbContext
             }
         }
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ClientModel>()
+            .HasIndex(c => c.Email)
+            .IsUnique();
+
+        modelBuilder.Entity<EmployeModel>()
+            .HasIndex(e => new { e.Nom, e.Prenom, e.Email })
+            .IsUnique();
+
+        modelBuilder.Entity<FournisseurModel>()
+            .HasIndex(f => new { f.Nom, f.Email })
+            .IsUnique();
+
+        modelBuilder.Entity<ProduitModel>()
+            .HasIndex(p => p.Nom)
+            .IsUnique();
+
+        modelBuilder.Entity<FamilleProduitModel>()
+            .HasIndex(f => f.Nom)
+            .IsUnique();
+
+        modelBuilder.Entity<RoleModel>()
+            .HasIndex(r => r.Nom)
+            .IsUnique();
+
+        modelBuilder.Entity<StockModel>()
+            .HasIndex(s => s.ProduitId)
+            .IsUnique();
+    }
 }

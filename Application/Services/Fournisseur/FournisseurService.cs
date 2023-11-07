@@ -4,6 +4,8 @@ using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Persistence.Repositories.Fournisseur;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
 
 namespace ApiCube.Application.Services.Fournisseur;
 
@@ -37,6 +39,15 @@ public class FournisseurService : IFournisseurService
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
                 data: new { message = "Fournisseur ajouté avec succès" }
+            );
+
+            return response;
+        }
+        catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.Conflict,
+                data: new { message = "Ce fournisseur existe déjà" }
             );
 
             return response;
