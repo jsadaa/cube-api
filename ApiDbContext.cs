@@ -55,7 +55,7 @@ public class ApiDbContext : DbContext
     private void UpdateTimestamps()
     {
         var entities = ChangeTracker.Entries().Where(
-            x => (x.State == EntityState.Added || x.State == EntityState.Modified));
+            x => x.State is EntityState.Added or EntityState.Modified);
 
         foreach (var entity in entities)
         {

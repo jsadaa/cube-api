@@ -19,6 +19,7 @@ using ApiCube.Persistence.Repositories.Produit;
 using ApiCube.Persistence.Repositories.Promotion;
 using ApiCube.Persistence.Repositories.Stock;
 using ApiCube.Persistence.Repositories.TransactionStock;
+using ApiCube.Persistence.Seeders;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -91,10 +92,29 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    // Seed the database with fake data
+    using (var scope = app.Services.CreateScope())
+    {
+        var context = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
+        
+        var familles = FamilleProduitSeeder.SeedFamilleProduits(context);
+        var fournisseurs = FournisseurSeeder.SeedFournisseurs(context);
+        var produits = ProduitSeeder.SeedProduits(context, familles, fournisseurs);
+        StockSeeder.SeedStocksAndTransactions(context, produits);
+        PromotionSeeder.SeedPromotions(context);
+    }
+    
+    app.UseDeveloperExceptionPage();
+    
+    // Enable middleware to serve generated Swagger as a JSON endpoint.
     app.UseSwagger(
         c => c.SerializeAsV2 = true
     );
+    
+    // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiCube v1"));
+    
+    // Enable middleware to serve ReDoc documentation
     app.UseReDoc(
         options => { options.Path = "/redoc"; }
     );
