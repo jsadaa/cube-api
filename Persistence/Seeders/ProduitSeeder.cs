@@ -7,7 +7,7 @@ namespace ApiCube.Persistence.Seeders;
 public static class ProduitSeeder
 {
     public static List<ProduitModel> SeedProduits(ApiDbContext context, List<FamilleProduitModel> familles,
-        List<FournisseurModel> fournisseurs, int count = 50)
+        List<FournisseurModel> fournisseurs, int count = 20)
     {
         if (context.Produits.Any()) return context.Produits.ToList();
 
@@ -106,7 +106,7 @@ public static class ProduitSeeder
                     DegreAlcool = Math.Round(f.Random.Double(10, 20), 2),
                     PrixAchat = prixAchat,
                     PrixVente = prixVente,
-                    EnPromotion = f.Random.Bool(),
+                    EnPromotion = false,
                     FamilleProduitId = f.PickRandom(familles).Id,
                     FournisseurId = f.PickRandom(fournisseurs).Id
                 };

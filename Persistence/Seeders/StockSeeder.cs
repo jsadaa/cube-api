@@ -32,7 +32,7 @@ public static class StockSeeder
 
         foreach (var stock in context.Stocks.Include(stockModel => stockModel.Produit).ToList())
         {
-            // Créer une transaction pour chaque stock
+            // Créer une transaction pour chaque création de stock
             var transaction = new TransactionStockModel
             {
                 StockId = stock.Id,
@@ -47,7 +47,6 @@ public static class StockSeeder
             context.TransactionsStock.Add(transaction);
         }
 
-        // Sauvegarder toutes les transactions en une fois
         context.SaveChanges();
     }
 }

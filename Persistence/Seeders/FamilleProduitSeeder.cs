@@ -31,7 +31,7 @@ public static class FamilleProduitSeeder
                 return new FamilleProduitModel
                 {
                     Nom = nom,
-                    Description = f.Commerce.ProductDescription()
+                    Description = f.Lorem.Sentence()
                 };
             });
 

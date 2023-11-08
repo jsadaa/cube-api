@@ -5,7 +5,7 @@ namespace ApiCube.Persistence.Seeders;
 
 public static class FournisseurSeeder
 {
-    public static List<FournisseurModel> SeedFournisseurs(ApiDbContext context, int count = 10)
+    public static List<FournisseurModel> SeedFournisseurs(ApiDbContext context, int count = 15)
     {
         if (context.Fournisseurs.Any()) return context.Fournisseurs.ToList();
 
