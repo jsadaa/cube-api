@@ -109,4 +109,9 @@ public class TransactionStock
     {
         return EstUneSortie() && !EstUnePeremption();
     }
+    
+    public bool EstUneSuppression()
+    {
+        return Type is TypeTransactionStock.Suppression;
+    }
 }

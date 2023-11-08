@@ -1,3 +1,4 @@
+using ApiCube.Domain.Enums.Stock;
 using ApiCube.Domain.Mappers.FamilleProduit;
 using ApiCube.Domain.Mappers.Fournisseur;
 using ApiCube.Domain.Mappers.Produit;
@@ -12,16 +13,19 @@ namespace ApiCube.Persistence.Repositories.Stock;
 public class StockRepository : IStockRepository
 {
     private readonly ApiDbContext _context;
+    private readonly StatutStockMapper _statutStockMapper;
     private readonly IStockMapper _stockMapper;
     private readonly IProduitMapper _produitMapper;
     private readonly IFamilleProduitMapper _familleProduitMapper;
     private readonly IFournisseurMapper _fournisseurMapper;
     private readonly IMapper _mapper;
 
-    public StockRepository(ApiDbContext context, IStockMapper stockMapper, IProduitMapper produitMapper,
-        IFamilleProduitMapper familleProduitMapper, IFournisseurMapper fournisseurMapper, IMapper mapper)
+    public StockRepository(ApiDbContext context, StatutStockMapper statutStockMapper, IStockMapper stockMapper,
+        IProduitMapper produitMapper, IFamilleProduitMapper familleProduitMapper, IFournisseurMapper fournisseurMapper,
+        IMapper mapper)
     {
         _context = context;
+        _statutStockMapper = statutStockMapper;
         _stockMapper = stockMapper;
         _produitMapper = produitMapper;
         _familleProduitMapper = familleProduitMapper;
@@ -52,7 +56,8 @@ public class StockRepository : IStockRepository
             var familleProduit = _familleProduitMapper.Mapper(stockModel.Produit.FamilleProduit);
             var fournisseur = _fournisseurMapper.Mapper(stockModel.Produit.Fournisseur);
             var produit = _produitMapper.Mapper(stockModel.Produit, familleProduit, fournisseur);
-            var stock = _stockMapper.Mapper(stockModel, produit);
+            var statutStock = _statutStockMapper.Mapper(stockModel.Statut);
+            var stock = _stockMapper.Mapper(stockModel, produit, statutStock);
 
             stocks.Add(stock);
         }
@@ -74,7 +79,8 @@ public class StockRepository : IStockRepository
         var familleProduit = _familleProduitMapper.Mapper(stockModel.Produit.FamilleProduit);
         var fournisseur = _fournisseurMapper.Mapper(stockModel.Produit.Fournisseur);
         var produit = _produitMapper.Mapper(stockModel.Produit, familleProduit, fournisseur);
-        var stock = _stockMapper.Mapper(stockModel, produit);
+        var statutStock = _statutStockMapper.Mapper(stockModel.Statut);
+        var stock = _stockMapper.Mapper(stockModel, produit, statutStock);
 
         return stock;
     }
@@ -93,7 +99,8 @@ public class StockRepository : IStockRepository
         var familleProduit = _familleProduitMapper.Mapper(stockModel.Produit.FamilleProduit);
         var fournisseur = _fournisseurMapper.Mapper(stockModel.Produit.Fournisseur);
         var produit = _produitMapper.Mapper(stockModel.Produit, familleProduit, fournisseur);
-        var stock = _stockMapper.Mapper(stockModel, produit);
+        var statutStock = _statutStockMapper.Mapper(stockModel.Statut);
+        var stock = _stockMapper.Mapper(stockModel, produit, statutStock);
 
         return stock;
     }

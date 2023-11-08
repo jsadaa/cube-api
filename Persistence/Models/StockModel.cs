@@ -37,6 +37,4 @@ public class StockModel
     public required DateTime DateModification { get; set; }
 
     [Column("date_suppression")] public DateTime? DateSuppression { get; set; }
-
-    [Column("est_supprime")] [Required] public required bool EstSupprime { get; set; }
 }

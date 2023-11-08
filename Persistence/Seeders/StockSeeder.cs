@@ -23,7 +23,6 @@ public static class StockSeeder
                 DateCreation = new Faker().Date.Past(),
                 DatePeremption = new Faker().Date.Future(),
                 DateModification = new Faker().Date.Recent(),
-                EstSupprime = false
             };
             context.Stocks.Add(stock);
         }

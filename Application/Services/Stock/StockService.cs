@@ -216,7 +216,20 @@ public class StockService : IStockService
         try
         {
             var stock = _stockRepository.Trouver(id);
-            _stockRepository.Supprimer(stock);
+            
+            var transactionStock = new TransactionStock(
+                quantite: - stock.Quantite,
+                date: DateTime.Now,
+                type: TypeTransactionStock.Suppression,
+                stock: stock,
+                prixUnitaire: stock.Produit.PrixAchat,
+                quantiteAvant: stock.Quantite,
+                quantiteApres: 0
+            );
+            
+            stock.AjouterTransaction(transactionStock);
+            
+            _stockRepository.Modifier(stock);
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,

@@ -21,11 +21,12 @@ public class TransactionStockRepository : ITransactionStockRepository
     private readonly IStockMapper _stockMapper;
     private readonly IProduitMapper _produitMapper;
     private readonly TypeTransactionStockMapper _typeTransactionStockMapper;
+    private readonly StatutStockMapper _statutStockMapper;
 
     public TransactionStockRepository(ApiDbContext context, IMapper mapper,
         ITransactionStockMapper transactionStockMapper, IFamilleProduitMapper familleProduitMapper,
         IFournisseurMapper fournisseurMapper, IStockMapper stockMapper, IProduitMapper produitMapper,
-        TypeTransactionStockMapper typeTransactionStockMapper)
+        TypeTransactionStockMapper typeTransactionStockMapper, StatutStockMapper statutStockMapper)
     {
         _context = context;
         _mapper = mapper;
@@ -35,6 +36,7 @@ public class TransactionStockRepository : ITransactionStockRepository
         _stockMapper = stockMapper;
         _produitMapper = produitMapper;
         _typeTransactionStockMapper = typeTransactionStockMapper;
+        _statutStockMapper = statutStockMapper;
     }
 
     public void Ajouter(Domain.Entities.TransactionStock transactionStock)
@@ -60,7 +62,8 @@ public class TransactionStockRepository : ITransactionStockRepository
         var familleProduit = _familleProduitMapper.Mapper(transactionStock.Stock.Produit.FamilleProduit);
         var fournisseur = _fournisseurMapper.Mapper(transactionStock.Stock.Produit.Fournisseur);
         var produit = _produitMapper.Mapper(transactionStock.Stock.Produit, familleProduit, fournisseur);
-        var stock = _stockMapper.Mapper(transactionStock.Stock, produit);
+        var statutStock = _statutStockMapper.Mapper(transactionStock.Stock.Statut);
+        var stock = _stockMapper.Mapper(transactionStock.Stock, produit, statutStock);
         var typeTransactionStock = _typeTransactionStockMapper.Mapper(transactionStock.Type);
 
         return _transactionStockMapper.Mapper(transactionStock, stock, typeTransactionStock);
@@ -83,7 +86,8 @@ public class TransactionStockRepository : ITransactionStockRepository
             var familleProduit = _familleProduitMapper.Mapper(transactionStock.Stock.Produit.FamilleProduit);
             var fournisseur = _fournisseurMapper.Mapper(transactionStock.Stock.Produit.Fournisseur);
             var produit = _produitMapper.Mapper(transactionStock.Stock.Produit, familleProduit, fournisseur);
-            var stock = _stockMapper.Mapper(transactionStock.Stock, produit);
+            var statutStock = _statutStockMapper.Mapper(transactionStock.Stock.Statut);
+            var stock = _stockMapper.Mapper(transactionStock.Stock, produit, statutStock);
             var typeTransactionStock = _typeTransactionStockMapper.Mapper(transactionStock.Type);
 
             transactionsStockMapped.Add(_transactionStockMapper.Mapper(transactionStock, stock, typeTransactionStock));
@@ -110,7 +114,8 @@ public class TransactionStockRepository : ITransactionStockRepository
             var familleProduit = _familleProduitMapper.Mapper(transactionStock.Stock.Produit.FamilleProduit);
             var fournisseur = _fournisseurMapper.Mapper(transactionStock.Stock.Produit.Fournisseur);
             var produit = _produitMapper.Mapper(transactionStock.Stock.Produit, familleProduit, fournisseur);
-            var stock = _stockMapper.Mapper(transactionStock.Stock, produit);
+            var statutStock = _statutStockMapper.Mapper(transactionStock.Stock.Statut);
+            var stock = _stockMapper.Mapper(transactionStock.Stock, produit, statutStock);
             var typeTransactionStock = _typeTransactionStockMapper.Mapper(transactionStock.Type);
 
             transactionsStockMapped.Add(_transactionStockMapper.Mapper(transactionStock, stock, typeTransactionStock));

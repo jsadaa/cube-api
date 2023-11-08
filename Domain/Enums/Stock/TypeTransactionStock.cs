@@ -10,7 +10,8 @@ public enum TypeTransactionStock
     Perte,
     Vol,
     Peremption,
-    ModificationInterne
+    ModificationInterne,
+    Suppression
 }
 
 public class TypeTransactionStockMapper
@@ -26,6 +27,7 @@ public class TypeTransactionStockMapper
             "Vol" => TypeTransactionStock.Vol,
             "Peremption" => TypeTransactionStock.Peremption,
             "ModificationInterne" => TypeTransactionStock.ModificationInterne,
+            "Suppression" => TypeTransactionStock.Suppression,
             _ => throw new TypeTransactionStockInexistant()
         };
     }

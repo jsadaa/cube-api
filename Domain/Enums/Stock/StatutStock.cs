@@ -16,6 +16,7 @@ public enum StatutStock
     Perdu,
     Vole,
     Casse,
+    Supprime,
     Autre,
 }
 
@@ -37,6 +38,7 @@ public class StatutStockMapper
             "Perdu" => StatutStock.Perdu,
             "Vole" => StatutStock.Vole,
             "Casse" => StatutStock.Casse,
+            "Supprime" => StatutStock.Supprime,
             "Autre" => StatutStock.Autre,
             _ => throw new StatutStockInexistant()
         };
