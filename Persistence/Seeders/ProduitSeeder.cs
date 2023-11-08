@@ -96,7 +96,7 @@ public static class ProduitSeeder
                 prixVente = Math.Round(prixAchat + f.Random.Double(3, 20), 2);
                 var familleProduit = f.PickRandom(familles);
                 var fournisseur = f.PickRandom(fournisseurs);
-                
+
                 return new ProduitModel
                 {
                     Nom = nom,

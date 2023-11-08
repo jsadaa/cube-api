@@ -28,5 +28,5 @@ public class CommandeClientModel
 
     [ForeignKey("EmployeId")] public required EmployeModel Employe { get; set; }
 
-    public required  ICollection<LigneCommandeClientModel> LigneCommandeClients { get; set; }
+    public required ICollection<LigneCommandeClientModel> LigneCommandeClients { get; set; }
 }
