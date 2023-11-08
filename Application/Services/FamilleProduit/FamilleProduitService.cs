@@ -117,4 +117,86 @@ public class FamilleProduitService : IFamilleProduitService
             return response;
         }
     }
+    
+    public BaseResponse ModifierUneFamilleProduit(int id, FamilleProduitRequestDTO familleProduitRequestDTO)
+    {
+        try
+        {
+            var familleProduitAModifier = _familleProduitRepository.Trouver(id);
+
+            familleProduitAModifier.Nom = familleProduitRequestDTO.Nom;
+            familleProduitAModifier.Description = familleProduitRequestDTO.Description;
+
+            _familleProduitRepository.Modifier(familleProduitAModifier);
+
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.OK,
+                data: new { message = "Famille de produit modifiée avec succès" }
+            );
+
+            return response;
+        }
+        catch (FamilleProduitIntrouvable e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.NotFound,
+                data: new { message = "Cette famille de produit n'existe pas" }
+            );
+
+            return response;
+        }
+        catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.Conflict,
+                data: new { message = "Cette famille de produit existe déjà" }
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.InternalServerError,
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
+    }
+    
+    public BaseResponse SupprimerUneFamilleProduit(int id)
+    {
+        try
+        {
+            var familleProduitASupprimer = _familleProduitRepository.Trouver(id);
+
+            _familleProduitRepository.Supprimer(familleProduitASupprimer);
+
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.OK,
+                data: new { message = "Famille de produit supprimée avec succès" }
+            );
+
+            return response;
+        }
+        catch (FamilleProduitIntrouvable e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.NotFound,
+                data: new { message = "Cette famille de produit n'existe pas" }
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.InternalServerError,
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
+    }
 }

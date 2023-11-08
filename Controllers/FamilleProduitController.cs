@@ -78,5 +78,52 @@ namespace ApiCube.Controllers
             return StatusCode(response.StatusCode, response.Data);
         }
         
+        /// <summary>
+        /// Modifier une famille de produit
+        /// </summary>
+        /// <param name="id">Identifiant de la famille de produit</param>
+        /// <param name="familleProduitRequestDTO"></param>
+        /// <returns></returns>
+        /// <response code="200">La famille de produit a été modifiée avec succès</response>
+        /// <response code="400">La famille de produit n'a pas pu être modifiée</response>
+        /// <response code="404">La famille de produit n'a pas été trouvée</response>
+        /// <response code="500">Erreur interne</response>
+        [HttpPut("modifier/{id:int}")]
+        [ActionName("ModifierUneFamilleProduit")]
+        [ProducesResponseType(typeof(string), 200)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
+        [Produces("application/json")]
+        public IActionResult ModifierUneFamilleProduit(int id, [FromBody] FamilleProduitRequestDTO familleProduitRequestDTO)
+        {
+            var response = _familleProduitService.ModifierUneFamilleProduit(id, familleProduitRequestDTO);
+
+            return StatusCode(response.StatusCode, response.Data);
+        }
+
+        /// <summary>
+        /// Supprimer une famille de produit
+        /// </summary>
+        /// <param name="id">Identifiant de la famille de produit</param>
+        /// <returns></returns>
+        /// <response code="200">La famille de produit a été supprimée avec succès</response>
+        /// <response code="400">La famille de produit n'a pas pu être supprimée</response>
+        /// <response code="404">La famille de produit n'a pas été trouvée</response>
+        /// <response code="500">Erreur interne</response>
+        [HttpDelete("supprimer/{id:int}")]
+        [ActionName("SupprimerUneFamilleProduit")]
+        [ProducesResponseType(typeof(string), 200)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
+        [Produces("application/json")]
+        public IActionResult SupprimerUneFamilleProduit(int id)
+        {
+            var response = _familleProduitService.SupprimerUneFamilleProduit(id);
+
+            return StatusCode(response.StatusCode, response.Data);
+        }
+
     }
 }

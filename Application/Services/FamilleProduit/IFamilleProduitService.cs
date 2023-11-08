@@ -10,4 +10,8 @@ public interface IFamilleProduitService
     public BaseResponse ListerLesFamillesProduits();
     
     public BaseResponse TrouverUneFamilleProduit(int id);
+    
+    public BaseResponse ModifierUneFamilleProduit(int id, FamilleProduitRequestDTO familleProduitRequestDTO);
+    
+    public BaseResponse SupprimerUneFamilleProduit(int id);
 }
