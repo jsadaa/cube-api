@@ -45,6 +45,7 @@ public class ProduitRepository : IProduitRepository
             .Include(produit => produit.FamilleProduit)
             .Include(produit => produit.Fournisseur)
             .Include(produit => produit.Promotion)
+            .OrderBy(produit => produit.Id)
             .ToList();
 
         var produits = new List<Domain.Entities.Produit>();
