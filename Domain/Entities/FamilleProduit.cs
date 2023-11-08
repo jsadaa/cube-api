@@ -40,4 +40,11 @@ public class FamilleProduit
     {
         return Produits;
     }
+    
+    public void MettreAJour(int id, string nom, string description)
+    {
+        Id = id;
+        Nom = nom;
+        Description = description;
+    }
 }

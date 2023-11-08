@@ -2,6 +2,7 @@ using System.Net;
 using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
+using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Repositories.Fournisseur;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -73,6 +74,128 @@ public class FournisseurService : IFournisseurService
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
                 data: fournisseurs
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.InternalServerError,
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
+    }
+    
+    public BaseResponse TrouverUnFournisseurParId(int id)
+    {
+        try
+        {
+            var fournisseur = _fournisseurRepository.Trouver(id);
+            
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.OK,
+                data: _mapper.Map<FournisseurResponseDTO>(fournisseur)
+            );
+
+            return response;
+        }
+        catch (FournisseurIntrouvable e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.NotFound,
+                data: new { message = "Fournisseur introuvable" }
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.InternalServerError,
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
+    }
+    
+    public BaseResponse ModifierUnFournisseur(int id, FournisseurRequestDTO fournisseurRequestDTO)
+    {
+        try
+        {
+            var fournisseur = _fournisseurRepository.Trouver(id);
+
+            fournisseur.MettreAJour(
+                nom: fournisseurRequestDTO.Nom,
+                adresse: fournisseurRequestDTO.Adresse,
+                codePostal: fournisseurRequestDTO.CodePostal,
+                ville: fournisseurRequestDTO.Ville,
+                pays: fournisseurRequestDTO.Pays,
+                telephone: fournisseurRequestDTO.Telephone,
+                email: fournisseurRequestDTO.Email
+            );
+
+            _fournisseurRepository.Modifier(fournisseur);
+
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.OK,
+                data: new { message = "Fournisseur modifié avec succès" }
+            );
+
+            return response;
+        }
+        catch (FournisseurIntrouvable e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.NotFound,
+                data: new { message = "Fournisseur introuvable" }
+            );
+
+            return response;
+        }
+        catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.Conflict,
+                data: new { message = "Ce fournisseur existe déjà" }
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.InternalServerError,
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
+    }
+    
+    public BaseResponse SupprimerUnFournisseur(int id)
+    {
+        try
+        {
+            var fournisseur = _fournisseurRepository.Trouver(id);
+
+            _fournisseurRepository.Supprimer(fournisseur);
+
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.OK,
+                data: new { message = "Fournisseur supprimé avec succès" }
+            );
+
+            return response;
+        }
+        catch (FournisseurIntrouvable e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.NotFound,
+                data: new { message = "Fournisseur introuvable" }
             );
 
             return response;

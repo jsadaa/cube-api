@@ -124,8 +124,10 @@ public class FamilleProduitService : IFamilleProduitService
         {
             var familleProduitAModifier = _familleProduitRepository.Trouver(id);
 
-            familleProduitAModifier.Nom = familleProduitRequestDTO.Nom;
-            familleProduitAModifier.Description = familleProduitRequestDTO.Description;
+            familleProduitAModifier.MettreAJour(
+                nom: familleProduitRequestDTO.Nom,
+                description: familleProduitRequestDTO.Description
+            );
 
             _familleProduitRepository.Modifier(familleProduitAModifier);
 
