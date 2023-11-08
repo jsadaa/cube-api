@@ -149,6 +149,7 @@ namespace ApiCube.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     region = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    annee = table.Column<int>(type: "int", nullable: false),
                     degre_alcool = table.Column<double>(type: "double", nullable: false),
                     prix_achat = table.Column<double>(type: "double", nullable: false),
                     prix_vente = table.Column<double>(type: "double", nullable: false),
@@ -585,9 +586,9 @@ namespace ApiCube.Migrations
                 column: "fournisseur_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_produit_nom",
+                name: "IX_produit_nom_annee",
                 table: "produit",
-                column: "nom",
+                columns: new[] { "nom", "annee" },
                 unique: true);
 
             migrationBuilder.CreateIndex(

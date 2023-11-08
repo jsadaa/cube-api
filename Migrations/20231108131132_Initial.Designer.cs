@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiCube.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20231108105443_Initial")]
+    [Migration("20231108131132_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -538,6 +538,10 @@ namespace ApiCube.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
+                    b.Property<int>("Annee")
+                        .HasColumnType("int")
+                        .HasColumnName("annee");
+
                     b.Property<string>("Appellation")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -602,10 +606,10 @@ namespace ApiCube.Migrations
 
                     b.HasIndex("FournisseurId");
 
-                    b.HasIndex("Nom")
-                        .IsUnique();
-
                     b.HasIndex("PromotionId");
+
+                    b.HasIndex("Nom", "Annee")
+                        .IsUnique();
 
                     b.ToTable("produit");
                 });

@@ -535,6 +535,10 @@ namespace ApiCube.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
+                    b.Property<int>("Annee")
+                        .HasColumnType("int")
+                        .HasColumnName("annee");
+
                     b.Property<string>("Appellation")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -599,10 +603,10 @@ namespace ApiCube.Migrations
 
                     b.HasIndex("FournisseurId");
 
-                    b.HasIndex("Nom")
-                        .IsUnique();
-
                     b.HasIndex("PromotionId");
+
+                    b.HasIndex("Nom", "Annee")
+                        .IsUnique();
 
                     b.ToTable("produit");
                 });
