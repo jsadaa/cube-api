@@ -1,5 +1,6 @@
 using ApiCube.Persistence.Models;
 using Bogus;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApiCube.Persistence.Seeders;
 
@@ -70,31 +71,45 @@ public static class ProduitSeeder
             "Vallée du Rhône"
         };
 
-        var uniqueProductNames = new HashSet<string>(context.Produits.Select(p => p.Nom));
+        var existingProducts = context.Produits
+            .AsNoTracking()
+            .ToList()
+            .Select(p => (p.Nom, p.Annee))
+            .ToHashSet();
+
+        var uniqueNameYearPairs = existingProducts;
         var produitGenerator = new Faker<ProduitModel>()
             .CustomInstantiator(f =>
             {
-                ProduitModel produit;
+                string nom;
+                int annee;
+                double prixAchat, prixVente;
                 do
                 {
-                    produit = new ProduitModel
-                    {
-                        Nom = "Château " + f.Name.LastName(),
-                        Description = f.Lorem.Sentence(),
-                        Appellation = f.PickRandom(appellations),
-                        Cepage = f.PickRandom(cepages),
-                        Region = f.PickRandom(regions),
-                        DegreAlcool = Math.Round(f.Random.Double(10, 20), 2),
-                        PrixAchat = Math.Round(f.Random.Double(5, 10), 2),
-                        PrixVente = Math.Round(f.Random.Double(11, 20), 2),
-                        EnPromotion = false,
-                        FamilleProduitId = f.PickRandom(familles).Id,
-                        FournisseurId = f.PickRandom(fournisseurs).Id
-                    };
-                } while (uniqueProductNames.Contains(produit.Nom));
+                    nom = "Château " + f.Name.LastName();
+                    annee = f.Date.Past(50).Year;
+                } while (uniqueNameYearPairs.Contains((nom, annee)));
 
-                uniqueProductNames.Add(produit.Nom);
-                return produit;
+                uniqueNameYearPairs.Add((nom, annee));
+
+                prixAchat = Math.Round(f.Random.Double(5, 50), 2);
+                prixVente = Math.Round(prixAchat + f.Random.Double(3, 20), 2);
+
+                return new ProduitModel
+                {
+                    Nom = nom,
+                    Description = f.Lorem.Sentence(),
+                    Appellation = f.PickRandom(appellations),
+                    Cepage = f.PickRandom(cepages),
+                    Region = f.PickRandom(regions),
+                    Annee = annee,
+                    DegreAlcool = Math.Round(f.Random.Double(10, 20), 2),
+                    PrixAchat = prixAchat,
+                    PrixVente = prixVente,
+                    EnPromotion = f.Random.Bool(),
+                    FamilleProduitId = f.PickRandom(familles).Id,
+                    FournisseurId = f.PickRandom(fournisseurs).Id
+                };
             });
 
         var produits = produitGenerator.Generate(count);

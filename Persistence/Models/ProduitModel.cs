@@ -36,6 +36,8 @@ public class ProduitModel
     [StringLength(50)]
     public string Region { get; set; }
 
+    [Column("annee")] [Required] public int Annee { get; set; }
+
     [Column("degre_alcool")] [Required] public double DegreAlcool { get; set; }
 
     [Column("prix_achat")] [Required] public double PrixAchat { get; set; }

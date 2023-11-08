@@ -89,8 +89,9 @@ public class ApiDbContext : DbContext
             .HasIndex(f => new { f.Nom, f.Email })
             .IsUnique();
 
+        // Produit has unique constraint on nom année
         modelBuilder.Entity<ProduitModel>()
-            .HasIndex(p => p.Nom)
+            .HasIndex(p => new { p.Nom, p.Annee })
             .IsUnique();
 
         modelBuilder.Entity<FamilleProduitModel>()

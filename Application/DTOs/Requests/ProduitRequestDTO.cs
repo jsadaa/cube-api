@@ -14,6 +14,8 @@ public class ProduitRequestDTO
 
     [Required] public string Region { get; set; }
 
+    [Required] public int Annee { get; set; }
+
     [Required] public double DegreAlcool { get; set; }
 
     [Required] public double PrixAchat { get; set; }

@@ -10,6 +10,7 @@ public class Produit
     public string Appellation { get; set; }
     public string Cepage { get; set; }
     public string Region { get; set; }
+    public int Annee { get; set; }
     public double DegreAlcool { get; set; }
     public double PrixAchat { get; set; }
     public double PrixVente { get; set; }
@@ -18,7 +19,8 @@ public class Produit
     public FamilleProduit FamilleProduit { get; set; }
     public Fournisseur Fournisseur { get; set; }
 
-    public Produit(string nom, string description, string appellation, string cepage, string region, double degreAlcool,
+    public Produit(string nom, string description, string appellation, string cepage, string region, int annee,
+        double degreAlcool,
         bool enPromotion, double prixAchat, double prixVente, FamilleProduit familleProduit, Fournisseur fournisseur)
     {
         Nom = nom;
@@ -26,6 +28,7 @@ public class Produit
         Appellation = appellation;
         Cepage = cepage;
         Region = region;
+        Annee = annee;
         DegreAlcool = degreAlcool;
         PrixAchat = prixAchat;
         PrixVente = prixVente;
@@ -36,7 +39,7 @@ public class Produit
         VerifierValiditePromotion();
     }
 
-    public Produit(int id, string nom, string description, string appellation, string cepage, string region,
+    public Produit(int id, string nom, string description, string appellation, string cepage, int annee, string region,
         double degreAlcool, bool enPromotion, double prixAchat, double prixVente, FamilleProduit familleProduit,
         Fournisseur fournisseur)
     {
@@ -46,6 +49,7 @@ public class Produit
         Appellation = appellation;
         Cepage = cepage;
         Region = region;
+        Annee = annee;
         DegreAlcool = degreAlcool;
         PrixAchat = prixAchat;
         PrixVente = prixVente;
@@ -56,7 +60,7 @@ public class Produit
         VerifierValiditePromotion();
     }
 
-    public Produit(int id, string nom, string description, string appellation, string cepage, string region,
+    public Produit(int id, string nom, string description, string appellation, string cepage, string region, int annee,
         double degreAlcool, bool enPromotion, double prixAchat, double prixVente, FamilleProduit familleProduit,
         Fournisseur fournisseur, Promotion promotion)
     {
@@ -66,6 +70,7 @@ public class Produit
         Appellation = appellation;
         Cepage = cepage;
         Region = region;
+        Annee = annee;
         DegreAlcool = degreAlcool;
         PrixAchat = prixAchat;
         PrixVente = prixVente;
@@ -112,7 +117,7 @@ public class Produit
         return prix;
     }
 
-    public void MettreAJour(string nom, string description, string appellation, string cepage, string region,
+    public void MettreAJour(string nom, string description, string appellation, string cepage, string region, int annee,
         double degreAlcool, double prixAchat, double prixVente, bool enPromotion)
     {
         Nom = nom;
@@ -120,6 +125,7 @@ public class Produit
         Appellation = appellation;
         Cepage = cepage;
         Region = region;
+        Annee = annee;
         DegreAlcool = degreAlcool;
         PrixAchat = prixAchat;
         PrixVente = prixVente;

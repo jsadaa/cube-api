@@ -48,6 +48,7 @@ public class ProduitService : IProduitService
                 appellation: produitRequestDTO.Appellation,
                 cepage: produitRequestDTO.Cepage,
                 region: produitRequestDTO.Region,
+                annee: produitRequestDTO.Annee,
                 degreAlcool: produitRequestDTO.DegreAlcool,
                 prixAchat: produitRequestDTO.PrixAchat,
                 prixVente: produitRequestDTO.PrixVente,
