@@ -1,9 +1,11 @@
 using System.Net;
 using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
+using ApiCube.Application.DTOs.Requests.Stock;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Domain.Entities;
 using ApiCube.Domain.Enums.Stock;
+using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Repositories.Produit;
 using ApiCube.Persistence.Repositories.Stock;
 using AutoMapper;
@@ -98,6 +100,136 @@ public class StockService : IStockService
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
                 data: stocks
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.InternalServerError,
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
+    }
+    
+    public BaseResponse TrouverUnStock(int id)
+    {
+        try
+        {
+            var stock = _stockRepository.Trouver(id);
+            var stockResponse = _mapper.Map<StockResponse>(stock);
+
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.OK,
+                data: stockResponse
+            );
+
+            return response;
+        }
+        catch (StockIntrouvable e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.NotFound,
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.InternalServerError,
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
+    }
+    
+    public BaseResponse ModifierUnStock(int id, StockUpdate stockUpdate)
+    {
+        try
+        {
+            var stock = _stockRepository.Trouver(id);
+
+            if (stock.Quantite != stockUpdate.Quantite)
+            {
+                var nouvelleTransactionStock = new TransactionStock(
+                    quantite: stockUpdate.Quantite - stock.Quantite,
+                    date: DateTime.Now,
+                    type: TypeTransactionStock.ModificationInterne,
+                    stock: stock,
+                    prixUnitaire: stock.Produit.PrixAchat,
+                    quantiteAvant: stock.Quantite,
+                    quantiteApres: stockUpdate.Quantite
+                );
+
+                stock.AjouterTransaction(nouvelleTransactionStock);
+            }
+            
+            stock.ModifierSeuilDisponibilite(stockUpdate.SeuilDisponibilite);
+            stock.ModifierDatePeremption(stockUpdate.DatePeremption);
+
+            _stockRepository.Modifier(stock);
+
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.OK,
+                data: new { message = "Stock modifié avec succès" }
+            );
+
+            return response;
+        }
+        catch (StockIntrouvable e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.NotFound,
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
+        catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.Conflict,
+                data: new { message = "Ce stock existe déjà" }
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.InternalServerError,
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
+    }
+    
+    public BaseResponse SupprimerUnStock(int id)
+    {
+        try
+        {
+            var stock = _stockRepository.Trouver(id);
+            _stockRepository.Supprimer(stock);
+
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.OK,
+                data: new { message = "Stock supprimé avec succès" }
+            );
+
+            return response;
+        }
+        catch (StockIntrouvable e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.NotFound,
+                data: new { message = e.Message }
             );
 
             return response;

@@ -64,6 +64,11 @@ public class TransactionStock
         return Type is TypeTransactionStock.Vente or TypeTransactionStock.Perte or TypeTransactionStock.Vol
             or TypeTransactionStock.Peremption;
     }
+    
+    public bool EstUneModificationInterne()
+    {
+        return Type is TypeTransactionStock.ModificationInterne;
+    }
 
     public bool EstUnePerte()
     {

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ApiCube.Application.DTOs.Requests;
+namespace ApiCube.Application.DTOs.Requests.Stock;
 
 public class StockRequest
 {

@@ -82,6 +82,7 @@ public class Stock
 
     private void RetirerQuantite(int quantite)
     {
+        quantite = Math.Abs(quantite);
         Quantite -= quantite;
         AdapterStatut();
     }
@@ -109,7 +110,27 @@ public class Stock
         Transactions.Add(transactionStock);
         if (transactionStock.EstUneSortie()) RetirerQuantite(transactionStock.Quantite);
         else if (transactionStock.EstUneEntree()) AjouterQuantite(transactionStock.Quantite);
-        else return;
+        else if (transactionStock.EstUneModificationInterne() && transactionStock.Quantite > 0)
+            AjouterQuantite(transactionStock.Quantite);
+        else if (transactionStock.EstUneModificationInterne() && transactionStock.Quantite < 0)
+            RetirerQuantite(transactionStock.Quantite);
+        AdapterStatut();
+    }
+    
+    public void MettreAJour(Stock stock)
+    {
+        Quantite = stock.Quantite;
+        SeuilDisponibilite = stock.SeuilDisponibilite;
+        Produit = stock.Produit;
+        DatePeremption = stock.DatePeremption;
+        DateModification = stock.DateModification;
+        DateSuppression = stock.DateSuppression;
+        AdapterStatut();
+    }
+
+    public void ModifierDatePeremption(DateTime stockUpdateDatePeremption)
+    {
+        DatePeremption = stockUpdateDatePeremption;
         AdapterStatut();
     }
 }
