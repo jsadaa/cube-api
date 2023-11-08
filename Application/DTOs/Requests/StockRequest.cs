@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ApiCube.Application.DTOs.Requests;
 
-public class StockRequestDTO
+public class StockRequest
 {
     [Required] public required int Quantite { get; set; }
 

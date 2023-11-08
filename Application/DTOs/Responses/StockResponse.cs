@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ApiCube.Application.DTOs.Responses;
 
-public class StockResponseDTO
+public class StockResponse
 {
     [Required] public required int Id { get; set; }
 
@@ -12,7 +12,7 @@ public class StockResponseDTO
 
     [Required] public required string Statut { get; set; }
 
-    [Required] public required ProduitResponseDTO Produit { get; set; }
+    [Required] public required ProduitResponse Produit { get; set; }
 
     [Required] public required DateTime DateCreation { get; set; }
 

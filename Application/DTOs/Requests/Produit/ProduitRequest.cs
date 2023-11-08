@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ApiCube.Application.DTOs.Requests;
+namespace ApiCube.Application.DTOs.Requests.Produit;
 
-public class ProduitRequestDTO
+public class ProduitRequest
 {
     [Required] public required string Nom { get; set; }
 

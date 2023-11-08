@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ApiCube.Application.DTOs.Responses;
 
-public class TransactionStockResponseDTO
+public class TransactionStockResponse
 {
     [Required] public required int Id { get; set; }
 

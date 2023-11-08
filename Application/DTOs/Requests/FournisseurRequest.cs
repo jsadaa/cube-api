@@ -1,6 +1,6 @@
 namespace ApiCube.Application.DTOs.Requests;
 
-public class FournisseurRequestDTO
+public class FournisseurRequest
 {
     public required string Nom { get; set; }
 
