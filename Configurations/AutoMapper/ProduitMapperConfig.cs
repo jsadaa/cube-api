@@ -1,4 +1,5 @@
 using ApiCube.Application.DTOs.Requests;
+using ApiCube.Application.DTOs.Requests.Produit;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Domain.Entities;
 using ApiCube.Persistence.Models;
@@ -18,14 +19,14 @@ public class ProduitMapperConfig : Profile
             .ForMember(dest => dest.PromotionId,
                 opt => opt.MapFrom(src => src.Promotion != null ? src.Promotion.Id : (int?)null))
             .ForMember(dest => dest.Promotion, opt => opt.Ignore());
-        CreateMap<Produit, ProduitResponseDTO>()
+        CreateMap<Produit, ProduitResponse>()
             .ForMember(dest => dest.FamilleProduitNom, opt => opt.MapFrom(src => src.FamilleProduit.Nom))
             .ForMember(dest => dest.FournisseurNom, opt => opt.MapFrom(src => src.Fournisseur.Nom))
             .ForMember(dest => dest.EnPromotion, opt => opt.MapFrom(src => src.EnPromotion));
-        CreateMap<ProduitModel, ProduitResponseDTO>()
+        CreateMap<ProduitModel, ProduitResponse>()
             .ForMember(dest => dest.FamilleProduitNom, opt => opt.MapFrom(src => src.FamilleProduit.Nom))
             .ForMember(dest => dest.FournisseurNom, opt => opt.MapFrom(src => src.Fournisseur.Nom))
             .ForMember(dest => dest.EnPromotion, opt => opt.MapFrom(src => src.EnPromotion));
-        CreateMap<ProduitRequestDTO, ProduitModel>();
+        CreateMap<ProduitRequest, ProduitModel>();
     }
 }

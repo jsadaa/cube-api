@@ -10,7 +10,7 @@ public class FamilleProduitMapperConfig : Profile
     public FamilleProduitMapperConfig()
     {
         CreateMap<FamilleProduit, FamilleProduitModel>();
-        CreateMap<FamilleProduit, FamilleProduitResponseDTO>();
-        CreateMap<FamilleProduitModel, FamilleProduitResponseDTO>();
+        CreateMap<FamilleProduit, FamilleProduitResponse>();
+        CreateMap<FamilleProduitModel, FamilleProduitResponse>();
     }
 }

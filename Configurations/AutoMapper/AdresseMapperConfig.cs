@@ -8,6 +8,6 @@ public class AdresseMapperConfig : Profile
 {
     public AdresseMapperConfig()
     {
-        CreateMap<Adresse, AdresseDTO>();
+        CreateMap<Adresse, AdresseResponse>();
     }
 }

@@ -11,8 +11,8 @@ public class PromotionMapperConfig : Profile
     public PromotionMapperConfig()
     {
         CreateMap<Promotion, PromotionModel>();
-        CreateMap<Promotion, PromotionResponseDTO>();
-        CreateMap<PromotionModel, PromotionResponseDTO>();
-        CreateMap<PromotionRequestDTO, PromotionModel>();
+        CreateMap<Promotion, PromotionResponse>();
+        CreateMap<PromotionModel, PromotionResponse>();
+        CreateMap<PromotionRequest, PromotionModel>();
     }
 }

@@ -16,9 +16,9 @@ public class FournisseurMapperConfig : Profile
             .ForMember(dest => dest.Ville, opt => opt.MapFrom(src => src.Adresse.Ville))
             .ForMember(dest => dest.Pays, opt => opt.MapFrom(src => src.Adresse.Pays))
             .ForMember(dest => dest.Telephone, opt => opt.MapFrom(src => src.Telephone.ToString()));
-        CreateMap<Fournisseur, FournisseurResponseDTO>()
+        CreateMap<Fournisseur, FournisseurResponse>()
             .ForMember(dest => dest.Telephone, opt => opt.MapFrom(src => src.Telephone.ToString()));
-        CreateMap<FournisseurModel, FournisseurResponseDTO>();
-        CreateMap<FournisseurRequestDTO, FournisseurModel>();
+        CreateMap<FournisseurModel, FournisseurResponse>();
+        CreateMap<FournisseurRequest, FournisseurModel>();
     }
 }

@@ -1,6 +1,6 @@
 namespace ApiCube.Application.DTOs.Responses;
 
-public class AdresseDTO
+public class AdresseResponse
 {
     public required string Rue { get; set; } = string.Empty;
 
