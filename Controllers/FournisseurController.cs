@@ -69,7 +69,7 @@ namespace ApiCube.Controllers
         [HttpGet("{id:int}")]
         [ActionName("TrouverUnFournisseurParId")]
         [ProducesResponseType(typeof(FournisseurResponse), 200)]
-        [ProducesResponseType(typeof(FournisseurIntrouvable), 404)]
+        [ProducesResponseType(typeof(string), 404)]
         [ProducesResponseType(typeof(string), 500)]
         [Produces("application/json")]
         public IActionResult TrouverUnFournisseur(int id)
@@ -93,7 +93,7 @@ namespace ApiCube.Controllers
         [ActionName("ModifierUnFournisseur")]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(FournisseurIntrouvable), 404)]
+        [ProducesResponseType(typeof(string), 404)]
         [ProducesResponseType(typeof(string), 500)]
         [Produces("application/json")]
         public IActionResult ModifierUnFournisseur(int id, [FromBody] FournisseurRequest fournisseurRequest)
@@ -116,7 +116,7 @@ namespace ApiCube.Controllers
         [ActionName("SupprimerUnFournisseur")]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(FournisseurIntrouvable), 404)]
+        [ProducesResponseType(typeof(string), 404)]
         [ProducesResponseType(typeof(string), 500)]
         [Produces("application/json")]
         public IActionResult SupprimerUnFournisseur(int id)

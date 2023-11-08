@@ -67,9 +67,9 @@ namespace ApiCube.Controllers
         /// <response code="404">Famille de produit non trouvée</response>
         /// <response code="500">Erreur interne</response>
         [HttpGet("{id:int}")]
-        [ActionName("TrouverUneFamilleProduit")]
+        [ActionName("TrouverUneFamilleProduitParId")]
         [ProducesResponseType(typeof(FamilleProduitResponse), 200)]
-        [ProducesResponseType(typeof(FamilleProduitIntrouvable), 404)]
+        [ProducesResponseType(typeof(string), 404)]
         [ProducesResponseType(typeof(string), 500)]
         [Produces("application/json")]
         public IActionResult TrouverUneFamilleProduit(int id)
@@ -93,7 +93,7 @@ namespace ApiCube.Controllers
         [ActionName("ModifierUneFamilleProduit")]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(FamilleProduitIntrouvable), 404)]
+        [ProducesResponseType(typeof(string), 404)]
         [ProducesResponseType(typeof(string), 500)]
         [Produces("application/json")]
         public IActionResult ModifierUneFamilleProduit(int id, [FromBody] FamilleProduitRequest familleProduitRequest)
@@ -116,7 +116,7 @@ namespace ApiCube.Controllers
         [ActionName("SupprimerUneFamilleProduit")]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(FamilleProduitIntrouvable), 404)]
+        [ProducesResponseType(typeof(string), 404)]
         [ProducesResponseType(typeof(string), 500)]
         [Produces("application/json")]
         public IActionResult SupprimerUneFamilleProduit(int id)

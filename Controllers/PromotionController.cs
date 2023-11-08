@@ -68,7 +68,7 @@ namespace ApiCube.Controllers
         /// <response code="500">Erreur interne</response>
         /// <response code="400">Id invalide</response>
         [HttpGet("{id:int}")]
-        [ActionName("TrouverUnePromotion")]
+        [ActionName("TrouverUnePromotionParId")]
         [ProducesResponseType(typeof(PromotionResponse), 200)]
         [ProducesResponseType(typeof(PromotionIntrouvable), 404)]
         [ProducesResponseType(typeof(string), 500)]

@@ -71,7 +71,7 @@ public class ProduitController : ControllerBase
     [HttpGet("{id:int}")]
     [ActionName("TrouverUnProduitParId")]
     [ProducesResponseType(typeof(ProduitResponse), 200)]
-    [ProducesResponseType(typeof(ProduitIntrouvable), 404)]
+    [ProducesResponseType(typeof(string), 404)]
     [ProducesResponseType(typeof(string), 500)]
     [Produces("application/json")]
     public IActionResult TrouverUnProduit(int id)
@@ -95,7 +95,7 @@ public class ProduitController : ControllerBase
     [ActionName("ModifierUnProduit")]
     [ProducesResponseType(typeof(string), 200)]
     [ProducesResponseType(typeof(string), 400)]
-    [ProducesResponseType(typeof(ProduitIntrouvable), 404)]
+    [ProducesResponseType(typeof(string), 404)]
     [ProducesResponseType(typeof(string), 500)]
     [Produces("application/json")]
     public IActionResult ModifierUnProduit(int id, [FromBody] ProduitUpdate produitUpdate)
@@ -118,7 +118,7 @@ public class ProduitController : ControllerBase
     [ActionName("SupprimerUnProduit")]
     [ProducesResponseType(typeof(string), 200)]
     [ProducesResponseType(typeof(string), 400)]
-    [ProducesResponseType(typeof(ProduitIntrouvable), 404)]
+    [ProducesResponseType(typeof(string), 404)]
     [ProducesResponseType(typeof(string), 500)]
     [Produces("application/json")]
     public IActionResult SupprimerUnProduit(int id)
@@ -142,7 +142,7 @@ public class ProduitController : ControllerBase
     [ActionName("AppliquerUnePromotionSurUnProduit")]
     [ProducesResponseType(typeof(string), 200)]
     [ProducesResponseType(typeof(string), 400)]
-    [ProducesResponseType(typeof(ProduitIntrouvable), 404)]
+    [ProducesResponseType(typeof(string), 404)]
     [ProducesResponseType(typeof(string), 500)]
     [Produces("application/json")]
     public IActionResult AppliquerUnePromotionSurUnProduit(int produitId, int promotionId)
@@ -165,7 +165,7 @@ public class ProduitController : ControllerBase
     [ActionName("SupprimerUnePromotionSurUnProduit")]
     [ProducesResponseType(typeof(string), 200)]
     [ProducesResponseType(typeof(string), 400)]
-    [ProducesResponseType(typeof(ProduitIntrouvable), 404)]
+    [ProducesResponseType(typeof(string), 404)]
     [ProducesResponseType(typeof(string), 500)]
     [Produces("application/json")]
     public IActionResult RetirerUnePromotionSurUnProduit(int produitId)
