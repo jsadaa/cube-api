@@ -4,21 +4,21 @@ namespace ApiCube.Application.DTOs.Responses;
 
 public class StockResponseDTO
 {
-    [Required] public int Id { get; set; }
+    [Required] public required int Id { get; set; }
 
-    [Required] public int Quantite { get; set; }
+    [Required] public required int Quantite { get; set; }
 
-    [Required] public int SeuilDisponibilite { get; set; }
+    [Required] public required int SeuilDisponibilite { get; set; }
 
-    [Required] public string Statut { get; set; }
+    [Required] public required string Statut { get; set; }
 
-    [Required] public ProduitResponseDTO Produit { get; set; }
+    [Required] public required ProduitResponseDTO Produit { get; set; }
 
-    [Required] public DateTime DateCreation { get; set; }
+    [Required] public required DateTime DateCreation { get; set; }
 
-    [Required] public DateTime DatePeremption { get; set; }
+    [Required] public required DateTime DatePeremption { get; set; }
 
-    [Required] public DateTime DateModification { get; set; }
+    [Required] public required DateTime DateModification { get; set; }
 
     public DateTime? DateSuppression { get; set; }
 }

@@ -4,25 +4,25 @@ namespace ApiCube.Application.DTOs.Requests;
 
 public class ProduitRequestDTO
 {
-    [Required] public string Nom { get; set; }
+    [Required] public required string Nom { get; set; }
 
-    [Required] public string Description { get; set; }
+    [Required] public required string Description { get; set; }
 
-    [Required] public string Appellation { get; set; }
+    [Required] public required string Appellation { get; set; }
 
-    [Required] public string Cepage { get; set; }
+    [Required] public required string Cepage { get; set; }
 
-    [Required] public string Region { get; set; }
+    [Required] public required string Region { get; set; }
 
-    [Required] public int Annee { get; set; }
+    [Required] public required int Annee { get; set; }
 
-    [Required] public double DegreAlcool { get; set; }
+    [Required] public required double DegreAlcool { get; set; }
 
-    [Required] public double PrixAchat { get; set; }
+    [Required] public required double PrixAchat { get; set; }
 
-    [Required] public double PrixVente { get; set; }
+    [Required] public required double PrixVente { get; set; }
 
-    [Required] public int FamilleProduitId { get; set; }
+    [Required] public required int FamilleProduitId { get; set; }
 
-    [Required] public int FournisseurId { get; set; }
+    [Required] public required int FournisseurId { get; set; }
 }

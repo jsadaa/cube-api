@@ -4,9 +4,9 @@ namespace ApiCube.Application.DTOs.Responses;
 
 public class FamilleProduitResponseDTO
 {
-    [Required] public int Id { get; set; }
+    [Required] public required int Id { get; set; }
 
-    [Required] public string Nom { get; set; } = null!;
+    [Required] public required string Nom { get; set; }
 
-    [Required] public string Description { get; set; } = null!;
+    [Required] public required string Description { get; set; }
 }

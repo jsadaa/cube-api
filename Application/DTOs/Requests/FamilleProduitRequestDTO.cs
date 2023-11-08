@@ -4,7 +4,7 @@ namespace ApiCube.Application.DTOs.Requests;
 
 public class FamilleProduitRequestDTO
 {
-    [Required] public string Nom { get; set; } = null!;
+    [Required] public required string Nom { get; set; }
 
-    [Required] public string Description { get; set; } = null!;
+    [Required] public required string Description { get; set; }
 }

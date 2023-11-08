@@ -6,27 +6,27 @@ public class ProduitResponseDTO
 {
     [Required] public int Id { get; set; }
 
-    [Required] public string Nom { get; set; }
+    [Required] public required string Nom { get; set; }
 
-    [Required] public string Description { get; set; }
+    [Required] public required string Description { get; set; }
 
-    [Required] public string Appellation { get; set; }
+    [Required] public required string Appellation { get; set; }
 
-    [Required] public string Cepage { get; set; }
+    [Required] public required string Cepage { get; set; }
 
-    [Required] public string Region { get; set; }
+    [Required] public required string Region { get; set; }
 
-    [Required] public int Annee { get; set; }
+    [Required] public required int Annee { get; set; }
 
-    [Required] public double DegreAlcool { get; set; }
+    [Required] public required double DegreAlcool { get; set; }
 
-    [Required] public double PrixAchat { get; set; }
+    [Required] public required double PrixAchat { get; set; }
 
-    [Required] public double PrixVente { get; set; }
+    [Required] public required double PrixVente { get; set; }
 
-    [Required] public bool EnPromotion { get; set; }
+    [Required] public required bool EnPromotion { get; set; }
 
-    [Required] public string FamilleProduitNom { get; set; } = null!;
+    [Required] public required string FamilleProduitNom { get; set; } = null!;
 
-    [Required] public string FournisseurNom { get; set; } = null!;
+    [Required] public required string FournisseurNom { get; set; } = null!;
 }

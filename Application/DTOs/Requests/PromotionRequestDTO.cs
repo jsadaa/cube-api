@@ -4,13 +4,13 @@ namespace ApiCube.Application.DTOs.Requests;
 
 public class PromotionRequestDTO
 {
-    [Required] public string Nom { get; set; } = null!;
+    [Required] public required string Nom { get; set; }
 
-    [Required] public string Description { get; set; } = null!;
+    [Required] public required string Description { get; set; }
 
-    [Required] public DateTime DateDebut { get; set; }
+    [Required] public required DateTime DateDebut { get; set; }
 
-    [Required] public DateTime DateFin { get; set; }
+    [Required] public required DateTime DateFin { get; set; }
 
-    [Required] public double Pourcentage { get; set; }
+    [Required] public required double Pourcentage { get; set; }
 }
