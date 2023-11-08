@@ -94,7 +94,9 @@ public static class ProduitSeeder
 
                 prixAchat = Math.Round(f.Random.Double(5, 50), 2);
                 prixVente = Math.Round(prixAchat + f.Random.Double(3, 20), 2);
-
+                var familleProduit = f.PickRandom(familles);
+                var fournisseur = f.PickRandom(fournisseurs);
+                
                 return new ProduitModel
                 {
                     Nom = nom,
@@ -107,8 +109,10 @@ public static class ProduitSeeder
                     PrixAchat = prixAchat,
                     PrixVente = prixVente,
                     EnPromotion = false,
-                    FamilleProduitId = f.PickRandom(familles).Id,
-                    FournisseurId = f.PickRandom(fournisseurs).Id
+                    FamilleProduitId = familleProduit.Id,
+                    FournisseurId = fournisseur.Id,
+                    FamilleProduit = familleProduit,
+                    Fournisseur = fournisseur
                 };
             });
 

@@ -14,7 +14,7 @@ public class RoleModel
     [Column("nom")]
     [Required]
     [StringLength(50)]
-    public string Nom { get; set; }
+    public required string Nom { get; set; }
 
-    public ICollection<EmployeModel> Employes { get; set; }
+    public ICollection<EmployeModel>? Employes { get; set; }
 }

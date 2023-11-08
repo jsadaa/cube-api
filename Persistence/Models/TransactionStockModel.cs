@@ -11,24 +11,24 @@ public class TransactionStockModel
     [Key]
     public int Id { get; set; }
 
-    [Column("quantite")] [Required] public int Quantite { get; set; }
+    [Column("quantite")] [Required] public required int Quantite { get; set; }
 
-    [Column("date")] [Required] public DateTime Date { get; set; }
+    [Column("date")] [Required] public required DateTime Date { get; set; }
 
     [Column("type")]
     [Required]
     [StringLength(50)]
-    public string Type { get; set; }
+    public required string Type { get; set; }
 
-    [Column("stock_id")] [Required] public int StockId { get; set; }
+    [Column("stock_id")] [Required] public required int StockId { get; set; }
 
-    [ForeignKey("StockId")] public StockModel Stock { get; set; }
+    [ForeignKey("StockId")] public required StockModel Stock { get; set; }
 
-    [Column("prix_unitaire")] [Required] public double PrixUnitaire { get; set; }
+    [Column("prix_unitaire")] [Required] public required double PrixUnitaire { get; set; }
 
-    [Column("prix_total")] [Required] public double PrixTotal { get; set; }
+    [Column("prix_total")] [Required] public required double PrixTotal { get; set; }
 
-    [Column("quantite_avant")] [Required] public int QuantiteAvant { get; set; }
+    [Column("quantite_avant")] [Required] public required int QuantiteAvant { get; set; }
 
-    [Column("quantite_apres")] [Required] public int QuantiteApres { get; set; }
+    [Column("quantite_apres")] [Required] public required int QuantiteApres { get; set; }
 }

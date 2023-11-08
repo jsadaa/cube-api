@@ -11,22 +11,22 @@ public class CommandeFournisseurModel
     [Key]
     public int Id { get; set; }
 
-    [Column("date_commande")] [Required] public DateTime DateCommande { get; set; }
+    [Column("date_commande")] [Required] public required DateTime DateCommande { get; set; }
 
-    [Column("date_livraison")] [Required] public DateTime DateLivraison { get; set; }
+    [Column("date_livraison")] [Required] public required DateTime DateLivraison { get; set; }
 
     [Column("statut")]
     [Required]
     [StringLength(50)]
-    public string Statut { get; set; }
+    public required string Statut { get; set; }
 
-    [Column("fournisseur_id")] [Required] public int FournisseurId { get; set; }
+    [Column("fournisseur_id")] [Required] public required int FournisseurId { get; set; }
 
-    [Column("employe_id")] [Required] public int EmployeId { get; set; }
+    [Column("employe_id")] [Required] public required int EmployeId { get; set; }
 
-    [ForeignKey("FournisseurId")] public FournisseurModel Fournisseur { get; set; }
+    [ForeignKey("FournisseurId")] public required FournisseurModel Fournisseur { get; set; }
 
-    [ForeignKey("EmployeId")] public EmployeModel Employe { get; set; }
+    [ForeignKey("EmployeId")] public required EmployeModel Employe { get; set; }
 
-    public ICollection<LigneCommandeFournisseurModel> LigneCommandeFournisseurs { get; set; }
+    public required ICollection<LigneCommandeFournisseurModel> LigneCommandeFournisseurs { get; set; }
 }

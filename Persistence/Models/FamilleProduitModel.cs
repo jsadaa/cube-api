@@ -14,10 +14,10 @@ public class FamilleProduitModel
     [Column("nom")]
     [Required]
     [StringLength(50)]
-    public string Nom { get; set; }
+    public required string Nom { get; set; }
 
     [Column("description")]
     [Required]
     [StringLength(200)]
-    public string Description { get; set; }
+    public required string Description { get; set; }
 }

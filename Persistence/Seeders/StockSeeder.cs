@@ -16,6 +16,7 @@ public static class StockSeeder
             var stock = new StockModel
             {
                 ProduitId = produit.Id,
+                Produit = produit,
                 Quantite = new Faker().Random.Number(10, 100),
                 SeuilDisponibilite = new Faker().Random.Number(2, 5),
                 Statut = "EnStock",
@@ -36,6 +37,7 @@ public static class StockSeeder
             var transaction = new TransactionStockModel
             {
                 StockId = stock.Id,
+                Stock = stock,
                 Quantite = stock.Quantite,
                 Date = DateTime.Now,
                 Type = "Achat",

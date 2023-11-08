@@ -14,16 +14,16 @@ public class PromotionModel
     [Column("nom")]
     [Required]
     [StringLength(50)]
-    public string Nom { get; set; }
+    public required string Nom { get; set; }
 
     [Column("description")]
     [Required]
     [StringLength(200)]
-    public string Description { get; set; }
+    public required string Description { get; set; }
 
-    [Column("date_debut")] [Required] public DateTime DateDebut { get; set; }
+    [Column("date_debut")] [Required] public required DateTime DateDebut { get; set; }
 
-    [Column("date_fin")] [Required] public DateTime DateFin { get; set; }
+    [Column("date_fin")] [Required] public required DateTime DateFin { get; set; }
 
-    [Column("pourcentage")] [Required] public double Pourcentage { get; set; }
+    [Column("pourcentage")] [Required] public required double Pourcentage { get; set; }
 }

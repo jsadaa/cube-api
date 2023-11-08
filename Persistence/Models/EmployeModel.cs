@@ -14,34 +14,34 @@ public class EmployeModel
     [Column("nom")]
     [Required]
     [StringLength(50)]
-    public string Nom { get; set; }
+    public required string Nom { get; set; }
 
     [Column("prenom")]
     [Required]
     [StringLength(50)]
-    public string Prenom { get; set; }
+    public required string Prenom { get; set; }
 
     [Column("email")]
     [Required]
     [StringLength(50)]
-    public string Email { get; set; }
+    public required string Email { get; set; }
 
     [Column("mot_de_passe")]
     [Required]
     [StringLength(50)]
-    public string MotDePasse { get; set; }
+    public required string MotDePasse { get; set; }
 
-    [Column("date_embauche")] [Required] public DateTime DateEmbauche { get; set; }
+    [Column("date_embauche")] [Required] public required DateTime DateEmbauche { get; set; }
 
-    [Column("date_depart")] [Required] public DateTime DateDepart { get; set; }
+    [Column("date_depart")] [Required] public required DateTime DateDepart { get; set; }
 
     [Column("statut")]
     [Required]
     [StringLength(50)]
-    public string Statut { get; set; }
+    public required string Statut { get; set; }
 
     [Column("role")]
     [Required]
     [StringLength(50)]
-    public string Role { get; set; }
+    public required string Role { get; set; }
 }
