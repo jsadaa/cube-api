@@ -66,8 +66,8 @@ namespace ApiCube.Migrations
 
                     b.Property<string>("Pays")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
                         .HasColumnName("pays");
 
                     b.Property<int>("PointsFidelite")
@@ -424,8 +424,8 @@ namespace ApiCube.Migrations
 
                     b.Property<string>("Pays")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
                         .HasColumnName("pays");
 
                     b.Property<string>("Telephone")

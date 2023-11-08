@@ -31,7 +31,7 @@ namespace ApiCube.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ville = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    pays = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    pays = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     telephone = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -85,7 +85,7 @@ namespace ApiCube.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ville = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    pays = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    pays = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     telephone = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),

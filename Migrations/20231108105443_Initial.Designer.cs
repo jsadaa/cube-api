@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiCube.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20231107192801_Initial")]
+    [Migration("20231108105443_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -69,8 +69,8 @@ namespace ApiCube.Migrations
 
                     b.Property<string>("Pays")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
                         .HasColumnName("pays");
 
                     b.Property<int>("PointsFidelite")
@@ -427,8 +427,8 @@ namespace ApiCube.Migrations
 
                     b.Property<string>("Pays")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
                         .HasColumnName("pays");
 
                     b.Property<string>("Telephone")
