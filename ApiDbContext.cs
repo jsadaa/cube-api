@@ -60,13 +60,7 @@ public class ApiDbContext : DbContext
         foreach (var entity in entities)
         {
             var type = entity.Entity.GetType();
-            var dateCreationProperty = type.GetProperty("DateCreation");
             var dateModificationProperty = type.GetProperty("DateModification");
-
-            if (entity.State == EntityState.Added && dateCreationProperty != null)
-            {
-                dateCreationProperty.SetValue(entity.Entity, DateTime.UtcNow);
-            }
 
             if (dateModificationProperty != null)
             {
@@ -89,7 +83,6 @@ public class ApiDbContext : DbContext
             .HasIndex(f => new { f.Nom, f.Email })
             .IsUnique();
 
-        // Produit has unique constraint on nom année
         modelBuilder.Entity<ProduitModel>()
             .HasIndex(p => new { p.Nom, p.Annee })
             .IsUnique();
