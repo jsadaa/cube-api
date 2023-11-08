@@ -77,7 +77,7 @@ public class PromotionService : IPromotionService
             return response;
         }
     }
-    
+
     public BaseResponse TrouverUnePromotion(int id)
     {
         try
@@ -111,13 +111,13 @@ public class PromotionService : IPromotionService
             return response;
         }
     }
-    
+
     public BaseResponse ModifierUnePromotion(int id, PromotionRequest promotionRequest)
     {
         try
         {
             var promotionAModifier = _promotionRepository.Trouver(id);
-            
+
             promotionAModifier.MettreAJour(
                 nom: promotionRequest.Nom,
                 description: promotionRequest.Description,

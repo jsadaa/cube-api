@@ -57,7 +57,7 @@ namespace ApiCube.Controllers
 
             return StatusCode(response.StatusCode, response.Data);
         }
-        
+
         /// <summary>
         /// Trouver une promotion par son id
         /// </summary>
@@ -80,7 +80,7 @@ namespace ApiCube.Controllers
 
             return StatusCode(response.StatusCode, response.Data);
         }
-        
+
         /// <summary>
         /// Modifier une promotion
         /// </summary>
@@ -106,7 +106,7 @@ namespace ApiCube.Controllers
 
             return StatusCode(response.StatusCode, response.Data);
         }
-        
+
         /// <summary>
         /// Supprimer une promotion
         /// </summary>

@@ -116,7 +116,7 @@ public class Stock
             RetirerQuantite(transactionStock.Quantite);
         AdapterStatut();
     }
-    
+
     public void MettreAJour(Stock stock)
     {
         Quantite = stock.Quantite;

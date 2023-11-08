@@ -32,7 +32,7 @@ public class Promotion
     {
         return DateDebut < DateTime.Now && DateFin > DateTime.Now;
     }
-    
+
     public void MettreAJour(string nom, string description, double pourcentage, DateTime dateDebut, DateTime dateFin)
     {
         Nom = nom;

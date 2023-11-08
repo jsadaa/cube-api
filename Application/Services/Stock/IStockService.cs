@@ -8,10 +8,10 @@ public interface IStockService
 {
     public BaseResponse AjouterUnStockDeProduit(StockRequest stockRequest);
     public BaseResponse ListerLesStocks();
-    
+
     public BaseResponse TrouverUnStock(int id);
-    
+
     public BaseResponse ModifierUnStock(int id, StockUpdate stockUpdate);
-    
+
     public BaseResponse SupprimerUnStock(int id);
 }

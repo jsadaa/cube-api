@@ -59,7 +59,7 @@ public class ProduitController : ControllerBase
 
         return StatusCode(response.StatusCode, response.Data);
     }
-    
+
     /// <summary>
     /// Trouver un produit par son identifiant
     /// </summary>
@@ -80,7 +80,7 @@ public class ProduitController : ControllerBase
 
         return StatusCode(response.StatusCode, response.Data);
     }
-    
+
     /// <summary>
     /// Modifier un produit
     /// </summary>
@@ -104,7 +104,7 @@ public class ProduitController : ControllerBase
 
         return StatusCode(response.StatusCode, response.Data);
     }
-    
+
     /// <summary>
     /// Supprimer un produit
     /// </summary>
@@ -127,7 +127,7 @@ public class ProduitController : ControllerBase
 
         return StatusCode(response.StatusCode, response.Data);
     }
-    
+
     /// <summary>
     /// Appliquer une promotion sur un produit
     /// </summary>

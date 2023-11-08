@@ -83,7 +83,7 @@ public class FamilleProduitService : IFamilleProduitService
             return response;
         }
     }
-    
+
     public BaseResponse TrouverUneFamilleProduit(int id)
     {
         try
@@ -117,7 +117,7 @@ public class FamilleProduitService : IFamilleProduitService
             return response;
         }
     }
-    
+
     public BaseResponse ModifierUneFamilleProduit(int id, FamilleProduitRequest familleProduitRequest)
     {
         try
@@ -166,7 +166,7 @@ public class FamilleProduitService : IFamilleProduitService
             return response;
         }
     }
-    
+
     public BaseResponse SupprimerUneFamilleProduit(int id)
     {
         try

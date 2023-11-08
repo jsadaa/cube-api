@@ -193,7 +193,7 @@ public class ProduitService : IProduitService
             return response;
         }
     }
-    
+
     public BaseResponse TrouverUnProduit(int produitId)
     {
         try
@@ -283,7 +283,7 @@ public class ProduitService : IProduitService
             return response;
         }
     }
-    
+
     public BaseResponse SupprimerUnProduit(int produitId)
     {
         try

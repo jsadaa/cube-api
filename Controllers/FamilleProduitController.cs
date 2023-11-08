@@ -57,7 +57,7 @@ namespace ApiCube.Controllers
 
             return StatusCode(response.StatusCode, response.Data);
         }
-        
+
         /// <summary>
         /// Trouver une famille de produit par son identifiant
         /// </summary>
@@ -78,7 +78,7 @@ namespace ApiCube.Controllers
 
             return StatusCode(response.StatusCode, response.Data);
         }
-        
+
         /// <summary>
         /// Modifier une famille de produit
         /// </summary>
@@ -125,6 +125,5 @@ namespace ApiCube.Controllers
 
             return StatusCode(response.StatusCode, response.Data);
         }
-
     }
 }

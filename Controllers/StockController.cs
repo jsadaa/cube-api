@@ -60,7 +60,7 @@ namespace ApiCube.Controllers
 
             return StatusCode(response.StatusCode, response.Data);
         }
-        
+
         /// <summary>
         /// Trouver un stock par son identifiant
         /// </summary>
@@ -81,7 +81,7 @@ namespace ApiCube.Controllers
 
             return StatusCode(response.StatusCode, response.Data);
         }
-        
+
         /// <summary>
         /// Modifier un stock
         /// </summary>

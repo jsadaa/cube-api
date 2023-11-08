@@ -88,13 +88,13 @@ public class FournisseurService : IFournisseurService
             return response;
         }
     }
-    
+
     public BaseResponse TrouverUnFournisseur(int id)
     {
         try
         {
             var fournisseur = _fournisseurRepository.Trouver(id);
-            
+
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
                 data: _mapper.Map<FournisseurResponse>(fournisseur)
@@ -121,7 +121,7 @@ public class FournisseurService : IFournisseurService
             return response;
         }
     }
-    
+
     public BaseResponse ModifierUnFournisseur(int id, FournisseurRequest fournisseurRequest)
     {
         try
@@ -175,7 +175,7 @@ public class FournisseurService : IFournisseurService
             return response;
         }
     }
-    
+
     public BaseResponse SupprimerUnFournisseur(int id)
     {
         try

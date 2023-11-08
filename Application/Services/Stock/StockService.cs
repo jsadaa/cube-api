@@ -114,7 +114,7 @@ public class StockService : IStockService
             return response;
         }
     }
-    
+
     public BaseResponse TrouverUnStock(int id)
     {
         try
@@ -148,7 +148,7 @@ public class StockService : IStockService
             return response;
         }
     }
-    
+
     public BaseResponse ModifierUnStock(int id, StockUpdate stockUpdate)
     {
         try
@@ -169,7 +169,7 @@ public class StockService : IStockService
 
                 stock.AjouterTransaction(nouvelleTransactionStock);
             }
-            
+
             stock.ModifierSeuilDisponibilite(stockUpdate.SeuilDisponibilite);
             stock.ModifierDatePeremption(stockUpdate.DatePeremption);
 
@@ -210,7 +210,7 @@ public class StockService : IStockService
             return response;
         }
     }
-    
+
     public BaseResponse SupprimerUnStock(int id)
     {
         try

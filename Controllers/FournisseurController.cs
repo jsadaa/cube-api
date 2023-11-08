@@ -57,7 +57,7 @@ namespace ApiCube.Controllers
 
             return StatusCode(response.StatusCode, response.Data);
         }
-        
+
         /// <summary>
         /// Trouver un fournisseur par son id
         /// </summary>
@@ -78,7 +78,7 @@ namespace ApiCube.Controllers
 
             return StatusCode(response.StatusCode, response.Data);
         }
-        
+
         /// <summary>
         /// Modifier un fournisseur
         /// </summary>
