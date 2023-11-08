@@ -64,7 +64,7 @@ public class ApiDbContext : DbContext
 
             if (dateModificationProperty != null)
             {
-                dateModificationProperty.SetValue(entity.Entity, DateTime.UtcNow);
+                dateModificationProperty.SetValue(entity.Entity, DateTime.Now);
             }
         }
     }
