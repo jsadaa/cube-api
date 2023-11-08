@@ -5,6 +5,9 @@ namespace ApiCube.Application.Services.Promotion;
 
 public interface IPromotionService
 {
-    public BaseResponse AjouterUnePromotion(PromotionRequestDTO promotionRequestDTO);
+    public BaseResponse AjouterUnePromotion(PromotionRequest promotionRequest);
     public BaseResponse ListerLesPromotions();
+    public BaseResponse TrouverUnePromotion(int id);
+    public BaseResponse ModifierUnePromotion(int id, PromotionRequest promotionRequest);
+    public BaseResponse SupprimerUnePromotion(int id);
 }
