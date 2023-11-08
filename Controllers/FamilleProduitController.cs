@@ -26,6 +26,7 @@ namespace ApiCube.Controllers
         /// <response code="409">La famille de produit existe déjà</response>
         /// <response code="500">Erreur interne</response>
         [HttpPost("ajouter")]
+        [ActionName("AjouterUneFamilleProduit")]
         [ProducesResponseType(typeof(string), 201)]
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(string), 409)]
@@ -55,5 +56,27 @@ namespace ApiCube.Controllers
 
             return StatusCode(response.StatusCode, response.Data);
         }
+        
+        /// <summary>
+        /// Trouver une famille de produit par son identifiant
+        /// </summary>
+        /// <param name="id">Identifiant de la famille de produit</param>
+        /// <returns> Famille de produit </returns>
+        /// <response code="200">Famille de produit</response>
+        /// <response code="404">Famille de produit non trouvée</response>
+        /// <response code="500">Erreur interne</response>
+        [HttpGet("trouver/{id:int}")]
+        [ActionName("TrouverUneFamilleProduit")]
+        [ProducesResponseType(typeof(FamilleProduitResponseDTO), 200)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(string), 500)]
+        [Produces("application/json")]
+        public IActionResult TrouverUneFamilleProduit(int id)
+        {
+            var response = _familleProduitService.TrouverUneFamilleProduit(id);
+
+            return StatusCode(response.StatusCode, response.Data);
+        }
+        
     }
 }

@@ -2,6 +2,7 @@ using System.Net;
 using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
+using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Repositories.FamilleProduit;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -68,6 +69,40 @@ public class FamilleProduitService : IFamilleProduitService
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
                 data: famillesProduits
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.InternalServerError,
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
+    }
+    
+    public BaseResponse TrouverUneFamilleProduit(int id)
+    {
+        try
+        {
+            var familleProduit = _familleProduitRepository.Trouver(id);
+            var familleProduitResponse = _mapper.Map<FamilleProduitResponseDTO>(familleProduit);
+
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.OK,
+                data: familleProduitResponse
+            );
+
+            return response;
+        }
+        catch (FamilleProduitIntrouvable e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.NotFound,
+                data: new { message = "Cette famille de produit n'existe pas" }
             );
 
             return response;

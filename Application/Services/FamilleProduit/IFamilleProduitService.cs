@@ -8,4 +8,6 @@ public interface IFamilleProduitService
     public BaseResponse AjouterUneFamilleProduit(FamilleProduitRequestDTO familleProduitRequestDTO);
 
     public BaseResponse ListerLesFamillesProduits();
+    
+    public BaseResponse TrouverUneFamilleProduit(int id);
 }
