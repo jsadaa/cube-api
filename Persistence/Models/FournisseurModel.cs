@@ -33,7 +33,7 @@ public class FournisseurModel
 
     [Column("pays")]
     [Required]
-    [StringLength(50)]
+    [StringLength(100)]
     public string Pays { get; set; }
 
     [Column("telephone")]

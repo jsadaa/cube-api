@@ -38,7 +38,7 @@ public class ClientModel
 
     [Column("pays")]
     [Required]
-    [StringLength(50)]
+    [StringLength(100)]
     public string Pays { get; set; }
 
     [Column("telephone")]
