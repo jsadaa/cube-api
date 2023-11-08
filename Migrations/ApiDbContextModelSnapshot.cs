@@ -691,10 +691,6 @@ namespace ApiCube.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date_suppression");
 
-                    b.Property<bool>("EstSupprime")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("est_supprime");
-
                     b.Property<int>("ProduitId")
                         .HasColumnType("int")
                         .HasColumnName("produit_id");

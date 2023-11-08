@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiCube.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20231108140140_Initial")]
+    [Migration("20231108165537_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -693,10 +693,6 @@ namespace ApiCube.Migrations
                     b.Property<DateTime?>("DateSuppression")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date_suppression");
-
-                    b.Property<bool>("EstSupprime")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("est_supprime");
 
                     b.Property<int>("ProduitId")
                         .HasColumnType("int")

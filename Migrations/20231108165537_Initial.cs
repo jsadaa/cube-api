@@ -228,8 +228,7 @@ namespace ApiCube.Migrations
                     date_creation = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     date_peremption = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     date_modification = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    date_suppression = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    est_supprime = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    date_suppression = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {
