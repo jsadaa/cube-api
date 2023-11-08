@@ -21,13 +21,13 @@ public class FamilleProduitService : IFamilleProduitService
         _mapper = mapper;
     }
 
-    public BaseResponse AjouterUneFamilleProduit(FamilleProduitRequestDTO familleProduitRequestDTO)
+    public BaseResponse AjouterUneFamilleProduit(FamilleProduitRequest familleProduitRequest)
     {
         try
         {
             var nouvelleFamilleProduit = new Domain.Entities.FamilleProduit(
-                nom: familleProduitRequestDTO.Nom,
-                description: familleProduitRequestDTO.Description
+                nom: familleProduitRequest.Nom,
+                description: familleProduitRequest.Description
             );
 
             _familleProduitRepository.Ajouter(nouvelleFamilleProduit);
@@ -64,7 +64,7 @@ public class FamilleProduitService : IFamilleProduitService
         try
         {
             var listeFamillesProduits = _familleProduitRepository.Lister();
-            var famillesProduits = _mapper.Map<List<FamilleProduitResponseDTO>>(listeFamillesProduits);
+            var famillesProduits = _mapper.Map<List<FamilleProduitResponse>>(listeFamillesProduits);
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
@@ -89,7 +89,7 @@ public class FamilleProduitService : IFamilleProduitService
         try
         {
             var familleProduit = _familleProduitRepository.Trouver(id);
-            var familleProduitResponse = _mapper.Map<FamilleProduitResponseDTO>(familleProduit);
+            var familleProduitResponse = _mapper.Map<FamilleProduitResponse>(familleProduit);
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
@@ -102,7 +102,7 @@ public class FamilleProduitService : IFamilleProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = "Cette famille de produit n'existe pas" }
+                data: new { message = e.Message }
             );
 
             return response;
@@ -118,15 +118,15 @@ public class FamilleProduitService : IFamilleProduitService
         }
     }
     
-    public BaseResponse ModifierUneFamilleProduit(int id, FamilleProduitRequestDTO familleProduitRequestDTO)
+    public BaseResponse ModifierUneFamilleProduit(int id, FamilleProduitRequest familleProduitRequest)
     {
         try
         {
             var familleProduitAModifier = _familleProduitRepository.Trouver(id);
 
             familleProduitAModifier.MettreAJour(
-                nom: familleProduitRequestDTO.Nom,
-                description: familleProduitRequestDTO.Description
+                nom: familleProduitRequest.Nom,
+                description: familleProduitRequest.Description
             );
 
             _familleProduitRepository.Modifier(familleProduitAModifier);
@@ -142,7 +142,7 @@ public class FamilleProduitService : IFamilleProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = "Cette famille de produit n'existe pas" }
+                data: new { message = e.Message }
             );
 
             return response;
@@ -186,7 +186,7 @@ public class FamilleProduitService : IFamilleProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = "Cette famille de produit n'existe pas" }
+                data: new { message = e.Message }
             );
 
             return response;

@@ -5,6 +5,6 @@ namespace ApiCube.Application.Services.Stock;
 
 public interface IStockService
 {
-    public BaseResponse AjouterUnStockDeProduit(StockRequestDTO stockRequestDTO);
+    public BaseResponse AjouterUnStockDeProduit(StockRequest stockRequest);
     public BaseResponse ListerLesStocks();
 }

@@ -5,13 +5,13 @@ namespace ApiCube.Application.Services.Fournisseur;
 
 public interface IFournisseurService
 {
-    public BaseResponse AjouterUnFournisseur(FournisseurRequestDTO fournisseurRequestDTO);
+    public BaseResponse AjouterUnFournisseur(FournisseurRequest fournisseurRequest);
 
     public BaseResponse ListerLesFournisseurs();
     
-    public BaseResponse TrouverUnFournisseurParId(int id);
+    public BaseResponse TrouverUnFournisseur(int id);
     
-    public BaseResponse ModifierUnFournisseur(int id, FournisseurRequestDTO fournisseurRequestDTO);
+    public BaseResponse ModifierUnFournisseur(int id, FournisseurRequest fournisseurRequest);
     
     public BaseResponse SupprimerUnFournisseur(int id);
 }

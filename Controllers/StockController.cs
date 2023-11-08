@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ApiCube.Controllers
 {
-    [Route("api/stock")]
+    [Route("api/stocks")]
     [ApiController]
     public class StockController : ControllerBase
     {
@@ -20,21 +20,21 @@ namespace ApiCube.Controllers
         /// <summary>
         /// Ajouter un stock de produit
         /// </summary>
-        /// <param name="stockRequestDTO"></param>
+        /// <param name="stockRequest"></param>
         /// <returns></returns>
         /// <response code="201">Le stock de produit a été ajouté avec succès</response>
         /// <response code="400">Le stock de produit n'a pas pu être ajouté</response>
         /// <response code="409">Le stock de produit existe déjà</response>
         /// <response code="500">Erreur interne</response>
-        [HttpPost("ajouter")]
+        [HttpPost("")]
         [ProducesResponseType(typeof(string), 201)]
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(string), 409)]
         [ProducesResponseType(typeof(string), 500)]
         [Produces("application/json")]
-        public IActionResult AjouterUnStockDeProduit([FromBody] StockRequestDTO stockRequestDTO)
+        public IActionResult AjouterUnStockDeProduit([FromBody] StockRequest stockRequest)
         {
-            BaseResponse response = _stockService.AjouterUnStockDeProduit(stockRequestDTO);
+            BaseResponse response = _stockService.AjouterUnStockDeProduit(stockRequest);
 
             return StatusCode(response.StatusCode, response.Data);
         }
@@ -45,8 +45,8 @@ namespace ApiCube.Controllers
         /// <returns> Liste des stocks </returns>
         /// <response code="200">Liste des stocks</response>
         /// <response code="500">Erreur interne</response>
-        [HttpGet("lister")]
-        [ProducesResponseType(typeof(List<StockResponseDTO>), 200)]
+        [HttpGet("")]
+        [ProducesResponseType(typeof(List<StockResponse>), 200)]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(typeof(string), 500)]
         [Produces("application/json")]

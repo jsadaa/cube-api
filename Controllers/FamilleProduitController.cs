@@ -1,6 +1,7 @@
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Services.FamilleProduit;
+using ApiCube.Persistence.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiCube.Controllers
@@ -19,22 +20,22 @@ namespace ApiCube.Controllers
         /// <summary>
         /// Ajouter une famille de produit
         /// </summary>
-        /// <param name="familleProduitRequestDTO"></param>
+        /// <param name="familleProduitRequest"></param>
         /// <returns></returns>
         /// <response code="201">La famille de produit a été ajoutée avec succès</response>
         /// <response code="400">La famille de produit n'a pas pu être ajoutée</response>
         /// <response code="409">La famille de produit existe déjà</response>
         /// <response code="500">Erreur interne</response>
-        [HttpPost("ajouter")]
+        [HttpPost("")]
         [ActionName("AjouterUneFamilleProduit")]
         [ProducesResponseType(typeof(string), 201)]
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(string), 409)]
         [ProducesResponseType(typeof(string), 500)]
         [Produces("application/json")]
-        public IActionResult AjouterUneFamilleProduit([FromBody] FamilleProduitRequestDTO familleProduitRequestDTO)
+        public IActionResult AjouterUneFamilleProduit([FromBody] FamilleProduitRequest familleProduitRequest)
         {
-            var response = _familleProduitService.AjouterUneFamilleProduit(familleProduitRequestDTO);
+            var response = _familleProduitService.AjouterUneFamilleProduit(familleProduitRequest);
 
             return StatusCode(response.StatusCode, response.Data);
         }
@@ -45,9 +46,9 @@ namespace ApiCube.Controllers
         /// <returns> Liste des familles de produits </returns>
         /// <response code="200">Liste des familles de produits</response>
         /// <response code="500">Erreur interne</response>
-        [HttpGet("lister")]
+        [HttpGet("")]
         [ActionName("ListerLesFamillesProduits")]
-        [ProducesResponseType(typeof(List<FamilleProduitResponseDTO>), 200)]
+        [ProducesResponseType(typeof(List<FamilleProduitResponse>), 200)]
         [ProducesResponseType(typeof(string), 500)]
         [Produces("application/json")]
         public IActionResult ListerLesFamillesProduits()
@@ -65,10 +66,10 @@ namespace ApiCube.Controllers
         /// <response code="200">Famille de produit</response>
         /// <response code="404">Famille de produit non trouvée</response>
         /// <response code="500">Erreur interne</response>
-        [HttpGet("trouver/{id:int}")]
+        [HttpGet("{id:int}")]
         [ActionName("TrouverUneFamilleProduit")]
-        [ProducesResponseType(typeof(FamilleProduitResponseDTO), 200)]
-        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(FamilleProduitResponse), 200)]
+        [ProducesResponseType(typeof(FamilleProduitIntrouvable), 404)]
         [ProducesResponseType(typeof(string), 500)]
         [Produces("application/json")]
         public IActionResult TrouverUneFamilleProduit(int id)
@@ -82,22 +83,22 @@ namespace ApiCube.Controllers
         /// Modifier une famille de produit
         /// </summary>
         /// <param name="id">Identifiant de la famille de produit</param>
-        /// <param name="familleProduitRequestDTO"></param>
+        /// <param name="familleProduitRequest"></param>
         /// <returns></returns>
         /// <response code="200">La famille de produit a été modifiée avec succès</response>
         /// <response code="400">La famille de produit n'a pas pu être modifiée</response>
         /// <response code="404">La famille de produit n'a pas été trouvée</response>
         /// <response code="500">Erreur interne</response>
-        [HttpPut("modifier/{id:int}")]
+        [HttpPut("{id:int}")]
         [ActionName("ModifierUneFamilleProduit")]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(FamilleProduitIntrouvable), 404)]
         [ProducesResponseType(typeof(string), 500)]
         [Produces("application/json")]
-        public IActionResult ModifierUneFamilleProduit(int id, [FromBody] FamilleProduitRequestDTO familleProduitRequestDTO)
+        public IActionResult ModifierUneFamilleProduit(int id, [FromBody] FamilleProduitRequest familleProduitRequest)
         {
-            var response = _familleProduitService.ModifierUneFamilleProduit(id, familleProduitRequestDTO);
+            var response = _familleProduitService.ModifierUneFamilleProduit(id, familleProduitRequest);
 
             return StatusCode(response.StatusCode, response.Data);
         }
@@ -111,11 +112,11 @@ namespace ApiCube.Controllers
         /// <response code="400">La famille de produit n'a pas pu être supprimée</response>
         /// <response code="404">La famille de produit n'a pas été trouvée</response>
         /// <response code="500">Erreur interne</response>
-        [HttpDelete("supprimer/{id:int}")]
+        [HttpDelete("{id:int}")]
         [ActionName("SupprimerUneFamilleProduit")]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(FamilleProduitIntrouvable), 404)]
         [ProducesResponseType(typeof(string), 500)]
         [Produces("application/json")]
         public IActionResult SupprimerUneFamilleProduit(int id)

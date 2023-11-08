@@ -1,7 +1,9 @@
 using System.Net;
 using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
+using ApiCube.Application.DTOs.Requests.Produit;
 using ApiCube.Application.DTOs.Responses;
+using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Repositories.FamilleProduit;
 using ApiCube.Persistence.Repositories.Fournisseur;
 using ApiCube.Persistence.Repositories.Produit;
@@ -35,23 +37,23 @@ public class ProduitService : IProduitService
         _mapper = mapper;
     }
 
-    public BaseResponse AjouterUnProduitAuCatalogue(ProduitRequestDTO produitRequestDTO)
+    public BaseResponse AjouterUnProduitAuCatalogue(ProduitRequest produitRequest)
     {
         try
         {
-            var fournisseur = _fournisseurRepository.Trouver(produitRequestDTO.FournisseurId);
-            var familleProduit = _familleProduitRepository.Trouver(produitRequestDTO.FamilleProduitId);
+            var fournisseur = _fournisseurRepository.Trouver(produitRequest.FournisseurId);
+            var familleProduit = _familleProduitRepository.Trouver(produitRequest.FamilleProduitId);
 
             var nouveauProduit = new Domain.Entities.Produit(
-                nom: produitRequestDTO.Nom,
-                description: produitRequestDTO.Description,
-                appellation: produitRequestDTO.Appellation,
-                cepage: produitRequestDTO.Cepage,
-                region: produitRequestDTO.Region,
-                annee: produitRequestDTO.Annee,
-                degreAlcool: produitRequestDTO.DegreAlcool,
-                prixAchat: produitRequestDTO.PrixAchat,
-                prixVente: produitRequestDTO.PrixVente,
+                nom: produitRequest.Nom,
+                description: produitRequest.Description,
+                appellation: produitRequest.Appellation,
+                cepage: produitRequest.Cepage,
+                region: produitRequest.Region,
+                annee: produitRequest.Annee,
+                degreAlcool: produitRequest.DegreAlcool,
+                prixAchat: produitRequest.PrixAchat,
+                prixVente: produitRequest.PrixVente,
                 enPromotion: false,
                 fournisseur: fournisseur,
                 familleProduit: familleProduit
@@ -90,7 +92,7 @@ public class ProduitService : IProduitService
         try
         {
             var listeProduits = _produitRepository.Lister();
-            var produits = _mapper.Map<List<ProduitResponseDTO>>(listeProduits);
+            var produits = _mapper.Map<List<ProduitResponse>>(listeProduits);
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
@@ -127,11 +129,20 @@ public class ProduitService : IProduitService
 
             return response;
         }
-        catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1452 })
+        catch (ProduitIntrouvable e)
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = "Le produit ou la promotion n'a pas été trouvé" }
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
+        catch (PromotionIntrouvable e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.NotFound,
+                data: new { message = e.Message }
             );
 
             return response;
@@ -163,11 +174,135 @@ public class ProduitService : IProduitService
 
             return response;
         }
-        catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1452 })
+        catch (ProduitIntrouvable e)
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = "Le produit n'a pas été trouvé" }
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.InternalServerError,
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
+    }
+    
+    public BaseResponse TrouverUnProduit(int produitId)
+    {
+        try
+        {
+            var produit = _produitRepository.Trouver(produitId);
+            var produitResponseDTO = _mapper.Map<ProduitResponse>(produit);
+
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.OK,
+                data: produitResponseDTO
+            );
+
+            return response;
+        }
+        catch (ProduitIntrouvable e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.NotFound,
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.InternalServerError,
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
+    }
+
+    public BaseResponse ModifierUnProduit(int produitId, ProduitUpdate produitUpdate)
+    {
+        try
+        {
+            var produit = _produitRepository.Trouver(produitId);
+
+            produit.MettreAJour(
+                nom: produitUpdate.Nom,
+                description: produitUpdate.Description,
+                appellation: produitUpdate.Appellation,
+                cepage: produitUpdate.Cepage,
+                region: produitUpdate.Region,
+                annee: produitUpdate.Annee,
+                degreAlcool: produitUpdate.DegreAlcool,
+                prixAchat: produitUpdate.PrixAchat,
+                prixVente: produitUpdate.PrixVente,
+                enPromotion: produitUpdate.EnPromotion
+            );
+            _produitRepository.Modifier(produit);
+
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.OK,
+                data: new { message = "Produit modifié avec succès" }
+            );
+
+            return response;
+        }
+        catch (ProduitIntrouvable e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.NotFound,
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
+        catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.Conflict,
+                data: new { message = "Ce produit existe déjà dans le stock" }
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.InternalServerError,
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
+    }
+    
+    public BaseResponse SupprimerUnProduit(int produitId)
+    {
+        try
+        {
+            var produit = _produitRepository.Trouver(produitId);
+            _produitRepository.Supprimer(produit);
+
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.OK,
+                data: new { message = "Produit supprimé avec succès" }
+            );
+
+            return response;
+        }
+        catch (ProduitIntrouvable e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.NotFound,
+                data: new { message = e.Message }
             );
 
             return response;

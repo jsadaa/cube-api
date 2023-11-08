@@ -1,6 +1,7 @@
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Services.Fournisseur;
+using ApiCube.Persistence.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiCube.Controllers
@@ -19,22 +20,22 @@ namespace ApiCube.Controllers
         /// <summary>
         /// Ajouter un fournisseur
         /// </summary>
-        /// <param name="fournisseurRequestDTO"></param>
+        /// <param name="fournisseurRequest"></param>
         /// <returns></returns>
         /// <response code="201">Le fournisseur a été ajouté avec succès</response>
         /// <response code="400">Le fournisseur n'a pas pu être ajouté</response>
         /// <response code="409">Le fournisseur existe déjà</response>
         /// <response code="500">Erreur interne</response>
-        [HttpPost("ajouter")]
+        [HttpPost("")]
         [ActionName("AjouterUnFournisseur")]
         [ProducesResponseType(typeof(string), 201)]
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(string), 409)]
         [ProducesResponseType(typeof(string), 500)]
         [Produces("application/json")]
-        public IActionResult AjouterUnFournisseur([FromBody] FournisseurRequestDTO fournisseurRequestDTO)
+        public IActionResult AjouterUnFournisseur([FromBody] FournisseurRequest fournisseurRequest)
         {
-            var response = _fournisseurService.AjouterUnFournisseur(fournisseurRequestDTO);
+            var response = _fournisseurService.AjouterUnFournisseur(fournisseurRequest);
 
             return StatusCode(response.StatusCode, response.Data);
         }
@@ -45,9 +46,9 @@ namespace ApiCube.Controllers
         /// <returns> Liste des fournisseurs </returns>
         /// <response code="200">Liste des fournisseurs</response>
         /// <response code="500">Erreur interne</response>
-        [HttpGet("lister")]
+        [HttpGet("")]
         [ActionName("ListerLesFournisseurs")]
-        [ProducesResponseType(typeof(List<FournisseurResponseDTO>), 200)]
+        [ProducesResponseType(typeof(List<FournisseurResponse>), 200)]
         [ProducesResponseType(typeof(string), 500)]
         [Produces("application/json")]
         public IActionResult ListerLesFournisseurs()
@@ -65,15 +66,15 @@ namespace ApiCube.Controllers
         /// <response code="200">Fournisseur</response>
         /// <response code="404">Fournisseur non trouvé</response>
         /// <response code="500">Erreur interne</response>
-        [HttpGet("trouver/{id:int}")]
+        [HttpGet("{id:int}")]
         [ActionName("TrouverUnFournisseurParId")]
-        [ProducesResponseType(typeof(FournisseurResponseDTO), 200)]
-        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(FournisseurResponse), 200)]
+        [ProducesResponseType(typeof(FournisseurIntrouvable), 404)]
         [ProducesResponseType(typeof(string), 500)]
         [Produces("application/json")]
-        public IActionResult TrouverUnFournisseurParId(int id)
+        public IActionResult TrouverUnFournisseur(int id)
         {
-            var response = _fournisseurService.TrouverUnFournisseurParId(id);
+            var response = _fournisseurService.TrouverUnFournisseur(id);
 
             return StatusCode(response.StatusCode, response.Data);
         }
@@ -82,22 +83,22 @@ namespace ApiCube.Controllers
         /// Modifier un fournisseur
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="fournisseurRequestDTO"></param>
+        /// <param name="fournisseurRequest"></param>
         /// <returns></returns>
         /// <response code="200">Le fournisseur a été modifié avec succès</response>
         /// <response code="400">Le fournisseur n'a pas pu être modifié</response>
         /// <response code="404">Le fournisseur n'a pas été trouvé</response>
         /// <response code="500">Erreur interne</response>
-        [HttpPut("modifier/{id:int}")]
+        [HttpPut("{id:int}")]
         [ActionName("ModifierUnFournisseur")]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(FournisseurIntrouvable), 404)]
         [ProducesResponseType(typeof(string), 500)]
         [Produces("application/json")]
-        public IActionResult ModifierUnFournisseur(int id, [FromBody] FournisseurRequestDTO fournisseurRequestDTO)
+        public IActionResult ModifierUnFournisseur(int id, [FromBody] FournisseurRequest fournisseurRequest)
         {
-            var response = _fournisseurService.ModifierUnFournisseur(id, fournisseurRequestDTO);
+            var response = _fournisseurService.ModifierUnFournisseur(id, fournisseurRequest);
 
             return StatusCode(response.StatusCode, response.Data);
         }
@@ -111,11 +112,11 @@ namespace ApiCube.Controllers
         /// <response code="400">Le fournisseur n'a pas pu être supprimé</response>
         /// <response code="404">Le fournisseur n'a pas été trouvé</response>
         /// <response code="500">Erreur interne</response>
-        [HttpDelete("supprimer/{id:int}")]
+        [HttpDelete("{id:int}")]
         [ActionName("SupprimerUnFournisseur")]
         [ProducesResponseType(typeof(string), 200)]
         [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(typeof(FournisseurIntrouvable), 404)]
         [ProducesResponseType(typeof(string), 500)]
         [Produces("application/json")]
         public IActionResult SupprimerUnFournisseur(int id)

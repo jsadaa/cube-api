@@ -21,18 +21,18 @@ public class FournisseurService : IFournisseurService
         _mapper = mapper;
     }
 
-    public BaseResponse AjouterUnFournisseur(FournisseurRequestDTO fournisseurRequestDTO)
+    public BaseResponse AjouterUnFournisseur(FournisseurRequest fournisseurRequest)
     {
         try
         {
             var nouveauFournisseur = new Domain.Entities.Fournisseur(
-                nom: fournisseurRequestDTO.Nom,
-                adresse: fournisseurRequestDTO.Adresse,
-                codePostal: fournisseurRequestDTO.CodePostal,
-                ville: fournisseurRequestDTO.Ville,
-                pays: fournisseurRequestDTO.Pays,
-                telephone: fournisseurRequestDTO.Telephone,
-                email: fournisseurRequestDTO.Email
+                nom: fournisseurRequest.Nom,
+                adresse: fournisseurRequest.Adresse,
+                codePostal: fournisseurRequest.CodePostal,
+                ville: fournisseurRequest.Ville,
+                pays: fournisseurRequest.Pays,
+                telephone: fournisseurRequest.Telephone,
+                email: fournisseurRequest.Email
             );
 
             _fournisseurRepository.Ajouter(nouveauFournisseur);
@@ -69,7 +69,7 @@ public class FournisseurService : IFournisseurService
         try
         {
             var listeFournisseurs = _fournisseurRepository.Lister();
-            var fournisseurs = _mapper.Map<List<FournisseurResponseDTO>>(listeFournisseurs);
+            var fournisseurs = _mapper.Map<List<FournisseurResponse>>(listeFournisseurs);
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
@@ -89,7 +89,7 @@ public class FournisseurService : IFournisseurService
         }
     }
     
-    public BaseResponse TrouverUnFournisseurParId(int id)
+    public BaseResponse TrouverUnFournisseur(int id)
     {
         try
         {
@@ -97,7 +97,7 @@ public class FournisseurService : IFournisseurService
             
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: _mapper.Map<FournisseurResponseDTO>(fournisseur)
+                data: _mapper.Map<FournisseurResponse>(fournisseur)
             );
 
             return response;
@@ -106,7 +106,7 @@ public class FournisseurService : IFournisseurService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = "Fournisseur introuvable" }
+                data: new { message = e.Message }
             );
 
             return response;
@@ -122,20 +122,20 @@ public class FournisseurService : IFournisseurService
         }
     }
     
-    public BaseResponse ModifierUnFournisseur(int id, FournisseurRequestDTO fournisseurRequestDTO)
+    public BaseResponse ModifierUnFournisseur(int id, FournisseurRequest fournisseurRequest)
     {
         try
         {
             var fournisseur = _fournisseurRepository.Trouver(id);
 
             fournisseur.MettreAJour(
-                nom: fournisseurRequestDTO.Nom,
-                adresse: fournisseurRequestDTO.Adresse,
-                codePostal: fournisseurRequestDTO.CodePostal,
-                ville: fournisseurRequestDTO.Ville,
-                pays: fournisseurRequestDTO.Pays,
-                telephone: fournisseurRequestDTO.Telephone,
-                email: fournisseurRequestDTO.Email
+                nom: fournisseurRequest.Nom,
+                adresse: fournisseurRequest.Adresse,
+                codePostal: fournisseurRequest.CodePostal,
+                ville: fournisseurRequest.Ville,
+                pays: fournisseurRequest.Pays,
+                telephone: fournisseurRequest.Telephone,
+                email: fournisseurRequest.Email
             );
 
             _fournisseurRepository.Modifier(fournisseur);
@@ -151,7 +151,7 @@ public class FournisseurService : IFournisseurService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = "Fournisseur introuvable" }
+                data: new { message = e.Message }
             );
 
             return response;
@@ -195,7 +195,7 @@ public class FournisseurService : IFournisseurService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = "Fournisseur introuvable" }
+                data: new { message = e.Message }
             );
 
             return response;

@@ -29,33 +29,33 @@ public class StockService : IStockService
         _mapper = mapper;
     }
 
-    public BaseResponse AjouterUnStockDeProduit(StockRequestDTO stockRequestDTO)
+    public BaseResponse AjouterUnStockDeProduit(StockRequest stockRequest)
     {
         try
         {
-            var produit = _produitRepository.Trouver(stockRequestDTO.ProduitId);
+            var produit = _produitRepository.Trouver(stockRequest.ProduitId);
 
             // on met la quantité à 0 car elle sera mise à jour lors de la première transaction
             var nouveauStock = new Domain.Entities.Stock(
                 quantite: 0,
-                seuilDisponibilite: stockRequestDTO.SeuilDisponibilite,
+                seuilDisponibilite: stockRequest.SeuilDisponibilite,
                 produit: produit,
                 transactionStocks: new List<TransactionStock>(),
                 dateCreation: DateTime.Now,
-                datePeremption: stockRequestDTO.DatePeremption,
+                datePeremption: stockRequest.DatePeremption,
                 dateModification: DateTime.Now,
                 dateSuppression: null
             );
 
             // Ajout d'une transaction stock pour l'achat initial
             var nouvelleTransactionStock = new TransactionStock(
-                quantite: stockRequestDTO.Quantite,
+                quantite: stockRequest.Quantite,
                 date: DateTime.Now,
                 type: TypeTransactionStock.Achat,
                 stock: nouveauStock,
                 prixUnitaire: produit.PrixAchat,
                 quantiteAvant: 0,
-                quantiteApres: stockRequestDTO.Quantite
+                quantiteApres: stockRequest.Quantite
             );
 
             nouveauStock.AjouterTransaction(nouvelleTransactionStock);
@@ -93,7 +93,7 @@ public class StockService : IStockService
         try
         {
             var listeStocks = _stockRepository.Lister();
-            var stocks = _mapper.Map<List<StockResponseDTO>>(listeStocks);
+            var stocks = _mapper.Map<List<StockResponse>>(listeStocks);
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
