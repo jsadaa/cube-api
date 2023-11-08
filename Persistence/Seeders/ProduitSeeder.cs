@@ -5,17 +5,18 @@ namespace ApiCube.Persistence.Seeders;
 
 public static class ProduitSeeder
 {
-    public static List<ProduitModel> SeedProduits(ApiDbContext context, List<FamilleProduitModel> familles, List<FournisseurModel> fournisseurs, int count = 50)
+    public static List<ProduitModel> SeedProduits(ApiDbContext context, List<FamilleProduitModel> familles,
+        List<FournisseurModel> fournisseurs, int count = 50)
     {
         if (context.Produits.Any()) return context.Produits.ToList();
-        
+
         var appellations = new List<string>
         {
             "AOC",
             "IGP",
             "Vin de France"
         };
-        
+
         var cepages = new List<string>
         {
             "Cabernet Franc",
@@ -50,7 +51,7 @@ public static class ProduitSeeder
             "Ugni Blanc",
             "Viognier"
         };
-        
+
         var regions = new List<string>
         {
             "Alsace",
