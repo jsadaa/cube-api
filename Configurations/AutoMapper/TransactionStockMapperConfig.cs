@@ -15,10 +15,10 @@ public class TransactionStockMapperConfig : Profile
             .ForMember(dest => dest.StockId, opt => opt.MapFrom(src => src.Stock.Id))
             .ForMember(dest => dest.Stock, opt => opt.Ignore())
             .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()));
-        CreateMap<TransactionStock, TransactionStockResponseDTO>()
+        CreateMap<TransactionStock, TransactionStockResponse>()
             .ForMember(dest => dest.StockId, opt => opt.MapFrom(src => src.Stock.Id))
             .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()));
-        CreateMap<TransactionStockModel, TransactionStockResponseDTO>();
-        CreateMap<TransactionStockRequestDTO, TransactionStockModel>();
+        CreateMap<TransactionStockModel, TransactionStockResponse>();
+        CreateMap<TransactionStockRequest, TransactionStockModel>();
     }
 }
