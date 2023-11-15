@@ -2,6 +2,8 @@
 # Database #
 ############
 
+db-create : db-update
+
 db-migrate :
 	dotnet ef database update
 
