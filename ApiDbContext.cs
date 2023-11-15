@@ -73,7 +73,7 @@ public class ApiDbContext : IdentityDbContext<ClientModel>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
+
         modelBuilder.Entity<ClientModel>()
             .HasIndex(c => c.Email)
             .IsUnique();

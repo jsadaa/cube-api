@@ -1,9 +1,7 @@
 using ApiCube.Application.DTOs;
-using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Requests.Produit;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Services.Produit;
-using ApiCube.Persistence.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiCube.Controllers;

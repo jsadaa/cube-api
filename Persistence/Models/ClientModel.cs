@@ -56,7 +56,7 @@ public class ClientModel : IdentityUser
     [Required]
     [StringLength(50)]
     public required string Password { get; set; }*/
-    
+
     [Column("refresh_token")]
     [Required]
     [StringLength(500)]

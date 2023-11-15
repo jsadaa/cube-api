@@ -1,12 +1,12 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using ApiCube.Persistence.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
-[Route("api/[controller]")]
+[Route("api/auth")]
 [ApiController]
 public class AuthController : ControllerBase
 {
@@ -32,6 +32,7 @@ public class AuthController : ControllerBase
 
             return Ok(new { AccessToken = tokenString, RefreshToken = refreshToken });
         }
+
         return Unauthorized();
     }
 
@@ -67,7 +68,7 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenModel model)
     {
         var principal = GetPrincipalFromExpiredToken(model.ExpiredToken);
-        var username = principal.Identity.Name; 
+        var username = principal.Identity.Name;
         var user = await _userManager.FindByNameAsync(username);
 
         if (user == null || user.RefreshToken != model.RefreshToken)
@@ -94,8 +95,9 @@ public class AuthController : ControllerBase
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
-        if (!(securityToken is JwtSecurityToken jwtSecurityToken) || 
-            !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+        if (!(securityToken is JwtSecurityToken jwtSecurityToken) ||
+            !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
+                StringComparison.InvariantCultureIgnoreCase))
             throw new SecurityTokenException("Invalid token");
 
         return principal;
