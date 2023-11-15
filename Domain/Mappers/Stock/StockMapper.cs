@@ -16,7 +16,6 @@ public class StockMapper : IStockMapper
             produit: produit,
             transactionStocks: transactionsStock,
             dateCreation: stockModel.DateCreation,
-            datePeremption: stockModel.DatePeremption,
             dateModification: stockModel.DateModification,
             dateSuppression: stockModel.DateSuppression
         );
@@ -34,7 +33,6 @@ public class StockMapper : IStockMapper
             statut: statutStock,
             transactionStocks: new List<Entities.TransactionStock>(),
             dateCreation: stockModel.DateCreation,
-            datePeremption: stockModel.DatePeremption,
             dateModification: stockModel.DateModification,
             dateSuppression: stockModel.DateSuppression
         );

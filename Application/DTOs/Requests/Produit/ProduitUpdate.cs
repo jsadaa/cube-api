@@ -21,6 +21,8 @@ public class ProduitUpdate
     [Required] public required double PrixAchat { get; set; }
 
     [Required] public required double PrixVente { get; set; }
+    
+    [Required] public required DateTime DatePeremption { get; set; }
 
     [Required] public required bool EnPromotion { get; set; }
 }

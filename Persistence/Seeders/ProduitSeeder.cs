@@ -108,6 +108,7 @@ public static class ProduitSeeder
                     DegreAlcool = Math.Round(f.Random.Double(10, 20), 2),
                     PrixAchat = prixAchat,
                     PrixVente = prixVente,
+                    DatePeremption = f.Date.Future(100),
                     EnPromotion = false,
                     FamilleProduitId = familleProduit.Id,
                     FournisseurId = fournisseur.Id,

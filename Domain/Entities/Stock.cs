@@ -17,15 +17,13 @@ public class Stock
     public List<TransactionStock> Transactions { get; set; }
 
     public DateTime DateCreation { get; set; }
-
-    public DateTime DatePeremption { get; set; }
-
+    
     public DateTime DateModification { get; set; }
 
     public DateTime? DateSuppression { get; set; } = null;
 
     public Stock(int id, int quantite, int seuilDisponibilite, StatutStock statut, Produit produit,
-        List<TransactionStock> transactionStocks, DateTime dateCreation, DateTime datePeremption,
+        List<TransactionStock> transactionStocks, DateTime dateCreation,
         DateTime dateModification, DateTime? dateSuppression)
     {
         Id = id;
@@ -35,24 +33,22 @@ public class Stock
         Produit = produit;
         Transactions = transactionStocks;
         DateCreation = dateCreation;
-        DatePeremption = datePeremption;
         DateModification = dateModification;
         DateSuppression = dateSuppression;
-        AdapterStatut();
+        MettreAJourStatut();
     }
 
     public Stock(int quantite, int seuilDisponibilite, Produit produit, List<TransactionStock> transactionStocks,
-        DateTime dateCreation, DateTime datePeremption, DateTime dateModification, DateTime? dateSuppression)
+        DateTime dateCreation, DateTime dateModification, DateTime? dateSuppression)
     {
         Quantite = quantite;
         SeuilDisponibilite = seuilDisponibilite;
         Produit = produit;
         Transactions = transactionStocks;
         DateCreation = dateCreation;
-        DatePeremption = datePeremption;
         DateModification = dateModification;
         DateSuppression = dateSuppression;
-        AdapterStatut();
+        MettreAJourStatut();
     }
 
     public bool EstSupprime()
@@ -70,11 +66,6 @@ public class Stock
         return Statut == StatutStock.EnStock;
     }
 
-    public bool EstPerime()
-    {
-        return DatePeremption < DateTime.Now;
-    }
-
     public bool EstEnRupture()
     {
         return Quantite <= SeuilDisponibilite;
@@ -82,39 +73,40 @@ public class Stock
 
     public bool EstEnStock()
     {
-        return EstDisponible() && !EstPerime() && !EstEnRupture();
+        return EstDisponible() && !EstEnRupture();
     }
 
     private void AjouterQuantite(int quantite)
     {
         Quantite += quantite;
-        AdapterStatut();
+        MettreAJourStatut();
     }
 
     private void RetirerQuantite(int quantite)
     {
         quantite = Math.Abs(quantite);
         Quantite -= quantite;
-        AdapterStatut();
+        MettreAJourStatut();
     }
 
     public void ModifierSeuilDisponibilite(int seuilDisponibilite)
     {
         SeuilDisponibilite = seuilDisponibilite;
-        AdapterStatut();
+        MettreAJourStatut();
     }
 
-    private void AdapterStatut()
+    private void MettreAJourStatut()
     {
         if (EstSupprime()) return;
         if (Quantite > SeuilDisponibilite) Statut = StatutStock.EnStock;
         else if (Quantite <= SeuilDisponibilite || !EstEnCommande()) Statut = StatutStock.Indisponible;
         else if (Quantite <= 0) Statut = StatutStock.EnRuptureDeStock;
+        if (Produit.EstPerime()) Statut = StatutStock.Perime;
     }
 
     public bool DoitEtreRecommande()
     {
-        return EstEnRupture() || EstPerime();
+        return EstEnRupture();
     }
 
     public void AjouterTransaction(TransactionStock transactionStock)
@@ -129,7 +121,7 @@ public class Stock
             RetirerQuantite(transactionStock.Quantite);
         else if (transactionStock.EstUneSuppression()) MarquerCommeSupprime();
 
-        AdapterStatut();
+        MettreAJourStatut();
     }
 
     public void MettreAJour(Stock stock)
@@ -137,16 +129,9 @@ public class Stock
         Quantite = stock.Quantite;
         SeuilDisponibilite = stock.SeuilDisponibilite;
         Produit = stock.Produit;
-        DatePeremption = stock.DatePeremption;
         DateModification = stock.DateModification;
         DateSuppression = stock.DateSuppression;
-        AdapterStatut();
-    }
-
-    public void ModifierDatePeremption(DateTime stockUpdateDatePeremption)
-    {
-        DatePeremption = stockUpdateDatePeremption;
-        AdapterStatut();
+        MettreAJourStatut();
     }
 
     private void MarquerCommeSupprime()

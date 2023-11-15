@@ -14,6 +14,8 @@ public class Produit
     public double DegreAlcool { get; set; }
     public double PrixAchat { get; set; }
     public double PrixVente { get; set; }
+    
+    public DateTime DatePeremption { get; set; }
     public bool EnPromotion { get; set; }
     public Promotion? Promotion { get; set; }
     public FamilleProduit FamilleProduit { get; set; }
@@ -21,7 +23,7 @@ public class Produit
 
     public Produit(string nom, string description, string appellation, string cepage, string region, int annee,
         double degreAlcool,
-        bool enPromotion, double prixAchat, double prixVente, FamilleProduit familleProduit, Fournisseur fournisseur)
+        bool enPromotion, double prixAchat, double prixVente, DateTime datePeremption, FamilleProduit familleProduit, Fournisseur fournisseur)
     {
         Nom = nom;
         Description = description;
@@ -32,6 +34,7 @@ public class Produit
         DegreAlcool = degreAlcool;
         PrixAchat = prixAchat;
         PrixVente = prixVente;
+        DatePeremption = datePeremption;
         EnPromotion = enPromotion;
         FamilleProduit = familleProduit;
         Fournisseur = fournisseur;
@@ -40,7 +43,7 @@ public class Produit
     }
 
     public Produit(int id, string nom, string description, string appellation, string cepage, int annee, string region,
-        double degreAlcool, bool enPromotion, double prixAchat, double prixVente, FamilleProduit familleProduit,
+        double degreAlcool, bool enPromotion, double prixAchat, double prixVente, DateTime datePeremption, FamilleProduit familleProduit,
         Fournisseur fournisseur)
     {
         Id = id;
@@ -53,6 +56,7 @@ public class Produit
         DegreAlcool = degreAlcool;
         PrixAchat = prixAchat;
         PrixVente = prixVente;
+        DatePeremption = datePeremption;
         EnPromotion = enPromotion;
         FamilleProduit = familleProduit;
         Fournisseur = fournisseur;
@@ -61,7 +65,7 @@ public class Produit
     }
 
     public Produit(int id, string nom, string description, string appellation, string cepage, string region, int annee,
-        double degreAlcool, bool enPromotion, double prixAchat, double prixVente, FamilleProduit familleProduit,
+        double degreAlcool, bool enPromotion, double prixAchat, double prixVente, DateTime datePeremption, FamilleProduit familleProduit,
         Fournisseur fournisseur, Promotion promotion)
     {
         Id = id;
@@ -74,6 +78,7 @@ public class Produit
         DegreAlcool = degreAlcool;
         PrixAchat = prixAchat;
         PrixVente = prixVente;
+        DatePeremption = datePeremption;
         EnPromotion = enPromotion;
         FamilleProduit = familleProduit;
         Fournisseur = fournisseur;
@@ -107,6 +112,11 @@ public class Produit
     {
         return EnPromotion && Promotion != null;
     }
+    
+    public bool EstPerime()
+    {
+        return DatePeremption < DateTime.Now;
+    }
 
     private double CalculerPrixAvecPromotion()
     {
@@ -118,7 +128,7 @@ public class Produit
     }
 
     public void MettreAJour(string nom, string description, string appellation, string cepage, string region, int annee,
-        double degreAlcool, double prixAchat, double prixVente, bool enPromotion)
+        double degreAlcool, double prixAchat, double prixVente, DateTime datePeremption, bool enPromotion)
     {
         Nom = nom;
         Description = description;
@@ -129,6 +139,7 @@ public class Produit
         DegreAlcool = degreAlcool;
         PrixAchat = prixAchat;
         PrixVente = prixVente;
+        DatePeremption = datePeremption;
         EnPromotion = enPromotion;
 
         VerifierValiditePromotion();

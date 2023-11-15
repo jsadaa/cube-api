@@ -14,7 +14,6 @@ public class PreparateurDeStock
             produit: produit,
             transactionStocks: new List<TransactionStock>(),
             dateCreation: DateTime.Now,
-            datePeremption: stockRequest.DatePeremption,
             dateModification: DateTime.Now,
             dateSuppression: null
         );
@@ -52,7 +51,6 @@ public class PreparateurDeStock
         }
 
         stock.ModifierSeuilDisponibilite(stockUpdate.SeuilDisponibilite);
-        stock.ModifierDatePeremption(stockUpdate.DatePeremption);
 
         return stock;
     }

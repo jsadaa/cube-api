@@ -7,6 +7,4 @@ public class StockUpdate
     [Required] public required int Quantite { get; set; }
 
     [Required] public required int SeuilDisponibilite { get; set; }
-
-    [Required] public required DateTime DatePeremption { get; set; }
 }

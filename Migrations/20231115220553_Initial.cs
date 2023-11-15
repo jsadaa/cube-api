@@ -319,6 +319,7 @@ namespace ApiCube.Migrations
                     degre_alcool = table.Column<double>(type: "double", nullable: false),
                     prix_achat = table.Column<double>(type: "double", nullable: false),
                     prix_vente = table.Column<double>(type: "double", nullable: false),
+                    date_peremption = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     en_promotion = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     promotion_id = table.Column<int>(type: "int", nullable: true),
                     famille_produit_id = table.Column<int>(type: "int", nullable: false),
@@ -392,7 +393,6 @@ namespace ApiCube.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     produit_id = table.Column<int>(type: "int", nullable: false),
                     date_creation = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    date_peremption = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     date_modification = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     date_suppression = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },

@@ -599,6 +599,10 @@ namespace ApiCube.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("cepage");
 
+                    b.Property<DateTime>("DatePeremption")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("date_peremption");
+
                     b.Property<double>("DegreAlcool")
                         .HasColumnType("double")
                         .HasColumnName("degre_alcool");
@@ -730,10 +734,6 @@ namespace ApiCube.Migrations
                     b.Property<DateTime>("DateModification")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date_modification");
-
-                    b.Property<DateTime>("DatePeremption")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("date_peremption");
 
                     b.Property<DateTime?>("DateSuppression")
                         .HasColumnType("datetime(6)")

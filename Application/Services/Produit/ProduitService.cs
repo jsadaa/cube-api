@@ -53,6 +53,7 @@ public class ProduitService : IProduitService
                 degreAlcool: produitRequest.DegreAlcool,
                 prixAchat: produitRequest.PrixAchat,
                 prixVente: produitRequest.PrixVente,
+                datePeremption: produitRequest.DatePeremption,
                 enPromotion: false,
                 fournisseur: fournisseur,
                 familleProduit: familleProduit
@@ -243,6 +244,7 @@ public class ProduitService : IProduitService
                 degreAlcool: produitUpdate.DegreAlcool,
                 prixAchat: produitUpdate.PrixAchat,
                 prixVente: produitUpdate.PrixVente,
+                datePeremption: produitUpdate.DatePeremption,
                 enPromotion: produitUpdate.EnPromotion
             );
             _produitRepository.Modifier(produit);

@@ -23,17 +23,14 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
         var user = await _userManager.FindByEmailAsync(model.Email);
-        if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
-        {
-            var tokenString = GenerateJWTToken(user);
-            var refreshToken = GenerateRefreshToken();
-            user.RefreshToken = refreshToken;
-            await _userManager.UpdateAsync(user);
+        if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password)) return Unauthorized();
+        var tokenString = GenerateJWTToken(user);
+        var refreshToken = GenerateRefreshToken();
+        user.RefreshToken = refreshToken;
+        await _userManager.UpdateAsync(user);
 
-            return Ok(new { AccessToken = tokenString, RefreshToken = refreshToken });
-        }
+        return Ok(new { AccessToken = tokenString, RefreshToken = refreshToken });
 
-        return Unauthorized();
     }
 
     private string GenerateJWTToken(ClientModel user)

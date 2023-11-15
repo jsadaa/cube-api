@@ -18,6 +18,7 @@ public class ProduitMapper : IProduitMapper
             degreAlcool: produitModel.DegreAlcool,
             prixAchat: produitModel.PrixAchat,
             prixVente: produitModel.PrixVente,
+            datePeremption: produitModel.DatePeremption,
             enPromotion: produitModel.EnPromotion,
             familleProduit: familleProduit,
             fournisseur: fournisseur
@@ -40,6 +41,7 @@ public class ProduitMapper : IProduitMapper
             degreAlcool: produitModel.DegreAlcool,
             prixAchat: produitModel.PrixAchat,
             prixVente: produitModel.PrixVente,
+            datePeremption: produitModel.DatePeremption,
             enPromotion: produitModel.EnPromotion,
             familleProduit: familleProduit,
             fournisseur: fournisseur,

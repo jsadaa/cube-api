@@ -2,6 +2,7 @@ using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests.Stock;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Services.Stock;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiCube.Controllers
