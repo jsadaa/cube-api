@@ -1,10 +1,9 @@
 using System.Net;
 using ApiCube.Application.DTOs;
-using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Requests.Stock;
 using ApiCube.Application.DTOs.Responses;
-using ApiCube.Domain.Entities;
 using ApiCube.Domain.Enums.Stock;
+using ApiCube.Domain.Services;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Repositories.Produit;
 using ApiCube.Persistence.Repositories.Stock;
@@ -18,16 +17,19 @@ public class StockService : IStockService
 {
     private readonly IStockRepository _stockRepository;
     private readonly IProduitRepository _produitRepository;
+    private readonly PreparateurDeStock _preparateurDeStock;
     private readonly IMapper _mapper;
 
     public StockService(
         IStockRepository stockRepository,
         IProduitRepository produitRepository,
+        PreparateurDeStock preparateurDeStock,
         IMapper mapper
     )
     {
         _stockRepository = stockRepository;
         _produitRepository = produitRepository;
+        _preparateurDeStock = preparateurDeStock;
         _mapper = mapper;
     }
 
@@ -37,30 +39,12 @@ public class StockService : IStockService
         {
             var produit = _produitRepository.Trouver(stockRequest.ProduitId);
 
-            // on met la quantité à 0 car elle sera mise à jour lors de la première transaction
-            var nouveauStock = new Domain.Entities.Stock(
-                quantite: 0,
-                seuilDisponibilite: stockRequest.SeuilDisponibilite,
+            var nouveauStock = _preparateurDeStock.Achat(
                 produit: produit,
-                transactionStocks: new List<TransactionStock>(),
-                dateCreation: DateTime.Now,
-                datePeremption: stockRequest.DatePeremption,
-                dateModification: DateTime.Now,
-                dateSuppression: null
+                stockRequest: stockRequest,
+                typeTransactionStock: TypeTransactionStock.Achat
             );
 
-            // Ajout d'une transaction stock pour l'achat initial
-            var nouvelleTransactionStock = new TransactionStock(
-                quantite: stockRequest.Quantite,
-                date: DateTime.Now,
-                type: TypeTransactionStock.Achat,
-                stock: nouveauStock,
-                prixUnitaire: produit.PrixAchat,
-                quantiteAvant: 0,
-                quantiteApres: stockRequest.Quantite
-            );
-
-            nouveauStock.AjouterTransaction(nouvelleTransactionStock);
             _stockRepository.Ajouter(nouveauStock);
 
             var response = new BaseResponse(
@@ -155,25 +139,12 @@ public class StockService : IStockService
         {
             var stock = _stockRepository.Trouver(id);
 
-            if (stock.Quantite != stockUpdate.Quantite)
-            {
-                var nouvelleTransactionStock = new TransactionStock(
-                    quantite: stockUpdate.Quantite - stock.Quantite,
-                    date: DateTime.Now,
-                    type: TypeTransactionStock.ModificationInterne,
-                    stock: stock,
-                    prixUnitaire: stock.Produit.PrixAchat,
-                    quantiteAvant: stock.Quantite,
-                    quantiteApres: stockUpdate.Quantite
-                );
+            var stockModifié = _preparateurDeStock.ModificationInterne(
+                stock: stock,
+                stockUpdate: stockUpdate
+            );
 
-                stock.AjouterTransaction(nouvelleTransactionStock);
-            }
-
-            stock.ModifierSeuilDisponibilite(stockUpdate.SeuilDisponibilite);
-            stock.ModifierDatePeremption(stockUpdate.DatePeremption);
-
-            _stockRepository.Modifier(stock);
+            _stockRepository.Modifier(stockModifié);
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
@@ -216,20 +187,11 @@ public class StockService : IStockService
         try
         {
             var stock = _stockRepository.Trouver(id);
-            
-            var transactionStock = new TransactionStock(
-                quantite: - stock.Quantite,
-                date: DateTime.Now,
-                type: TypeTransactionStock.Suppression,
-                stock: stock,
-                prixUnitaire: stock.Produit.PrixAchat,
-                quantiteAvant: stock.Quantite,
-                quantiteApres: 0
-            );
-            
-            stock.AjouterTransaction(transactionStock);
-            
-            _stockRepository.Modifier(stock);
+            var stockSupprimé = _preparateurDeStock.Suppression(stock);
+
+            // On applique un soft delete ici,
+            // On ne supprime pas le stock de la base de données mais on le rend indisponible
+            _stockRepository.Modifier(stockSupprimé);
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,

@@ -23,7 +23,7 @@ public class Stock
     public DateTime DateModification { get; set; }
 
     public DateTime? DateSuppression { get; set; } = null;
-    
+
     public Stock(int id, int quantite, int seuilDisponibilite, StatutStock statut, Produit produit,
         List<TransactionStock> transactionStocks, DateTime dateCreation, DateTime datePeremption,
         DateTime dateModification, DateTime? dateSuppression)
@@ -54,12 +54,12 @@ public class Stock
         DateSuppression = dateSuppression;
         AdapterStatut();
     }
-    
+
     public bool EstSupprime()
     {
         return Statut == StatutStock.Supprime;
     }
-    
+
     public bool EstEnCommande()
     {
         return Statut == StatutStock.EnCommande;
@@ -120,13 +120,15 @@ public class Stock
     public void AjouterTransaction(TransactionStock transactionStock)
     {
         Transactions.Add(transactionStock);
-        
+
         if (transactionStock.EstUneSortie()) RetirerQuantite(transactionStock.Quantite);
         else if (transactionStock.EstUneEntree()) AjouterQuantite(transactionStock.Quantite);
-        else if (transactionStock.EstUneModificationInterne() && transactionStock.Quantite > 0) AjouterQuantite(transactionStock.Quantite);
-        else if (transactionStock.EstUneModificationInterne() && transactionStock.Quantite < 0) RetirerQuantite(transactionStock.Quantite);
+        else if (transactionStock.EstUneModificationInterne() && transactionStock.Quantite > 0)
+            AjouterQuantite(transactionStock.Quantite);
+        else if (transactionStock.EstUneModificationInterne() && transactionStock.Quantite < 0)
+            RetirerQuantite(transactionStock.Quantite);
         else if (transactionStock.EstUneSuppression()) MarquerCommeSupprime();
-        
+
         AdapterStatut();
     }
 

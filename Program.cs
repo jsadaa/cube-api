@@ -13,6 +13,7 @@ using ApiCube.Domain.Mappers.Produit;
 using ApiCube.Domain.Mappers.Promotion;
 using ApiCube.Domain.Mappers.Stock;
 using ApiCube.Domain.Mappers.TransactionStock;
+using ApiCube.Domain.Services;
 using ApiCube.Persistence.Repositories.FamilleProduit;
 using ApiCube.Persistence.Repositories.Fournisseur;
 using ApiCube.Persistence.Repositories.Produit;
@@ -75,6 +76,7 @@ builder.Services.AddScoped<IFamilleProduitService, FamilleProduitService>();
 builder.Services.AddScoped<IFournisseurService, FournisseurService>();
 builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<IPromotionService, PromotionService>();
+builder.Services.AddScoped<PreparateurDeStock>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
