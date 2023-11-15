@@ -1,6 +1,5 @@
 using System.Net;
 using ApiCube.Application.DTOs;
-using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Requests.Produit;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Persistence.Exceptions;

@@ -35,27 +35,29 @@ db-reset :
 install-dotnet-on-debian :
 	sudo apt-get install apt-transport-https
 	sudo apt-get update
-	sudo apt-get install dotnet-sdk-7.1
+	sudo apt-get install -y dotnet-sdk-7.0
 
 install-dotnet-on-mac :
-	brew cask install dotnet
+	brew install --cask dotnet-sdk
 
 install-ef :
 	dotnet tool install --global dotnet-ef
 
 install-mariadb-on-debian :
 	sudo apt-get install mariadb-server
+	sudo mysql_secure_installation
 
 install-mariadb-on-mac :
 	brew install mariadb
+	sudo mysql_secure_installation
 
 ###########
 # Install #
 ###########
 	
-install-app :
-	dotnet restore
-	dotnet build
+install-app : install-dependencies build publish
+
+publish:
 	dotnet publish -c Release -o out
 
 run :

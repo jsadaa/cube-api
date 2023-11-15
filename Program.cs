@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text;
 using ApiCube;
 using ApiCube.Application.Services.FamilleProduit;
 using ApiCube.Application.Services.Fournisseur;
@@ -14,6 +15,7 @@ using ApiCube.Domain.Mappers.Promotion;
 using ApiCube.Domain.Mappers.Stock;
 using ApiCube.Domain.Mappers.TransactionStock;
 using ApiCube.Domain.Services;
+using ApiCube.Persistence.Models;
 using ApiCube.Persistence.Repositories.FamilleProduit;
 using ApiCube.Persistence.Repositories.Fournisseur;
 using ApiCube.Persistence.Repositories.Produit;
@@ -21,7 +23,10 @@ using ApiCube.Persistence.Repositories.Promotion;
 using ApiCube.Persistence.Repositories.Stock;
 using ApiCube.Persistence.Repositories.TransactionStock;
 using ApiCube.Persistence.Seeders;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +40,35 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)).EnableSensitiveDataLogging();
 });
+
+// Configure Identity
+builder.Services.AddIdentity<ClientModel, IdentityRole>()
+    .AddEntityFrameworkStores<ApiDbContext>()
+    .AddDefaultTokenProviders();
+
+// Configure JWT
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey =
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? string.Empty)),
+            ClockSkew = TimeSpan.Zero // Réduire la marge de tolérance pour l'expiration des tokens
+        };
+    });
 
 // Configure AutoMapper
 // Note: Apart DTO to Data Model mapping and vice versa,
@@ -131,6 +165,7 @@ app.UseSwagger(c =>
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

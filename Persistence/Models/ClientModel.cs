@@ -1,15 +1,16 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace ApiCube.Persistence.Models;
 
 [Table("client")]
-public class ClientModel
+public class ClientModel : IdentityUser
 {
-    [Column("id")]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    [Key]
-    public int Id { get; set; }
+    //[Column("id")]
+    //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    //[Key]
+    //public int Id { get; set; }
 
     [Column("nom")]
     [Required]
@@ -46,7 +47,7 @@ public class ClientModel
     [StringLength(50)]
     public required string Telephone { get; set; }
 
-    [Column("email")]
+    /*[Column("email")]
     [Required]
     [StringLength(50)]
     public required string Email { get; set; }
@@ -54,7 +55,12 @@ public class ClientModel
     [Column("password")]
     [Required]
     [StringLength(50)]
-    public required string Password { get; set; }
+    public required string Password { get; set; }*/
+
+    [Column("refresh_token")]
+    [Required]
+    [StringLength(500)]
+    public string RefreshToken { get; set; }
 
     [Column("date_naissance")] [Required] public DateTime DateNaissance { get; set; }
 

@@ -1,9 +1,10 @@
 using ApiCube.Persistence.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiCube;
 
-public class ApiDbContext : DbContext
+public class ApiDbContext : IdentityDbContext<ClientModel>
 {
     public ApiDbContext(DbContextOptions<ApiDbContext> options) : base(options)
     {
@@ -29,7 +30,7 @@ public class ApiDbContext : DbContext
 
     public DbSet<EmployeModel> Employes { get; set; }
 
-    public DbSet<RoleModel> Roles { get; set; }
+    //public DbSet<RoleModel> Roles { get; set; }
 
     public DbSet<ClientModel> Clients { get; set; }
 
@@ -71,6 +72,8 @@ public class ApiDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<ClientModel>()
             .HasIndex(c => c.Email)
             .IsUnique();

@@ -1,5 +1,4 @@
 using ApiCube.Application.DTOs;
-using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Requests.Stock;
 
 namespace ApiCube.Application.Services.Stock;

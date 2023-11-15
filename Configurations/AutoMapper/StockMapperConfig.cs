@@ -1,4 +1,3 @@
-using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Requests.Stock;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Domain.Entities;
