@@ -14,14 +14,12 @@ namespace ApiCube.Application.Services.Employe;
 public class EmployeService : IEmployeService
 {
     private readonly UserManager<ApplicationUserModel> _userManager;
-    private readonly IConfiguration _configuration;
     private readonly IEmployeRepository _employeRepository;
 
-    public EmployeService(UserManager<ApplicationUserModel> userManager, IConfiguration configuration,
+    public EmployeService(UserManager<ApplicationUserModel> userManager,
         IEmployeRepository employeRepository)
     {
         _userManager = userManager;
-        _configuration = configuration;
         _employeRepository = employeRepository;
     }
 

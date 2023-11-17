@@ -14,14 +14,12 @@ namespace ApiCube.Application.Services.Client;
 public class ClientService : IClientService
 {
     private readonly UserManager<ApplicationUserModel> _userManager;
-    private readonly IConfiguration _configuration;
     private readonly IClientRepository _clientRepository;
 
-    public ClientService(UserManager<ApplicationUserModel> userManager, IConfiguration configuration,
+    public ClientService(UserManager<ApplicationUserModel> userManager,
         IClientRepository clientRepository)
     {
         _userManager = userManager;
-        _configuration = configuration;
         _clientRepository = clientRepository;
     }
 
