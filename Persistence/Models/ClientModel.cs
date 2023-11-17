@@ -1,16 +1,15 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Identity;
 
 namespace ApiCube.Persistence.Models;
 
 [Table("client")]
-public class ClientModel : IdentityUser
+public class ClientModel
 {
-    //[Column("id")]
-    //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    //[Key]
-    //public int Id { get; set; }
+    [Column("id")]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [Key]
+    public int Id { get; set; }
 
     [Column("nom")]
     [Required]
@@ -47,20 +46,10 @@ public class ClientModel : IdentityUser
     [StringLength(50)]
     public required string Telephone { get; set; }
 
-    /*[Column("email")]
+    [Column("email")]
     [Required]
     [StringLength(50)]
     public required string Email { get; set; }
-
-    [Column("password")]
-    [Required]
-    [StringLength(50)]
-    public required string Password { get; set; }*/
-
-    [Column("refresh_token")]
-    [Required]
-    [StringLength(500)]
-    public string RefreshToken { get; set; }
 
     [Column("date_naissance")] [Required] public DateTime DateNaissance { get; set; }
 
@@ -68,19 +57,9 @@ public class ClientModel : IdentityUser
     [Required]
     public required DateTime DateInscription { get; set; }
 
-    [Column("statut")]
+    [Column("application_user_id")]
     [Required]
-    [StringLength(50)]
-    public required string Statut { get; set; }
-
-    [Column("solde")] [Required] public required double Solde { get; set; }
-
-    [Column("points_fidelite")] [Required] public required int PointsFidelite { get; set; }
-
-    [Column("role")]
-    [Required]
-    [StringLength(50)]
-    public required string Role { get; set; }
+    public required string ApplicationUserId { get; set; }
 
     public ICollection<CommandeClientModel>? Commandes { get; set; }
 

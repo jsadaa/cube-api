@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ApiCube;
 
-public class ApiDbContext : IdentityDbContext<ClientModel>
+public class ApiDbContext : IdentityDbContext<ApplicationUserModel>
 {
     public ApiDbContext(DbContextOptions<ApiDbContext> options) : base(options)
     {
@@ -33,6 +33,8 @@ public class ApiDbContext : IdentityDbContext<ClientModel>
     //public DbSet<RoleModel> Roles { get; set; }
 
     public DbSet<ClientModel> Clients { get; set; }
+
+    public DbSet<ApplicationUserModel> ApplicationUsers { get; set; }
 
     public DbSet<FournisseurModel> Fournisseurs { get; set; }
 

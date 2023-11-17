@@ -43,7 +43,7 @@ public class ProduitModel
     [Column("prix_achat")] [Required] public required double PrixAchat { get; set; }
 
     [Column("prix_vente")] [Required] public required double PrixVente { get; set; }
-    
+
     [Column("date_peremption")] [Required] public required DateTime DatePeremption { get; set; }
 
     [Column("en_promotion")] [Required] public required bool EnPromotion { get; set; }

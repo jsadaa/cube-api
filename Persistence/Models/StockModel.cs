@@ -29,7 +29,7 @@ public class StockModel
     public ICollection<TransactionStockModel>? TransactionsStock { get; set; }
 
     [Column("date_creation")] [Required] public required DateTime DateCreation { get; set; }
-    
+
     [Column("date_modification")]
     [Required]
     public required DateTime DateModification { get; set; }

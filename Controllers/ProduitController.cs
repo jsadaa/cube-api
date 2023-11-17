@@ -2,6 +2,7 @@ using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests.Produit;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Services.Produit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiCube.Controllers;
@@ -46,6 +47,7 @@ public class ProduitController : ControllerBase
     /// <returns> Liste des produits </returns>
     /// <response code="200">Liste des produits</response>
     /// <response code="500">Erreur interne</response>
+    [Authorize(Roles = "Client")]
     [HttpGet("")]
     [ActionName("ListerLesProduits")]
     [ProducesResponseType(typeof(List<ProduitResponse>), 200)]

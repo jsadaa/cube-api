@@ -1,6 +1,8 @@
 using System.Reflection;
 using System.Text;
 using ApiCube;
+using ApiCube.Application.Services.Auth;
+using ApiCube.Application.Services.Client;
 using ApiCube.Application.Services.FamilleProduit;
 using ApiCube.Application.Services.Fournisseur;
 using ApiCube.Application.Services.Produit;
@@ -16,6 +18,7 @@ using ApiCube.Domain.Mappers.Stock;
 using ApiCube.Domain.Mappers.TransactionStock;
 using ApiCube.Domain.Services;
 using ApiCube.Persistence.Models;
+using ApiCube.Persistence.Repositories.Client;
 using ApiCube.Persistence.Repositories.FamilleProduit;
 using ApiCube.Persistence.Repositories.Fournisseur;
 using ApiCube.Persistence.Repositories.Produit;
@@ -42,7 +45,7 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
 });
 
 // Configure Identity
-builder.Services.AddIdentity<ClientModel, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUserModel, IdentityRole>()
     .AddEntityFrameworkStores<ApiDbContext>()
     .AddDefaultTokenProviders();
 
@@ -81,7 +84,8 @@ builder.Services.AddAutoMapper(
     typeof(StockMapperConfig),
     typeof(TransactionStockMapperConfig),
     typeof(AdresseMapperConfig),
-    typeof(PromotionMapperConfig)
+    typeof(PromotionMapperConfig),
+    typeof(ClientMapperConfig)
 );
 
 // Configure Mappers
@@ -103,6 +107,7 @@ builder.Services.AddScoped<ITransactionStockRepository, TransactionStockReposito
 builder.Services.AddScoped<IFournisseurRepository, FournisseurRepository>();
 builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<IPromotionRepository, PromotionRepository>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
 
 // Configure services
 builder.Services.AddScoped<IProduitService, ProduitService>();
@@ -110,7 +115,12 @@ builder.Services.AddScoped<IFamilleProduitService, FamilleProduitService>();
 builder.Services.AddScoped<IFournisseurService, FournisseurService>();
 builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<IPromotionService, PromotionService>();
+builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<PreparateurDeStock>();
+
+// Configure Role seeder
+builder.Services.AddScoped<RoleSeeder>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -125,7 +135,6 @@ builder.Services.AddSwaggerGen(
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     // Seed the database with fake data
@@ -156,7 +165,22 @@ if (app.Environment.IsDevelopment())
     );
 }
 
-// save the swagger.json file in the root of the project
+// Create roles
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var roleSeeder = services.GetRequiredService<RoleSeeder>();
+        await roleSeeder.CreateRoles(services);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Une erreur s'est produite lors de la création des rôles.");
+    }
+}
+
 app.UseSwagger(c =>
 {
     c.SerializeAsV2 = true;

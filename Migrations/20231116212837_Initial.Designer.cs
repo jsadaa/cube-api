@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiCube.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20231115220553_Initial")]
+    [Migration("20231116212837_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -22,7 +22,7 @@ namespace ApiCube.Migrations
                 .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("ApiCube.Persistence.Models.ClientModel", b =>
+            modelBuilder.Entity("ApiCube.Persistence.Models.ApplicationUserModel", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255)");
@@ -30,29 +30,9 @@ namespace ApiCube.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("Adresse")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)")
-                        .HasColumnName("adresse");
-
-                    b.Property<string>("CodePostal")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)")
-                        .HasColumnName("code_postal");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");
-
-                    b.Property<DateTime>("DateInscription")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("date_inscription");
-
-                    b.Property<DateTime>("DateNaissance")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("date_naissance");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -67,12 +47,6 @@ namespace ApiCube.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Nom")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("nom");
-
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
@@ -84,58 +58,14 @@ namespace ApiCube.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Pays")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("pays");
-
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("longtext");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("PointsFidelite")
-                        .HasColumnType("int")
-                        .HasColumnName("points_fidelite");
-
-                    b.Property<string>("Prenom")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("prenom");
-
-                    b.Property<string>("RefreshToken")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)")
-                        .HasColumnName("refresh_token");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("role");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
-
-                    b.Property<double>("Solde")
-                        .HasColumnType("double")
-                        .HasColumnName("solde");
-
-                    b.Property<string>("Statut")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("statut");
-
-                    b.Property<string>("Telephone")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("telephone");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("tinyint(1)");
@@ -143,6 +73,80 @@ namespace ApiCube.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("ApiCube.Persistence.Models.ClientModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Adresse")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("adresse");
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("application_user_id");
+
+                    b.Property<string>("CodePostal")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("code_postal");
+
+                    b.Property<DateTime>("DateInscription")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("date_inscription");
+
+                    b.Property<DateTime>("DateNaissance")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("date_naissance");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("email");
+
+                    b.Property<string>("Nom")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("nom");
+
+                    b.Property<string>("Pays")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("pays");
+
+                    b.Property<string>("Prenom")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("prenom");
+
+                    b.Property<string>("Telephone")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("telephone");
 
                     b.Property<string>("Ville")
                         .IsRequired()
@@ -155,14 +159,7 @@ namespace ApiCube.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
-
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("client");
                 });
 
             modelBuilder.Entity("ApiCube.Persistence.Models.CommandeClientModel", b =>
@@ -172,9 +169,8 @@ namespace ApiCube.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<string>("ClientId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int")
                         .HasColumnName("client_id");
 
                     b.Property<DateTime>("DateCommande")
@@ -313,9 +309,8 @@ namespace ApiCube.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<string>("ClientId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)")
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int")
                         .HasColumnName("client_id");
 
                     b.Property<int>("CommandeClientId")
@@ -1139,7 +1134,7 @@ namespace ApiCube.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("ApiCube.Persistence.Models.ClientModel", null)
+                    b.HasOne("ApiCube.Persistence.Models.ApplicationUserModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1148,7 +1143,7 @@ namespace ApiCube.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("ApiCube.Persistence.Models.ClientModel", null)
+                    b.HasOne("ApiCube.Persistence.Models.ApplicationUserModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1163,7 +1158,7 @@ namespace ApiCube.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApiCube.Persistence.Models.ClientModel", null)
+                    b.HasOne("ApiCube.Persistence.Models.ApplicationUserModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1172,7 +1167,7 @@ namespace ApiCube.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("ApiCube.Persistence.Models.ClientModel", null)
+                    b.HasOne("ApiCube.Persistence.Models.ApplicationUserModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

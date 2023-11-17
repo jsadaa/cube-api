@@ -40,30 +40,6 @@ namespace ApiCube.Migrations
                 {
                     Id = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    nom = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    prenom = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    adresse = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    code_postal = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ville = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    pays = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    telephone = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    refresh_token = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    date_naissance = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    date_inscription = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    statut = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    solde = table.Column<double>(type: "double", nullable: false),
-                    points_fidelite = table.Column<int>(type: "int", nullable: false),
-                    role = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NormalizedUserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
@@ -90,6 +66,39 @@ namespace ApiCube.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "client",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    nom = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    prenom = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    adresse = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    code_postal = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ville = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    pays = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    telephone = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    email = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    date_naissance = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    date_inscription = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    application_user_id = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_client", x => x.id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -418,18 +427,17 @@ namespace ApiCube.Migrations
                     date_livraison = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     statut = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    client_id = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    client_id = table.Column<int>(type: "int", nullable: false),
                     employe_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_commande_client", x => x.id);
                     table.ForeignKey(
-                        name: "FK_commande_client_AspNetUsers_client_id",
+                        name: "FK_commande_client_client_client_id",
                         column: x => x.client_id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        principalTable: "client",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_commande_client_employe_employe_id",
@@ -511,8 +519,7 @@ namespace ApiCube.Migrations
                     prix_ht = table.Column<double>(type: "double", nullable: false),
                     prix_ttc = table.Column<double>(type: "double", nullable: false),
                     tva = table.Column<double>(type: "double", nullable: false),
-                    client_id = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    client_id = table.Column<int>(type: "int", nullable: false),
                     employe_id = table.Column<int>(type: "int", nullable: false),
                     commande_client_id = table.Column<int>(type: "int", nullable: false)
                 },
@@ -520,10 +527,10 @@ namespace ApiCube.Migrations
                 {
                     table.PrimaryKey("PK_facture_client", x => x.id);
                     table.ForeignKey(
-                        name: "FK_facture_client_AspNetUsers_client_id",
+                        name: "FK_facture_client_client_client_id",
                         column: x => x.client_id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        principalTable: "client",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_facture_client_commande_client_commande_client_id",
@@ -675,15 +682,15 @@ namespace ApiCube.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_Email",
-                table: "AspNetUsers",
-                column: "Email",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_client_email",
+                table: "client",
+                column: "email",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -855,6 +862,9 @@ namespace ApiCube.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
                 name: "commande_client");
 
             migrationBuilder.DropTable(
@@ -864,7 +874,7 @@ namespace ApiCube.Migrations
                 name: "stock");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "client");
 
             migrationBuilder.DropTable(
                 name: "employe");

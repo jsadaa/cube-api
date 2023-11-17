@@ -75,22 +75,11 @@ public class Employe
 
     public bool EstGestionnaire()
     {
-        return Role is Role.ResponsableStock or Role.ResponsableAchat or Role.ResponsableVente or Role.ResponsableClient
-            or Role.ResponsableFournisseur;
+        return Role is Role.Admin or Role.Manager;
     }
 
-    public bool EstResponsableStock()
+    public bool EstManager()
     {
-        return Role == Role.ResponsableStock;
-    }
-
-    public bool EstResponsableAchat()
-    {
-        return Role == Role.ResponsableAchat;
-    }
-
-    public bool EstResponsableVente()
-    {
-        return Role == Role.ResponsableVente;
+        return Role == Role.Manager;
     }
 }

@@ -17,7 +17,7 @@ public class Stock
     public List<TransactionStock> Transactions { get; set; }
 
     public DateTime DateCreation { get; set; }
-    
+
     public DateTime DateModification { get; set; }
 
     public DateTime? DateSuppression { get; set; } = null;

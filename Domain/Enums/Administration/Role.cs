@@ -4,10 +4,6 @@ public enum Role
 {
     Admin,
     Employe,
+    Manager,
     Client,
-    ResponsableStock,
-    ResponsableAchat,
-    ResponsableVente,
-    ResponsableClient,
-    ResponsableFournisseur
 }
