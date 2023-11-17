@@ -21,7 +21,7 @@ namespace ApiCube.Controllers
         /// <param name="clientRequest"></param>
         /// <returns></returns>
         /// <response code="201">Le client a été ajouté avec succès</response>
-        /// <response code="400">Le client n'a pas pu être ajouté</response>
+        /// <response code="400">Données invalides</response>
         /// <response code="409">Le client existe déjà</response>
         /// <response code="500">Erreur interne</response>
         [HttpPost("")]

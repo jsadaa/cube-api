@@ -47,7 +47,10 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
 });
 
 // Configure Identity
-builder.Services.AddIdentity<ApplicationUserModel, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUserModel, IdentityRole>(options =>
+    {
+        options.User.RequireUniqueEmail = true;
+    })
     .AddEntityFrameworkStores<ApiDbContext>()
     .AddDefaultTokenProviders();
 
