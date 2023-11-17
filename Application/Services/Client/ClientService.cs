@@ -4,7 +4,6 @@ using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Exceptions;
 using ApiCube.Persistence.Exceptions;
-using ApiCube.Persistence.Models;
 using ApiCube.Persistence.Repositories.Client;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -27,13 +26,6 @@ public class ClientService : IClientService
     {
         try
         {
-            var user = new ApplicationUserModel
-            {
-                UserName = clientRequest.Nom + clientRequest.Prenom,
-                Email = clientRequest.Email,
-                EmailConfirmed = true
-            };
-
             var client = new Domain.Entities.Client(
                 username: clientRequest.Nom + clientRequest.Prenom,
                 nom: clientRequest.Nom,
@@ -48,7 +40,7 @@ public class ClientService : IClientService
                 dateInscription: DateTime.Now
             );
 
-            await _clientRepository.Ajouter(client, user, clientRequest.Password);
+            await _clientRepository.Ajouter(client, clientRequest.Password);
 
             var response = new BaseResponse(
                 HttpStatusCode.Created,

@@ -19,9 +19,17 @@ public class EmployeRepository : IEmployeRepository
         _userManager = userManager;
     }
 
-    public async Task Ajouter(Domain.Entities.Employe employe, ApplicationUserModel applicationUserModel,
+    public async Task Ajouter(Domain.Entities.Employe employe,
         string password)
     {
+        var employeModel = _mapper.Map<Domain.Entities.Employe, EmployeModel>(employe);
+        var applicationUserModel = new ApplicationUserModel
+        {
+            UserName = employe.Nom + employe.Prenom,
+            Email = employe.Email,
+            EmailConfirmed = true
+        };
+
         var creationAppUser = await _userManager.CreateAsync(applicationUserModel, password);
         if (!creationAppUser.Succeeded)
         {
@@ -46,7 +54,6 @@ public class EmployeRepository : IEmployeRepository
         await _userManager.AddToRoleAsync(applicationUserModel, Role.Employe.ToString());
 
         var userId = await _userManager.GetUserIdAsync(applicationUserModel);
-        var employeModel = _mapper.Map<Domain.Entities.Employe, EmployeModel>(employe);
         employeModel.ApplicationUserId = userId;
 
         _context.Employes.Add(employeModel);

@@ -25,9 +25,16 @@ public class ClientRepository : IClientRepository
         _userManager = userManager;
     }
 
-    public async Task Ajouter(Domain.Entities.Client nouveauClient, ApplicationUserModel applicationUserModel,
-        string password)
+    public async Task Ajouter(Domain.Entities.Client nouveauClient, string password)
     {
+        var nouveauClientModel = _mapper.Map<ClientModel>(nouveauClient);
+        var applicationUserModel = new ApplicationUserModel
+        {
+            UserName = nouveauClient.Nom + nouveauClient.Prenom,
+            Email = nouveauClient.Email,
+            EmailConfirmed = true
+        };
+
         var creationAppUser = await _userManager.CreateAsync(applicationUserModel, password);
         if (!creationAppUser.Succeeded)
         {
@@ -45,14 +52,13 @@ public class ClientRepository : IClientRepository
                 case "PasswordRequiresNonAlphanumeric":
                     throw new FormatMotDePasseInvalide();
                 default:
-                    throw new Exception("Erreur lors de la création de l'utilisateur");
+                    throw new Exception("error_create_user");
             }
         }
 
         await _userManager.AddToRoleAsync(applicationUserModel, Role.Client.ToString());
 
         var userId = await _userManager.GetUserIdAsync(applicationUserModel);
-        var nouveauClientModel = _mapper.Map<ClientModel>(nouveauClient);
         nouveauClientModel.ApplicationUserId = userId;
 
         _context.Clients.Add(nouveauClientModel);
@@ -105,7 +111,7 @@ public class ClientRepository : IClientRepository
                 case "PasswordRequiresNonAlphanumeric":
                     throw new FormatMotDePasseInvalide();
                 default:
-                    throw new Exception("Erreur lors de la modification de l'utilisateur");
+                    throw new Exception("error_reset_password");
             }
         }
 
@@ -120,7 +126,7 @@ public class ClientRepository : IClientRepository
                 case "DuplicateEmail":
                     throw new UtilisateurExisteDeja();
                 default:
-                    throw new Exception("Erreur lors de la modification de l'utilisateur");
+                    throw new Exception("error_update_user");
             }
         }
 

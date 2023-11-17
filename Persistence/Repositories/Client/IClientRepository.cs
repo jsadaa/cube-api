@@ -1,10 +1,8 @@
-using ApiCube.Persistence.Models;
-
 namespace ApiCube.Persistence.Repositories.Client;
 
 public interface IClientRepository
 {
-    Task Ajouter(Domain.Entities.Client nouveauClient, ApplicationUserModel applicationUserModel, string password);
+    Task Ajouter(Domain.Entities.Client nouveauClient, string password);
 
     public List<Domain.Entities.Client> Lister();
     public Domain.Entities.Client Trouver(int id);

@@ -2,7 +2,6 @@ using System.Net;
 using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.Exceptions;
-using ApiCube.Persistence.Models;
 using ApiCube.Persistence.Repositories.Employe;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
@@ -22,13 +21,6 @@ public class EmployeService : IEmployeService
     {
         try
         {
-            var user = new ApplicationUserModel
-            {
-                UserName = employeRequest.Nom + employeRequest.Prenom,
-                Email = employeRequest.Email,
-                EmailConfirmed = true
-            };
-
             var employe = new Domain.Entities.Employe(
                 nom: employeRequest.Nom,
                 prenom: employeRequest.Prenom,
@@ -37,7 +29,7 @@ public class EmployeService : IEmployeService
                 statut: employeRequest.Statut
             );
 
-            await _employeRepository.Ajouter(employe, user, employeRequest.Password);
+            await _employeRepository.Ajouter(employe, employeRequest.Password);
 
             var response = new BaseResponse(
                 HttpStatusCode.Created,
