@@ -1,8 +1,6 @@
 using ApiCube.Application.DTOs.Requests.Auth;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Services.Auth;
-using ApiCube.Persistence.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiCube.Controllers;
@@ -11,20 +9,15 @@ namespace ApiCube.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
-    private readonly UserManager<ApplicationUserModel> _userManager;
-    private readonly IConfiguration _configuration;
     private readonly IAuthService _authService;
 
-    public AuthController(UserManager<ApplicationUserModel> userManager, IConfiguration configuration,
-        IAuthService authService)
+    public AuthController(IAuthService authService)
     {
-        _userManager = userManager;
-        _configuration = configuration;
         _authService = authService;
     }
 
     /// <summary>
-    /// Login
+    /// Login d'un employé ou d'un client
     /// </summary>
     /// <param name="loginRequest"></param>
     /// <returns></returns>
@@ -40,9 +33,9 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
     {
         var response = await _authService.Login(loginRequest);
-
         return StatusCode(response.StatusCode, response.Data);
     }
+
 
     /// <summary>
     /// Rafraîchir un token expiré
@@ -60,7 +53,6 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest refreshTokenRequest)
     {
         var response = await _authService.RefreshToken(refreshTokenRequest);
-
         return StatusCode(response.StatusCode, response.Data);
     }
 }

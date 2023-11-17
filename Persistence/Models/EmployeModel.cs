@@ -26,22 +26,18 @@ public class EmployeModel
     [StringLength(50)]
     public required string Email { get; set; }
 
-    [Column("mot_de_passe")]
-    [Required]
-    [StringLength(50)]
-    public required string MotDePasse { get; set; }
-
     [Column("date_embauche")] [Required] public required DateTime DateEmbauche { get; set; }
 
-    [Column("date_depart")] [Required] public required DateTime DateDepart { get; set; }
+    [Column("date_depart")] public DateTime? DateDepart { get; set; }
 
     [Column("statut")]
     [Required]
     [StringLength(50)]
     public required string Statut { get; set; }
 
-    [Column("role")]
+    [Column("application_user_id")]
     [Required]
-    [StringLength(50)]
-    public required string Role { get; set; }
+    public required string ApplicationUserId { get; set; }
+
+    [ForeignKey("ApplicationUserId")] public ApplicationUserModel ApplicationUser { get; set; } = null!;
 }

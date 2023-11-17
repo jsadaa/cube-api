@@ -2,7 +2,6 @@ using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests.Produit;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Services.Produit;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiCube.Controllers;
@@ -47,7 +46,6 @@ public class ProduitController : ControllerBase
     /// <returns> Liste des produits </returns>
     /// <response code="200">Liste des produits</response>
     /// <response code="500">Erreur interne</response>
-    [Authorize(Roles = "Client")]
     [HttpGet("")]
     [ActionName("ListerLesProduits")]
     [ProducesResponseType(typeof(List<ProduitResponse>), 200)]
@@ -55,8 +53,7 @@ public class ProduitController : ControllerBase
     [Produces("application/json")]
     public IActionResult ListerLesProduits()
     {
-        BaseResponse response = _produitService.ListerLesProduits();
-
+        var response = _produitService.ListerLesProduits();
         return StatusCode(response.StatusCode, response.Data);
     }
 
@@ -76,8 +73,7 @@ public class ProduitController : ControllerBase
     [Produces("application/json")]
     public IActionResult TrouverUnProduit(int id)
     {
-        BaseResponse response = _produitService.TrouverUnProduit(id);
-
+        var response = _produitService.TrouverUnProduit(id);
         return StatusCode(response.StatusCode, response.Data);
     }
 
@@ -100,8 +96,7 @@ public class ProduitController : ControllerBase
     [Produces("application/json")]
     public IActionResult ModifierUnProduit(int id, [FromBody] ProduitUpdate produitUpdate)
     {
-        BaseResponse response = _produitService.ModifierUnProduit(id, produitUpdate);
-
+        var response = _produitService.ModifierUnProduit(id, produitUpdate);
         return StatusCode(response.StatusCode, response.Data);
     }
 
@@ -123,8 +118,7 @@ public class ProduitController : ControllerBase
     [Produces("application/json")]
     public IActionResult SupprimerUnProduit(int id)
     {
-        BaseResponse response = _produitService.SupprimerUnProduit(id);
-
+        var response = _produitService.SupprimerUnProduit(id);
         return StatusCode(response.StatusCode, response.Data);
     }
 
@@ -147,8 +141,7 @@ public class ProduitController : ControllerBase
     [Produces("application/json")]
     public IActionResult AppliquerUnePromotionSurUnProduit(int produitId, int promotionId)
     {
-        BaseResponse response = _produitService.AppliquerUnePromotion(produitId, promotionId);
-
+        var response = _produitService.AppliquerUnePromotion(produitId, promotionId);
         return StatusCode(response.StatusCode, response.Data);
     }
 
@@ -170,8 +163,7 @@ public class ProduitController : ControllerBase
     [Produces("application/json")]
     public IActionResult RetirerUnePromotionSurUnProduit(int produitId)
     {
-        BaseResponse response = _produitService.RetirerUnePromotion(produitId);
-
+        var response = _produitService.RetirerUnePromotion(produitId);
         return StatusCode(response.StatusCode, response.Data);
     }
 }

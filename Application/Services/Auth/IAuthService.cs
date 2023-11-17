@@ -1,6 +1,5 @@
 using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests.Auth;
-using ApiCube.Persistence.Models;
 
 namespace ApiCube.Application.Services.Auth;
 

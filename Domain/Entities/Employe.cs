@@ -1,5 +1,3 @@
-using ApiCube.Domain.Enums.Administration;
-
 namespace ApiCube.Domain.Entities;
 
 public class Employe
@@ -14,32 +12,21 @@ public class Employe
 
     public DateTime DateEmbauche { get; set; }
 
-    public DateTime DateDepart { get; set; }
+    public DateTime? DateDepart { get; set; }
 
     public string Statut { get; set; }
 
-    public string Login { get; set; }
-
-    public string MotDePasse { get; set; }
-
-    public Role Role { get; set; }
-
-    public Employe(string nom, string prenom, string email, DateTime dateEmbauche, DateTime dateDepart, string statut,
-        string login, string motDePasse, Role role)
+    public Employe(string nom, string prenom, string email, DateTime dateEmbauche, string statut)
     {
         Nom = nom;
         Prenom = prenom;
         Email = email;
         DateEmbauche = dateEmbauche;
-        DateDepart = dateDepart;
         Statut = statut;
-        Login = login;
-        MotDePasse = motDePasse;
-        Role = role;
     }
 
     public Employe(int id, string nom, string prenom, string email, DateTime dateEmbauche, DateTime dateDepart,
-        string statut, double salaire, string login, string motDePasse, Role role)
+        string statut)
     {
         Id = id;
         Nom = nom;
@@ -48,38 +35,5 @@ public class Employe
         DateEmbauche = dateEmbauche;
         DateDepart = dateDepart;
         Statut = statut;
-        Login = login;
-        MotDePasse = motDePasse;
-        Role = role;
-    }
-
-    public void MettreAJourMotDePasse(string motDePasse)
-    {
-        MotDePasse = motDePasse;
-    }
-
-    public void MettreAJourRole(Role role)
-    {
-        Role = role;
-    }
-
-    public bool EstAdmin()
-    {
-        return Role == Role.Admin;
-    }
-
-    public bool EstEmploye()
-    {
-        return Role == Role.Employe;
-    }
-
-    public bool EstGestionnaire()
-    {
-        return Role is Role.Admin or Role.Manager;
-    }
-
-    public bool EstManager()
-    {
-        return Role == Role.Manager;
     }
 }

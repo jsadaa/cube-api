@@ -58,15 +58,30 @@ public class ClientService : IClientService
 
             _clientRepository.Ajouter(client, userId);
 
-            return new BaseResponse(HttpStatusCode.OK, "Compte créé avec succès");
+            var response = new BaseResponse(
+                HttpStatusCode.Created,
+                "Le client a été ajouté avec succès"
+            );
+
+            return response;
         }
         catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
         {
-            return new BaseResponse(HttpStatusCode.Conflict, "Un compte avec cet email existe déjà");
+            var response = new BaseResponse(
+                HttpStatusCode.Conflict,
+                "Le client existe déjà"
+            );
+
+            return response;
         }
         catch (Exception e)
         {
-            return new BaseResponse(HttpStatusCode.InternalServerError, e.Message);
+            var response = new BaseResponse(
+                HttpStatusCode.InternalServerError,
+                e.Message
+            );
+
+            return response;
         }
     }
 }

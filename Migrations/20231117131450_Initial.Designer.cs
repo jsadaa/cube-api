@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiCube.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20231116212837_Initial")]
+    [Migration("20231117131450_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -101,7 +101,7 @@ namespace ApiCube.Migrations
 
                     b.Property<string>("ApplicationUserId")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("application_user_id");
 
                     b.Property<string>("CodePostal")
@@ -155,6 +155,8 @@ namespace ApiCube.Migrations
                         .HasColumnName("ville");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -245,7 +247,12 @@ namespace ApiCube.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<DateTime>("DateDepart")
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("application_user_id");
+
+                    b.Property<DateTime?>("DateDepart")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date_depart");
 
@@ -259,12 +266,6 @@ namespace ApiCube.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("email");
 
-                    b.Property<string>("MotDePasse")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("mot_de_passe");
-
                     b.Property<string>("Nom")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -277,12 +278,6 @@ namespace ApiCube.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("prenom");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("role");
-
                     b.Property<int?>("RoleModelId")
                         .HasColumnType("int");
 
@@ -293,6 +288,8 @@ namespace ApiCube.Migrations
                         .HasColumnName("statut");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("RoleModelId");
 
@@ -939,6 +936,17 @@ namespace ApiCube.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ApiCube.Persistence.Models.ClientModel", b =>
+                {
+                    b.HasOne("ApiCube.Persistence.Models.ApplicationUserModel", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+                });
+
             modelBuilder.Entity("ApiCube.Persistence.Models.CommandeClientModel", b =>
                 {
                     b.HasOne("ApiCube.Persistence.Models.ClientModel", "Client")
@@ -979,9 +987,17 @@ namespace ApiCube.Migrations
 
             modelBuilder.Entity("ApiCube.Persistence.Models.EmployeModel", b =>
                 {
+                    b.HasOne("ApiCube.Persistence.Models.ApplicationUserModel", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ApiCube.Persistence.Models.RoleModel", null)
                         .WithMany("Employes")
                         .HasForeignKey("RoleModelId");
+
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("ApiCube.Persistence.Models.FactureClientModel", b =>

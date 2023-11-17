@@ -35,7 +35,6 @@ namespace ApiCube.Controllers
         public IActionResult AjouterUneFamilleProduit([FromBody] FamilleProduitRequest familleProduitRequest)
         {
             var response = _familleProduitService.AjouterUneFamilleProduit(familleProduitRequest);
-
             return StatusCode(response.StatusCode, response.Data);
         }
 
@@ -53,7 +52,6 @@ namespace ApiCube.Controllers
         public IActionResult ListerLesFamillesProduits()
         {
             var response = _familleProduitService.ListerLesFamillesProduits();
-
             return StatusCode(response.StatusCode, response.Data);
         }
 
@@ -74,7 +72,6 @@ namespace ApiCube.Controllers
         public IActionResult TrouverUneFamilleProduit(int id)
         {
             var response = _familleProduitService.TrouverUneFamilleProduit(id);
-
             return StatusCode(response.StatusCode, response.Data);
         }
 
@@ -98,7 +95,6 @@ namespace ApiCube.Controllers
         public IActionResult ModifierUneFamilleProduit(int id, [FromBody] FamilleProduitRequest familleProduitRequest)
         {
             var response = _familleProduitService.ModifierUneFamilleProduit(id, familleProduitRequest);
-
             return StatusCode(response.StatusCode, response.Data);
         }
 
@@ -121,7 +117,6 @@ namespace ApiCube.Controllers
         public IActionResult SupprimerUneFamilleProduit(int id)
         {
             var response = _familleProduitService.SupprimerUneFamilleProduit(id);
-
             return StatusCode(response.StatusCode, response.Data);
         }
     }

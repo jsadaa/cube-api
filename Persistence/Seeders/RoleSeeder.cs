@@ -4,7 +4,7 @@ namespace ApiCube.Persistence.Seeders;
 
 public class RoleSeeder
 {
-    public async Task CreateRoles(IServiceProvider serviceProvider)
+    public static async Task CreateRoles(IServiceProvider serviceProvider)
     {
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
@@ -14,7 +14,6 @@ public class RoleSeeder
             var roleExist = await roleManager.RoleExistsAsync(roleName);
             if (!roleExist)
             {
-                // Créer les rôles et les ajouter à la base de données
                 await roleManager.CreateAsync(new IdentityRole(roleName));
             }
         }

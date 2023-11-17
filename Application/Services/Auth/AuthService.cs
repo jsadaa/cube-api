@@ -16,11 +16,14 @@ public class AuthService : IAuthService
 {
     private readonly UserManager<ApplicationUserModel> _userManager;
     private readonly IConfiguration _configuration;
+    private readonly ILogger<AuthService> _logger;
 
-    public AuthService(UserManager<ApplicationUserModel> userManager, IConfiguration configuration)
+    public AuthService(UserManager<ApplicationUserModel> userManager, IConfiguration configuration,
+        ILogger<AuthService> logger)
     {
         _userManager = userManager;
         _configuration = configuration;
+        _logger = logger;
     }
 
     public async Task<BaseResponse> Login(LoginRequest loginRequest)
@@ -31,15 +34,15 @@ public class AuthService : IAuthService
             if (user == null || !await _userManager.CheckPasswordAsync(user, loginRequest.Password))
                 throw new EmailOuMotDePasseIncorrect();
 
-            var tokenString = GenerateJwtToken(user);
+            var tokenString = await GenerateJwtToken(user);
             var refreshToken = GenerateRefreshToken();
 
             const string refreshTokenName = "RefreshToken";
-            await _userManager.SetAuthenticationTokenAsync(user, "Cube", refreshTokenName, refreshToken);
+            await _userManager.SetAuthenticationTokenAsync(user, "ApiCube", refreshTokenName, refreshToken);
 
             var tokenResponse = new TokenResponse()
             {
-                AccessToken = await tokenString,
+                AccessToken = tokenString,
                 RefreshToken = refreshToken
             };
 
@@ -75,23 +78,23 @@ public class AuthService : IAuthService
         try
         {
             var principal = GetPrincipalFromExpiredToken(refreshTokenRequest.ExpiredToken);
-            var username = principal.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
+            var username = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(username)) throw new ClaimInvalide();
 
+            var user = await _userManager.FindByNameAsync(username);
             if (user == null) throw new UtilisateurIntrouvable();
 
-            var storedRefreshToken = await _userManager.GetAuthenticationTokenAsync(user, "MyApp", "RefreshToken");
-
+            var storedRefreshToken = await _userManager.GetAuthenticationTokenAsync(user, "ApiCube", "RefreshToken");
             if (storedRefreshToken != refreshTokenRequest.RefreshToken) throw new RefreshTokenInvalide();
 
-            var newJwtToken = GenerateJwtToken(user);
+            var newJwtToken = await GenerateJwtToken(user);
             var newRefreshToken = GenerateRefreshToken();
 
-            await _userManager.SetAuthenticationTokenAsync(user, "MyApp", "RefreshToken", newRefreshToken);
+            await _userManager.SetAuthenticationTokenAsync(user, "ApiCube", "RefreshToken", newRefreshToken);
 
             var tokenResponse = new TokenResponse()
             {
-                AccessToken = await newJwtToken,
+                AccessToken = newJwtToken,
                 RefreshToken = newRefreshToken
             };
 
@@ -111,7 +114,25 @@ public class AuthService : IAuthService
 
             return response;
         }
+        catch (ClaimInvalide e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.Unauthorized,
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
         catch (RefreshTokenInvalide e)
+        {
+            var response = new BaseResponse(
+                statusCode: HttpStatusCode.Unauthorized,
+                data: new { message = e.Message }
+            );
+
+            return response;
+        }
+        catch (SecurityTokenException e)
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Unauthorized,
@@ -141,8 +162,9 @@ public class AuthService : IAuthService
 
         var claims = new List<Claim>
         {
-            new(JwtRegisteredClaimNames.Sub, user.UserName),
-            new(JwtRegisteredClaimNames.Email, user.Email),
+            new(JwtRegisteredClaimNames.Sub,
+                user.UserName ?? throw new InvalidOperationException("User.UserName is null")),
+            new(JwtRegisteredClaimNames.Email, user.Email ?? throw new InvalidOperationException("User.Email is null")),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
         claims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
@@ -151,7 +173,7 @@ public class AuthService : IAuthService
             issuer: _configuration["Jwt:Issuer"],
             audience: _configuration["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(30),
+            expires: DateTime.UtcNow.AddMinutes(2),
             signingCredentials: credentials
         );
 
@@ -165,6 +187,17 @@ public class AuthService : IAuthService
 
     private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
     {
+        var tokenHandler = new JwtSecurityTokenHandler();
+
+        if (tokenHandler.ReadToken(token) is not JwtSecurityToken securityToken ||
+            !securityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
+                StringComparison.InvariantCultureIgnoreCase))
+            throw new SecurityTokenException("Invalid token");
+
+        if (securityToken.ValidTo > DateTime.UtcNow)
+            throw new SecurityTokenException("Token is not yet expired");
+        _logger.LogInformation("Token is expired");
+
         var tokenValidationParameters = new TokenValidationParameters
         {
             ValidateAudience = false,
@@ -176,9 +209,8 @@ public class AuthService : IAuthService
             ValidateLifetime = false
         };
 
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
-        if (securityToken is not JwtSecurityToken jwtSecurityToken ||
+        var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var validatedToken);
+        if (validatedToken is not JwtSecurityToken jwtSecurityToken ||
             !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
                 StringComparison.InvariantCultureIgnoreCase))
             throw new SecurityTokenException("Invalid token");

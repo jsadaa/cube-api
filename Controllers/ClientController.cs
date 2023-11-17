@@ -31,11 +31,9 @@ namespace ApiCube.Controllers
         [ProducesResponseType(typeof(string), 409)]
         [ProducesResponseType(typeof(string), 500)]
         [Produces("application/json")]
-        public IActionResult AjouterUnClient([FromBody] ClientRequest clientRequest)
+        public async Task<IActionResult> AjouterUnClient([FromBody] ClientRequest clientRequest)
         {
-            var task = _clientService.AjouterUnClient(clientRequest);
-            var response = task.Result;
-
+            var response = await _clientService.AjouterUnClient(clientRequest);
             return StatusCode(response.StatusCode, response.Data);
         }
     }

@@ -61,6 +61,8 @@ public class ClientModel
     [Required]
     public required string ApplicationUserId { get; set; }
 
+    [ForeignKey("ApplicationUserId")] public ApplicationUserModel ApplicationUser { get; set; } = null!;
+
     public ICollection<CommandeClientModel>? Commandes { get; set; }
 
     public ICollection<FactureClientModel>? Factures { get; set; }

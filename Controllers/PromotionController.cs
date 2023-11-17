@@ -35,7 +35,6 @@ namespace ApiCube.Controllers
         public IActionResult AjouterUnePromotion([FromBody] PromotionRequest promotionRequest)
         {
             var response = _promotionService.AjouterUnePromotion(promotionRequest);
-
             return StatusCode(response.StatusCode, response.Data);
         }
 
@@ -53,7 +52,6 @@ namespace ApiCube.Controllers
         public IActionResult ListerLesPromotions()
         {
             var response = _promotionService.ListerLesPromotions();
-
             return StatusCode(response.StatusCode, response.Data);
         }
 
@@ -76,7 +74,6 @@ namespace ApiCube.Controllers
         public IActionResult TrouverUnePromotion(int id)
         {
             var response = _promotionService.TrouverUnePromotion(id);
-
             return StatusCode(response.StatusCode, response.Data);
         }
 
@@ -102,7 +99,6 @@ namespace ApiCube.Controllers
         public IActionResult ModifierUnePromotion(int id, [FromBody] PromotionRequest promotionRequest)
         {
             var response = _promotionService.ModifierUnePromotion(id, promotionRequest);
-
             return StatusCode(response.StatusCode, response.Data);
         }
 
@@ -125,7 +121,6 @@ namespace ApiCube.Controllers
         public IActionResult SupprimerUnePromotion(int id)
         {
             var response = _promotionService.SupprimerUnePromotion(id);
-
             return StatusCode(response.StatusCode, response.Data);
         }
     }

@@ -53,7 +53,6 @@ namespace ApiCube.Controllers
         public IActionResult ListerLesFournisseurs()
         {
             var response = _fournisseurService.ListerLesFournisseurs();
-
             return StatusCode(response.StatusCode, response.Data);
         }
 
@@ -74,7 +73,6 @@ namespace ApiCube.Controllers
         public IActionResult TrouverUnFournisseur(int id)
         {
             var response = _fournisseurService.TrouverUnFournisseur(id);
-
             return StatusCode(response.StatusCode, response.Data);
         }
 
@@ -98,7 +96,6 @@ namespace ApiCube.Controllers
         public IActionResult ModifierUnFournisseur(int id, [FromBody] FournisseurRequest fournisseurRequest)
         {
             var response = _fournisseurService.ModifierUnFournisseur(id, fournisseurRequest);
-
             return StatusCode(response.StatusCode, response.Data);
         }
 
@@ -121,7 +118,6 @@ namespace ApiCube.Controllers
         public IActionResult SupprimerUnFournisseur(int id)
         {
             var response = _fournisseurService.SupprimerUnFournisseur(id);
-
             return StatusCode(response.StatusCode, response.Data);
         }
     }

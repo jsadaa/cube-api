@@ -124,16 +124,6 @@ public class Stock
         MettreAJourStatut();
     }
 
-    public void MettreAJour(Stock stock)
-    {
-        Quantite = stock.Quantite;
-        SeuilDisponibilite = stock.SeuilDisponibilite;
-        Produit = stock.Produit;
-        DateModification = stock.DateModification;
-        DateSuppression = stock.DateSuppression;
-        MettreAJourStatut();
-    }
-
     private void MarquerCommeSupprime()
     {
         Quantite = 0;

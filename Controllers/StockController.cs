@@ -1,8 +1,6 @@
-using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests.Stock;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Services.Stock;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiCube.Controllers
@@ -36,8 +34,7 @@ namespace ApiCube.Controllers
         [Produces("application/json")]
         public IActionResult AjouterUnStockDeProduit([FromBody] StockRequest stockRequest)
         {
-            BaseResponse response = _stockService.AjouterUnStockDeProduit(stockRequest);
-
+            var response = _stockService.AjouterUnStockDeProduit(stockRequest);
             return StatusCode(response.StatusCode, response.Data);
         }
 
@@ -55,8 +52,7 @@ namespace ApiCube.Controllers
         [Produces("application/json")]
         public IActionResult ListerLesStocks()
         {
-            BaseResponse response = _stockService.ListerLesStocks();
-
+            var response = _stockService.ListerLesStocks();
             return StatusCode(response.StatusCode, response.Data);
         }
 
@@ -76,8 +72,7 @@ namespace ApiCube.Controllers
         [Produces("application/json")]
         public IActionResult TrouverUnStock(int id)
         {
-            BaseResponse response = _stockService.TrouverUnStock(id);
-
+            var response = _stockService.TrouverUnStock(id);
             return StatusCode(response.StatusCode, response.Data);
         }
 
@@ -100,8 +95,7 @@ namespace ApiCube.Controllers
         [Produces("application/json")]
         public IActionResult ModifierUnStock(int id, [FromBody] StockUpdate stockUpdate)
         {
-            BaseResponse response = _stockService.ModifierUnStock(id, stockUpdate);
-
+            var response = _stockService.ModifierUnStock(id, stockUpdate);
             return StatusCode(response.StatusCode, response.Data);
         }
 
@@ -123,8 +117,7 @@ namespace ApiCube.Controllers
         [Produces("application/json")]
         public IActionResult SupprimerUnStock(int id)
         {
-            BaseResponse response = _stockService.SupprimerUnStock(id);
-
+            var response = _stockService.SupprimerUnStock(id);
             return StatusCode(response.StatusCode, response.Data);
         }
     }
