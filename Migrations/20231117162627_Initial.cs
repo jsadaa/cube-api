@@ -134,21 +134,6 @@ namespace ApiCube.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "role",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    nom = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_role", x => x.id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -315,6 +300,37 @@ namespace ApiCube.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "employe",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    nom = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    prenom = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    email = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    date_embauche = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    date_depart = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    statut = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    application_user_id = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_employe", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_employe_AspNetUsers_application_user_id",
+                        column: x => x.application_user_id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "produit",
                 columns: table => new
                 {
@@ -360,70 +376,6 @@ namespace ApiCube.Migrations
                         column: x => x.promotion_id,
                         principalTable: "promotion",
                         principalColumn: "id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "employe",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    nom = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    prenom = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    email = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    date_embauche = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    date_depart = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    statut = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    application_user_id = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    RoleModelId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_employe", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_employe_AspNetUsers_application_user_id",
-                        column: x => x.application_user_id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_employe_role_RoleModelId",
-                        column: x => x.RoleModelId,
-                        principalTable: "role",
-                        principalColumn: "id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "stock",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    quantite = table.Column<int>(type: "int", nullable: false),
-                    seuil_disponibilite = table.Column<int>(type: "int", nullable: false),
-                    statut = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    produit_id = table.Column<int>(type: "int", nullable: false),
-                    date_creation = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    date_modification = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    date_suppression = table.Column<DateTime>(type: "datetime(6)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_stock", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_stock_produit_produit_id",
-                        column: x => x.produit_id,
-                        principalTable: "produit",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -490,28 +442,27 @@ namespace ApiCube.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "transaction_stock",
+                name: "stock",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     quantite = table.Column<int>(type: "int", nullable: false),
-                    date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    type = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    seuil_disponibilite = table.Column<int>(type: "int", nullable: false),
+                    statut = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    stock_id = table.Column<int>(type: "int", nullable: false),
-                    prix_unitaire = table.Column<double>(type: "double", nullable: false),
-                    prix_total = table.Column<double>(type: "double", nullable: false),
-                    quantite_avant = table.Column<int>(type: "int", nullable: false),
-                    quantite_apres = table.Column<int>(type: "int", nullable: false)
+                    produit_id = table.Column<int>(type: "int", nullable: false),
+                    date_creation = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    date_modification = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    date_suppression = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_transaction_stock", x => x.id);
+                    table.PrimaryKey("PK_stock", x => x.id);
                     table.ForeignKey(
-                        name: "FK_transaction_stock_stock_stock_id",
-                        column: x => x.stock_id,
-                        principalTable: "stock",
+                        name: "FK_stock_produit_produit_id",
+                        column: x => x.produit_id,
+                        principalTable: "produit",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -660,6 +611,34 @@ namespace ApiCube.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "transaction_stock",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    quantite = table.Column<int>(type: "int", nullable: false),
+                    date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    type = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    stock_id = table.Column<int>(type: "int", nullable: false),
+                    prix_unitaire = table.Column<double>(type: "double", nullable: false),
+                    prix_total = table.Column<double>(type: "double", nullable: false),
+                    quantite_avant = table.Column<int>(type: "int", nullable: false),
+                    quantite_apres = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_transaction_stock", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_transaction_stock_stock_stock_id",
+                        column: x => x.stock_id,
+                        principalTable: "stock",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -738,11 +717,6 @@ namespace ApiCube.Migrations
                 table: "employe",
                 columns: new[] { "nom", "prenom", "email" },
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_employe_RoleModelId",
-                table: "employe",
-                column: "RoleModelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_facture_client_client_id",
@@ -828,12 +802,6 @@ namespace ApiCube.Migrations
                 column: "promotion_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_role_nom",
-                table: "role",
-                column: "nom",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_stock_produit_id",
                 table: "stock",
                 column: "produit_id",
@@ -901,9 +869,6 @@ namespace ApiCube.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "role");
 
             migrationBuilder.DropTable(
                 name: "famille_produit");

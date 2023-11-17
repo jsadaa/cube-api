@@ -275,9 +275,6 @@ namespace ApiCube.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("prenom");
 
-                    b.Property<int?>("RoleModelId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Statut")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -287,8 +284,6 @@ namespace ApiCube.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("RoleModelId");
 
                     b.HasIndex("Nom", "Prenom", "Email")
                         .IsUnique();
@@ -691,27 +686,6 @@ namespace ApiCube.Migrations
                     b.ToTable("promotion");
                 });
 
-            modelBuilder.Entity("ApiCube.Persistence.Models.RoleModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Nom")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("nom");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Nom")
-                        .IsUnique();
-
-                    b.ToTable("role");
-                });
-
             modelBuilder.Entity("ApiCube.Persistence.Models.StockModel", b =>
                 {
                     b.Property<int>("Id")
@@ -990,10 +964,6 @@ namespace ApiCube.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApiCube.Persistence.Models.RoleModel", null)
-                        .WithMany("Employes")
-                        .HasForeignKey("RoleModelId");
-
                     b.Navigation("ApplicationUser");
                 });
 
@@ -1212,11 +1182,6 @@ namespace ApiCube.Migrations
             modelBuilder.Entity("ApiCube.Persistence.Models.ProduitModel", b =>
                 {
                     b.Navigation("Stocks");
-                });
-
-            modelBuilder.Entity("ApiCube.Persistence.Models.RoleModel", b =>
-                {
-                    b.Navigation("Employes");
                 });
 
             modelBuilder.Entity("ApiCube.Persistence.Models.StockModel", b =>

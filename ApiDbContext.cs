@@ -27,11 +27,9 @@ public class ApiDbContext : IdentityDbContext<ApplicationUserModel>
     public DbSet<LigneCommandeFournisseurModel> LignesCommandesFournisseurs { get; set; }
 
     public DbSet<FactureFournisseurModel> FacturesFournisseurs { get; set; }
-
+    
     public DbSet<EmployeModel> Employes { get; set; }
-
-    //public DbSet<RoleModel> Roles { get; set; }
-
+    
     public DbSet<ClientModel> Clients { get; set; }
 
     public DbSet<ApplicationUserModel> ApplicationUsers { get; set; }
@@ -94,10 +92,6 @@ public class ApiDbContext : IdentityDbContext<ApplicationUserModel>
 
         modelBuilder.Entity<FamilleProduitModel>()
             .HasIndex(f => f.Nom)
-            .IsUnique();
-
-        modelBuilder.Entity<RoleModel>()
-            .HasIndex(r => r.Nom)
             .IsUnique();
 
         modelBuilder.Entity<StockModel>()
