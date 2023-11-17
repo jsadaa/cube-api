@@ -13,13 +13,10 @@ namespace ApiCube.Application.Services.Employe;
 
 public class EmployeService : IEmployeService
 {
-    private readonly UserManager<ApplicationUserModel> _userManager;
     private readonly IEmployeRepository _employeRepository;
 
-    public EmployeService(UserManager<ApplicationUserModel> userManager,
-        IEmployeRepository employeRepository)
+    public EmployeService(IEmployeRepository employeRepository)
     {
-        _userManager = userManager;
         _employeRepository = employeRepository;
     }
 
@@ -33,32 +30,7 @@ public class EmployeService : IEmployeService
                 Email = employeRequest.Email,
                 EmailConfirmed = true
             };
-
-            var result = await _userManager.CreateAsync(user, employeRequest.Password);
-            if (!result.Succeeded)
-            {
-                var firstError = result.Errors.First();
-                switch (firstError.Code)
-                {
-                    case "DuplicateUserName":
-                    case "DuplicateEmail":
-                        throw new UtilisateurExisteDeja();
-                    case "PasswordTooShort":
-                    case "PasswordRequiresDigit":
-                    case "PasswordRequiresLower":
-                    case "PasswordRequiresUpper":
-                    case "PasswordRequiresUniqueChars":
-                    case "PasswordRequiresNonAlphanumeric":
-                        throw new FormatMotDePasseInvalide();
-                    default:
-                        throw new Exception("Erreur lors de la création de l'utilisateur");
-                }
-            }
-
-            await _userManager.AddToRoleAsync(user, Role.Employe.ToString());
-
-            var userId = await _userManager.GetUserIdAsync(user);
-
+            
             var employe = new Domain.Entities.Employe(
                 nom: employeRequest.Nom,
                 prenom: employeRequest.Prenom,
@@ -67,7 +39,7 @@ public class EmployeService : IEmployeService
                 statut: employeRequest.Statut
             );
 
-            _employeRepository.Ajouter(employe, userId);
+            await _employeRepository.Ajouter(employe, user, employeRequest.Password);
 
             var response = new BaseResponse(
                 HttpStatusCode.Created,

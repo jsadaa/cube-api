@@ -13,13 +13,11 @@ namespace ApiCube.Application.Services.Client;
 
 public class ClientService : IClientService
 {
-    private readonly UserManager<ApplicationUserModel> _userManager;
     private readonly IClientRepository _clientRepository;
 
-    public ClientService(UserManager<ApplicationUserModel> userManager,
+    public ClientService(
         IClientRepository clientRepository)
     {
-        _userManager = userManager;
         _clientRepository = clientRepository;
     }
 
@@ -33,31 +31,6 @@ public class ClientService : IClientService
                 Email = clientRequest.Email,
                 EmailConfirmed = true
             };
-
-            var result = await _userManager.CreateAsync(user, clientRequest.Password);
-            if (!result.Succeeded)
-            {
-                var firstError = result.Errors.First();
-                switch (firstError.Code)
-                {
-                    case "DuplicateUserName":
-                    case "DuplicateEmail":
-                        throw new UtilisateurExisteDeja();
-                    case "PasswordTooShort":
-                    case "PasswordRequiresDigit":
-                    case "PasswordRequiresLower":
-                    case "PasswordRequiresUpper":
-                    case "PasswordRequiresUniqueChars":
-                    case "PasswordRequiresNonAlphanumeric":
-                        throw new FormatMotDePasseInvalide();
-                    default:
-                        throw new Exception("Erreur lors de la création de l'utilisateur");
-                }
-            }
-
-            await _userManager.AddToRoleAsync(user, Role.Client.ToString());
-
-            var userId = await _userManager.GetUserIdAsync(user);
 
             var client = new Domain.Entities.Client(
                 username: clientRequest.Nom + clientRequest.Prenom,
@@ -73,7 +46,7 @@ public class ClientService : IClientService
                 dateInscription: DateTime.Now
             );
 
-            _clientRepository.Ajouter(client, userId);
+            await _clientRepository.Ajouter(client, user, clientRequest.Password);
 
             var response = new BaseResponse(
                 HttpStatusCode.Created,

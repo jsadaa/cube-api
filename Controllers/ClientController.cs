@@ -1,5 +1,6 @@
 using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
+using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Services.Client;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,5 +38,23 @@ namespace ApiCube.Controllers
             var response = await _clientService.AjouterUnClient(clientRequest);
             return StatusCode(response.StatusCode, response.Data);
         }
+        /*
+        /// <summary>
+        /// Lister les clients
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200"></response>
+        /// <response code="500">unexpected_error</response>
+        [HttpGet("")]
+        [ActionName("ListerLesClients")]
+        [ProducesResponseType(typeof(IEnumerable<ClientResponse>), 200)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
+        [Produces("application/json")]
+        public async Task<IActionResult> ListerLesClients()
+        {
+            var response = await _clientService.ListerLesClients();
+            return StatusCode(response.StatusCode, response.Data);
+        }
+        */
     }
 }

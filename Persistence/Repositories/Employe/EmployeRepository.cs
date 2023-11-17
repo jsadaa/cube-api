@@ -1,5 +1,8 @@
+using ApiCube.Application.Exceptions;
+using ApiCube.Domain.Enums.Administration;
 using ApiCube.Persistence.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 
 namespace ApiCube.Persistence.Repositories.Employe;
 
@@ -7,19 +10,45 @@ public class EmployeRepository : IEmployeRepository
 {
     private readonly ApiDbContext _context;
     private readonly IMapper _mapper;
+    private readonly UserManager<ApplicationUserModel> _userManager;
 
-    public EmployeRepository(ApiDbContext context, IMapper mapper)
+    public EmployeRepository(ApiDbContext context, IMapper mapper, UserManager<ApplicationUserModel> userManager)
     {
         _context = context;
         _mapper = mapper;
+        _userManager = userManager;
     }
 
-    public void Ajouter(Domain.Entities.Employe employe, string userId)
+    public async Task Ajouter(Domain.Entities.Employe employe, ApplicationUserModel applicationUserModel, string password)
     {
+        var creationAppUser = await _userManager.CreateAsync(applicationUserModel, password);
+        if (!creationAppUser.Succeeded)
+        {
+            var firstError = creationAppUser.Errors.First();
+            switch (firstError.Code)
+            {
+                case "DuplicateUserName":
+                case "DuplicateEmail":
+                    throw new UtilisateurExisteDeja();
+                case "PasswordTooShort":
+                case "PasswordRequiresDigit":
+                case "PasswordRequiresLower":
+                case "PasswordRequiresUpper":
+                case "PasswordRequiresUniqueChars":
+                case "PasswordRequiresNonAlphanumeric":
+                    throw new FormatMotDePasseInvalide();
+                default:
+                    throw new Exception("Erreur lors de la création de l'utilisateur");
+            }
+        }
+        
+        await _userManager.AddToRoleAsync(applicationUserModel, Role.Employe.ToString());
+
+        var userId = await _userManager.GetUserIdAsync(applicationUserModel);
         var employeModel = _mapper.Map<Domain.Entities.Employe, EmployeModel>(employe);
         employeModel.ApplicationUserId = userId;
 
         _context.Employes.Add(employeModel);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 }
