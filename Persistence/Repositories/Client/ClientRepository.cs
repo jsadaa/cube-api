@@ -89,8 +89,8 @@ public class ClientRepository : IClientRepository
         applicationUser.Email = clientModifié.Email;
         applicationUser.UserName = clientModifié.Nom + clientModifié.Prenom;
 
-        var token = _userManager.GeneratePasswordResetTokenAsync(applicationUser).Result;
-        var resetPassword = _userManager.ResetPasswordAsync(applicationUser, token, password).Result;
+        var token = await _userManager.GeneratePasswordResetTokenAsync(applicationUser);
+        var resetPassword = await _userManager.ResetPasswordAsync(applicationUser, token, password);
 
         if (!resetPassword.Succeeded)
         {
@@ -109,7 +109,7 @@ public class ClientRepository : IClientRepository
             }
         }
 
-        var updateAppUser = _userManager.UpdateAsync(applicationUser).Result;
+        var updateAppUser = await _userManager.UpdateAsync(applicationUser);
 
         if (!updateAppUser.Succeeded)
         {
