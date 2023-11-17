@@ -1,3 +1,4 @@
+using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests.Stock;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Services.Stock;
@@ -21,16 +22,16 @@ namespace ApiCube.Controllers
         /// </summary>
         /// <param name="stockRequest"></param>
         /// <returns></returns>
-        /// <response code="201">Le stock de produit a été ajouté avec succès</response>
-        /// <response code="400">Le stock de produit n'a pas pu être ajouté</response>
-        /// <response code="409">Le stock de produit existe déjà</response>
-        /// <response code="500">Erreur interne</response>
+        /// <response code="201">stock_ajoute</response>
+        /// <response code="400">donnees_invalides</response>
+        /// <response code="409">stock_existe_deja</response>
+        /// <response code="500">unexpected_error</response>
         [HttpPost("")]
         [ActionName("AjouterUnStockDeProduit")]
         [ProducesResponseType(typeof(string), 201)]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 409)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 400)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 409)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult AjouterUnStockDeProduit([FromBody] StockRequest stockRequest)
         {
@@ -42,13 +43,13 @@ namespace ApiCube.Controllers
         /// Lister les stocks
         /// </summary>
         /// <returns> Liste des stocks </returns>
-        /// <response code="200">Liste des stocks</response>
-        /// <response code="500">Erreur interne</response>
+        /// <response code="200"></response>
+        /// <response code="500">unexpected_error</response>
         [HttpGet("")]
         [ActionName("ListerLesStocks")]
         [ProducesResponseType(typeof(List<StockResponse>), 200)]
-        [ProducesResponseType(typeof(string), 200)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 200)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult ListerLesStocks()
         {
@@ -61,14 +62,15 @@ namespace ApiCube.Controllers
         /// </summary>
         /// <param name="id">Identifiant du stock</param>
         /// <returns> Stock </returns>
-        /// <response code="200">Stock</response>
-        /// <response code="404">Stock non trouvé</response>
-        /// <response code="500">Erreur interne</response>
+        /// <response code="200"></response>
+        /// <response code="400">donnees_invalides</response>
+        /// <response code="404">stock_introuvable</response>
+        /// <response code="500">unexpected_error</response>
         [HttpGet("{id:int}")]
         [ActionName("TrouverUnStockParId")]
         [ProducesResponseType(typeof(StockResponse), 200)]
-        [ProducesResponseType(typeof(string), 404)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 404)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult TrouverUnStock(int id)
         {
@@ -82,16 +84,18 @@ namespace ApiCube.Controllers
         /// <param name="id">Identifiant du stock</param>
         /// <param name="stockUpdate"></param>
         /// <returns></returns>
-        /// <response code="200">Le stock a été modifié avec succès</response>
-        /// <response code="400">Le stock n'a pas pu être modifié</response>
-        /// <response code="404">Le stock n'a pas été trouvé</response>
-        /// <response code="500">Erreur interne</response>
+        /// <response code="200">stock_modifie</response>
+        /// <response code="400">donnees_invalides</response>
+        /// <response code="404">stock_introuvable</response>
+        /// <response code="409">stock_existe_deja</response>
+        /// <response code="500">erreur_interne</response>
         [HttpPut("{id:int}")]
         [ActionName("ModifierUnStock")]
         [ProducesResponseType(typeof(string), 200)]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 404)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 400)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 404)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 409)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult ModifierUnStock(int id, [FromBody] StockUpdate stockUpdate)
         {
@@ -104,16 +108,16 @@ namespace ApiCube.Controllers
         /// </summary>
         /// <param name="id">Identifiant du stock</param>
         /// <returns></returns>
-        /// <response code="200">Le stock a été supprimé avec succès</response>
-        /// <response code="400">Le stock n'a pas pu être supprimé</response>
-        /// <response code="404">Le stock n'a pas été trouvé</response>
-        /// <response code="500">Erreur interne</response>
+        /// <response code="200">stock_supprime</response>
+        /// <response code="400">donnees_invalides</response>
+        /// <response code="404">stock_introuvable</response>
+        /// <response code="500">erreur_interne</response>
         [HttpDelete("{id:int}")]
         [ActionName("SupprimerUnStock")]
         [ProducesResponseType(typeof(string), 200)]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 404)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 400)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 404)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult SupprimerUnStock(int id)
         {

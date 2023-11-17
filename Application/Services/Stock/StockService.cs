@@ -49,7 +49,7 @@ public class StockService : IStockService
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
-                data: new { message = "Stock ajouté avec succès" }
+                data: new { code = "stock_ajoute" }
             );
 
             return response;
@@ -58,7 +58,7 @@ public class StockService : IStockService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Conflict,
-                data: new { message = "Ce stock existe déjà" }
+                data: new { code = "stock_existe_deja" }
             );
 
             return response;
@@ -67,7 +67,7 @@ public class StockService : IStockService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -92,7 +92,7 @@ public class StockService : IStockService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -117,7 +117,7 @@ public class StockService : IStockService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -126,7 +126,7 @@ public class StockService : IStockService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -148,7 +148,7 @@ public class StockService : IStockService
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: new { message = "Stock modifié avec succès" }
+                data: new { code = "stock_modifie" }
             );
 
             return response;
@@ -157,7 +157,7 @@ public class StockService : IStockService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -166,7 +166,7 @@ public class StockService : IStockService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Conflict,
-                data: new { message = "Ce stock existe déjà" }
+                data: new { code = "stock_existe_deja" }
             );
 
             return response;
@@ -175,7 +175,7 @@ public class StockService : IStockService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -195,7 +195,7 @@ public class StockService : IStockService
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: new { message = "Stock supprimé avec succès" }
+                data: new { code = "stock_supprime" }
             );
 
             return response;
@@ -204,7 +204,7 @@ public class StockService : IStockService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -213,7 +213,7 @@ public class StockService : IStockService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;

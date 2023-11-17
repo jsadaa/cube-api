@@ -1,3 +1,4 @@
+using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests.Auth;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Services.Auth;
@@ -21,14 +22,14 @@ public class AuthController : ControllerBase
     /// </summary>
     /// <param name="loginRequest"></param>
     /// <returns></returns>
-    /// <response code="200">Le client est connecté</response>
-    /// <response code="401">Email ou mot de passe incorrect</response>
-    /// <response code="500">Erreur interne</response>
+    /// <response code="200"></response>
+    /// <response code="401">identifiants_incorrects</response>
+    /// <response code="500">unexpected_error</response>
     [HttpPost("login")]
     [ActionName("Login")]
     [ProducesResponseType(typeof(TokenResponse), 200)]
-    [ProducesResponseType(typeof(string), 401)]
-    [ProducesResponseType(typeof(string), 500)]
+    [ProducesResponseType(typeof(ExpectedErrorResponse), 401)]
+    [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
     [Produces("application/json")]
     public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
     {
@@ -42,14 +43,14 @@ public class AuthController : ControllerBase
     /// </summary>
     /// <param name="refreshTokenRequest"></param>
     /// <returns></returns>
-    /// <response code="200">Le token a été rafraîchi avec succès</response>
-    /// <response code="401">Le token est invalide</response>
-    /// <response code="500">Erreur interne</response>
+    /// <response code="200"></response>
+    /// <response code="401">claim_invalide | refresh_token_invalide | jwt_token_invalide | token_non_expire</response>
+    /// <response code="500">unexpected_error</response>
     [HttpPost("refresh-token")]
     [ActionName("RefreshToken")]
     [ProducesResponseType(typeof(TokenResponse), 200)]
-    [ProducesResponseType(typeof(string), 401)]
-    [ProducesResponseType(typeof(string), 500)]
+    [ProducesResponseType(typeof(ExpectedErrorResponse), 401)]
+    [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest refreshTokenRequest)
     {
         var response = await _authService.RefreshToken(refreshTokenRequest);

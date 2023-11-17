@@ -2,7 +2,7 @@ namespace ApiCube.Application.Exceptions;
 
 public class ClaimInvalide : Exception
 {
-    public ClaimInvalide() : base("Le claim est invalide.")
+    public ClaimInvalide() : base("claim_invalide")
     {
     }
 

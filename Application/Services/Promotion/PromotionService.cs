@@ -37,7 +37,7 @@ public class PromotionService : IPromotionService
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
-                data: new { message = "Promotion ajoutée avec succès" }
+                data: new { code = "promotion_ajoute" }
             );
 
             return response;
@@ -46,7 +46,7 @@ public class PromotionService : IPromotionService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -71,7 +71,7 @@ public class PromotionService : IPromotionService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -96,7 +96,7 @@ public class PromotionService : IPromotionService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -105,7 +105,7 @@ public class PromotionService : IPromotionService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -129,7 +129,7 @@ public class PromotionService : IPromotionService
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: new { message = "Promotion modifiée avec succès" }
+                data: new { code = "promotion_modifiee" }
             );
 
             return response;
@@ -138,7 +138,7 @@ public class PromotionService : IPromotionService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -147,7 +147,7 @@ public class PromotionService : IPromotionService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -163,7 +163,7 @@ public class PromotionService : IPromotionService
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: new { message = "Promotion supprimée avec succès" }
+                data: new { code = "promotion_supprimee" }
             );
 
             return response;
@@ -172,7 +172,7 @@ public class PromotionService : IPromotionService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -181,7 +181,7 @@ public class PromotionService : IPromotionService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;

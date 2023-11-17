@@ -62,7 +62,7 @@ public class ProduitService : IProduitService
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
-                data: new { message = "Produit ajouté au stock avec succès" }
+                data: new { code = "produit_ajoute" }
             );
 
             return response;
@@ -71,7 +71,7 @@ public class ProduitService : IProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Conflict,
-                data: new { message = "Ce produit existe déjà dans le stock" }
+                data: new { code = "produit_existe_deja" }
             );
 
             return response;
@@ -80,7 +80,7 @@ public class ProduitService : IProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -105,7 +105,7 @@ public class ProduitService : IProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -124,7 +124,7 @@ public class ProduitService : IProduitService
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: new { message = "Promotion appliquée avec succès" }
+                data: new { code = "promotion_applique" }
             );
 
             return response;
@@ -133,7 +133,7 @@ public class ProduitService : IProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -142,7 +142,7 @@ public class ProduitService : IProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -151,7 +151,7 @@ public class ProduitService : IProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -169,7 +169,7 @@ public class ProduitService : IProduitService
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: new { message = "Promotion supprimée avec succès" }
+                data: new { code = "promotion_retiree" }
             );
 
             return response;
@@ -178,7 +178,7 @@ public class ProduitService : IProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -187,7 +187,7 @@ public class ProduitService : IProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -212,7 +212,7 @@ public class ProduitService : IProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -221,7 +221,7 @@ public class ProduitService : IProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -251,7 +251,7 @@ public class ProduitService : IProduitService
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: new { message = "Produit modifié avec succès" }
+                data: new { code = "produit_modifie" }
             );
 
             return response;
@@ -260,7 +260,7 @@ public class ProduitService : IProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -269,7 +269,7 @@ public class ProduitService : IProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Conflict,
-                data: new { message = "Ce produit existe déjà dans le stock" }
+                data: new { code = "produit_existe_deja" }
             );
 
             return response;
@@ -278,7 +278,7 @@ public class ProduitService : IProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -294,7 +294,7 @@ public class ProduitService : IProduitService
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: new { message = "Produit supprimé avec succès" }
+                data: new { code = "produit_supprime" }
             );
 
             return response;
@@ -303,7 +303,7 @@ public class ProduitService : IProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -312,7 +312,7 @@ public class ProduitService : IProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;

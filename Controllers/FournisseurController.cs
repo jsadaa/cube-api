@@ -1,3 +1,4 @@
+using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Services.Fournisseur;
@@ -21,16 +22,16 @@ namespace ApiCube.Controllers
         /// </summary>
         /// <param name="fournisseurRequest"></param>
         /// <returns></returns>
-        /// <response code="201">Le fournisseur a été ajouté avec succès</response>
-        /// <response code="400">Le fournisseur n'a pas pu être ajouté</response>
-        /// <response code="409">Le fournisseur existe déjà</response>
-        /// <response code="500">Erreur interne</response>
+        /// <response code="201">fournisseur_ajoute</response>
+        /// <response code="400">donnees_invalides</response>
+        /// <response code="409">fournisseur_existe_deja</response>
+        /// <response code="500">unexpected_error</response>
         [HttpPost("")]
         [ActionName("AjouterUnFournisseur")]
         [ProducesResponseType(typeof(string), 201)]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 409)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 400)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 409)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult AjouterUnFournisseur([FromBody] FournisseurRequest fournisseurRequest)
         {
@@ -43,12 +44,12 @@ namespace ApiCube.Controllers
         /// Lister les fournisseurs
         /// </summary>
         /// <returns> Liste des fournisseurs </returns>
-        /// <response code="200">Liste des fournisseurs</response>
-        /// <response code="500">Erreur interne</response>
+        /// <response code="200"></response>
+        /// <response code="500">unexpected_error</response>
         [HttpGet("")]
         [ActionName("ListerLesFournisseurs")]
         [ProducesResponseType(typeof(List<FournisseurResponse>), 200)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult ListerLesFournisseurs()
         {
@@ -61,14 +62,14 @@ namespace ApiCube.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns> Fournisseur </returns>
-        /// <response code="200">Fournisseur</response>
-        /// <response code="404">Fournisseur non trouvé</response>
-        /// <response code="500">Erreur interne</response>
+        /// <response code="200"></response>
+        /// <response code="404">fournisseur_introuvable</response>
+        /// <response code="500">unexpected_error</response>
         [HttpGet("{id:int}")]
         [ActionName("TrouverUnFournisseurParId")]
         [ProducesResponseType(typeof(FournisseurResponse), 200)]
-        [ProducesResponseType(typeof(string), 404)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 404)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult TrouverUnFournisseur(int id)
         {
@@ -82,16 +83,18 @@ namespace ApiCube.Controllers
         /// <param name="id"></param>
         /// <param name="fournisseurRequest"></param>
         /// <returns></returns>
-        /// <response code="200">Le fournisseur a été modifié avec succès</response>
-        /// <response code="400">Le fournisseur n'a pas pu être modifié</response>
-        /// <response code="404">Le fournisseur n'a pas été trouvé</response>
+        /// <response code="200">fournisseur_modifie</response>
+        /// <response code="400">donnees_invalides</response>
+        /// <response code="404">fournisseur_introuvable</response>
+        /// <response code="409">fournisseur_existe_deja</response>
         /// <response code="500">Erreur interne</response>
         [HttpPut("{id:int}")]
         [ActionName("ModifierUnFournisseur")]
         [ProducesResponseType(typeof(string), 200)]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 404)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 400)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 404)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 409)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult ModifierUnFournisseur(int id, [FromBody] FournisseurRequest fournisseurRequest)
         {
@@ -104,16 +107,16 @@ namespace ApiCube.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        /// <response code="200">Le fournisseur a été supprimé avec succès</response>
-        /// <response code="400">Le fournisseur n'a pas pu être supprimé</response>
-        /// <response code="404">Le fournisseur n'a pas été trouvé</response>
-        /// <response code="500">Erreur interne</response>
+        /// <response code="200">fournisseur_supprime</response>
+        /// <response code="400">donnees_invalides</response>
+        /// <response code="404">fournisseur_introuvable</response>
+        /// <response code="500">unexpected_error</response>
         [HttpDelete("{id:int}")]
         [ActionName("SupprimerUnFournisseur")]
         [ProducesResponseType(typeof(string), 200)]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 404)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 400)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 404)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult SupprimerUnFournisseur(int id)
         {

@@ -2,7 +2,7 @@ namespace ApiCube.Domain.Exceptions;
 
 public class TypeTransactionStockInexistant : Exception
 {
-    public TypeTransactionStockInexistant() : base("Le type de transaction n'existe pas")
+    public TypeTransactionStockInexistant() : base("type_transaction_stock_inexistant")
     {
     }
 

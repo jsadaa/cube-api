@@ -2,7 +2,7 @@ namespace ApiCube.Persistence.Exceptions;
 
 public class PromotionIntrouvable : Exception
 {
-    public PromotionIntrouvable() : base("La promotion est introuvable")
+    public PromotionIntrouvable() : base("promotion_introuvable")
     {
     }
 

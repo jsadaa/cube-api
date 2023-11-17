@@ -39,7 +39,7 @@ public class FournisseurService : IFournisseurService
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
-                data: new { message = "Fournisseur ajouté avec succès" }
+                data: new { code = "fournisseur_ajoute" }
             );
 
             return response;
@@ -48,7 +48,7 @@ public class FournisseurService : IFournisseurService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Conflict,
-                data: new { message = "Ce fournisseur existe déjà" }
+                data: new { code = "fournisseur_existe_deja" }
             );
 
             return response;
@@ -57,7 +57,7 @@ public class FournisseurService : IFournisseurService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -82,7 +82,7 @@ public class FournisseurService : IFournisseurService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -106,7 +106,7 @@ public class FournisseurService : IFournisseurService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -115,7 +115,7 @@ public class FournisseurService : IFournisseurService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -142,7 +142,7 @@ public class FournisseurService : IFournisseurService
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: new { message = "Fournisseur modifié avec succès" }
+                data: new { code = "fournisseur_modifie" }
             );
 
             return response;
@@ -151,7 +151,7 @@ public class FournisseurService : IFournisseurService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -160,7 +160,7 @@ public class FournisseurService : IFournisseurService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Conflict,
-                data: new { message = "Ce fournisseur existe déjà" }
+                data: new { code = "fournisseur_existe_deja" }
             );
 
             return response;
@@ -169,7 +169,7 @@ public class FournisseurService : IFournisseurService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -186,7 +186,7 @@ public class FournisseurService : IFournisseurService
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: new { message = "Fournisseur supprimé avec succès" }
+                data: new { code = "fournisseur_supprime" }
             );
 
             return response;
@@ -195,7 +195,7 @@ public class FournisseurService : IFournisseurService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -204,7 +204,7 @@ public class FournisseurService : IFournisseurService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;

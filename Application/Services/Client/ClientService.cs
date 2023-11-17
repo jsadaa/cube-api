@@ -79,7 +79,7 @@ public class ClientService : IClientService
 
             var response = new BaseResponse(
                 HttpStatusCode.Created,
-                "Le client a été ajouté avec succès"
+                new { code = "client_ajoute" }
             );
 
             return response;
@@ -88,25 +88,25 @@ public class ClientService : IClientService
         {
             var response = new BaseResponse(
                 HttpStatusCode.Conflict,
-                "L'employé existe déjà"
+                new { code = "client_existe_deja" }
             );
 
             return response;
         }
-        catch (UtilisateurExisteDeja)
+        catch (UtilisateurExisteDeja e)
         {
             var response = new BaseResponse(
                 HttpStatusCode.Conflict,
-                "Un utilisateur avec ce nom ou cet email existe déjà"
+                new { code = e.Message }
             );
 
             return response;
         }
-        catch (FormatMotDePasseInvalide)
+        catch (FormatMotDePasseInvalide e)
         {
             var response = new BaseResponse(
                 HttpStatusCode.BadRequest,
-                "Le mot de passe doit contenir au moins 6 caractères dont une majuscule, une minuscule, un chiffre et un caractère spécial"
+                new { code = e.Message }
             );
 
             return response;
@@ -114,8 +114,8 @@ public class ClientService : IClientService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                HttpStatusCode.InternalServerError,
-                e.Message
+                statusCode: HttpStatusCode.InternalServerError,
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;

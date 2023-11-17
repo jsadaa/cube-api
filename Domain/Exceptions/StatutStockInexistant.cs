@@ -2,7 +2,7 @@ namespace ApiCube.Domain.Exceptions;
 
 public class StatutStockInexistant : Exception
 {
-    public StatutStockInexistant() : base("Le statut de stock n'existe pas")
+    public StatutStockInexistant() : base("statut_stock_inexistant")
     {
     }
 

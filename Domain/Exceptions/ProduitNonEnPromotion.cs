@@ -2,7 +2,7 @@ namespace ApiCube.Domain.Exceptions;
 
 public class ProduitNonEnPromotion : Exception
 {
-    public ProduitNonEnPromotion() : base("Le produit n'est pas en promotion")
+    public ProduitNonEnPromotion() : base("produit_non_en_promotion")
     {
     }
 

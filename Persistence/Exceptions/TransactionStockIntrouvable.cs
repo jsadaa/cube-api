@@ -2,7 +2,7 @@ namespace ApiCube.Persistence.Exceptions;
 
 public class TransactionStockIntrouvable : Exception
 {
-    public TransactionStockIntrouvable() : base("La transaction stock est introuvable.")
+    public TransactionStockIntrouvable() : base("transaction_stock_introuvable")
     {
     }
 

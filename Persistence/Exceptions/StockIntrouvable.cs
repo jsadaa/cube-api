@@ -2,7 +2,7 @@ namespace ApiCube.Persistence.Exceptions;
 
 public class StockIntrouvable : Exception
 {
-    public StockIntrouvable() : base("Le stock n'a pas été trouvé.")
+    public StockIntrouvable() : base("stock_introuvable")
     {
     }
 

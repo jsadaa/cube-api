@@ -2,7 +2,7 @@ namespace ApiCube.Application.Exceptions;
 
 public class RefreshTokenInvalide : Exception
 {
-    public RefreshTokenInvalide() : base("Le token de rafraîchissement est invalide.")
+    public RefreshTokenInvalide() : base("refresh_token_invalide")
     {
     }
 

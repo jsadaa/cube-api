@@ -1,3 +1,4 @@
+using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.Services.Client;
 using Microsoft.AspNetCore.Mvc;
@@ -20,16 +21,16 @@ namespace ApiCube.Controllers
         /// </summary>
         /// <param name="clientRequest"></param>
         /// <returns></returns>
-        /// <response code="201">Le client a été ajouté avec succès</response>
-        /// <response code="400">Données invalides</response>
-        /// <response code="409">Le client existe déjà</response>
-        /// <response code="500">Erreur interne</response>
+        /// <response code="201">client_ajoute</response>
+        /// <response code="400">format_mot_de_passe_invalide</response>
+        /// <response code="409">client_existe_deja | utilisateur_existe_deja</response>
+        /// <response code="500">unexpected_error</response>
         [HttpPost("")]
         [ActionName("AjouterUnClient")]
         [ProducesResponseType(typeof(string), 201)]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 409)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 400)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 409)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public async Task<IActionResult> AjouterUnClient([FromBody] ClientRequest clientRequest)
         {

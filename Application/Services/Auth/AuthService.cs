@@ -32,7 +32,7 @@ public class AuthService : IAuthService
         {
             var user = await _userManager.FindByEmailAsync(loginRequest.Email);
             if (user == null || !await _userManager.CheckPasswordAsync(user, loginRequest.Password))
-                throw new EmailOuMotDePasseIncorrect();
+                throw new IdentifiantsIncorrects();
 
             var tokenString = await GenerateJwtToken(user);
             var refreshToken = GenerateRefreshToken();
@@ -53,11 +53,11 @@ public class AuthService : IAuthService
 
             return response;
         }
-        catch (EmailOuMotDePasseIncorrect e)
+        catch (IdentifiantsIncorrects e)
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Unauthorized,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -66,7 +66,7 @@ public class AuthService : IAuthService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -108,8 +108,8 @@ public class AuthService : IAuthService
         catch (UtilisateurIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.Unauthorized,
-                data: new { message = e.Message }
+                statusCode: HttpStatusCode.NotFound,
+                data: new { code = e.Message }
             );
 
             return response;
@@ -118,7 +118,7 @@ public class AuthService : IAuthService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Unauthorized,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -127,7 +127,7 @@ public class AuthService : IAuthService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Unauthorized,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -136,7 +136,7 @@ public class AuthService : IAuthService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Unauthorized,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -145,7 +145,7 @@ public class AuthService : IAuthService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -192,11 +192,10 @@ public class AuthService : IAuthService
         if (tokenHandler.ReadToken(token) is not JwtSecurityToken securityToken ||
             !securityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
                 StringComparison.InvariantCultureIgnoreCase))
-            throw new SecurityTokenException("Invalid token");
+            throw new SecurityTokenException("jwt_token_invalide");
 
         if (securityToken.ValidTo > DateTime.UtcNow)
-            throw new SecurityTokenException("Token is not yet expired");
-        _logger.LogInformation("Token is expired");
+            throw new SecurityTokenException("token_non_expire");
 
         var tokenValidationParameters = new TokenValidationParameters
         {

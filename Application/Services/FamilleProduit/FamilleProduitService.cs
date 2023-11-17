@@ -34,7 +34,7 @@ public class FamilleProduitService : IFamilleProduitService
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Created,
-                data: new { message = "Famille de produit ajoutée avec succès" }
+                data: new { code = "famille_produit_ajoute" }
             );
 
             return response;
@@ -43,7 +43,7 @@ public class FamilleProduitService : IFamilleProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Conflict,
-                data: new { message = "Cette famille de produit existe déjà" }
+                data: new { code = "famille_produit_existe_deja" }
             );
 
             return response;
@@ -52,7 +52,7 @@ public class FamilleProduitService : IFamilleProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -77,7 +77,7 @@ public class FamilleProduitService : IFamilleProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -102,7 +102,7 @@ public class FamilleProduitService : IFamilleProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -111,7 +111,7 @@ public class FamilleProduitService : IFamilleProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -133,7 +133,7 @@ public class FamilleProduitService : IFamilleProduitService
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: new { message = "Famille de produit modifiée avec succès" }
+                data: new { code = "famille_produit_modifiee" }
             );
 
             return response;
@@ -142,7 +142,7 @@ public class FamilleProduitService : IFamilleProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -151,7 +151,7 @@ public class FamilleProduitService : IFamilleProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.Conflict,
-                data: new { message = "Cette famille de produit existe déjà" }
+                data: new { code = "famille_produit_existe_deja" }
             );
 
             return response;
@@ -160,7 +160,7 @@ public class FamilleProduitService : IFamilleProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -177,7 +177,7 @@ public class FamilleProduitService : IFamilleProduitService
 
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.OK,
-                data: new { message = "Famille de produit supprimée avec succès" }
+                data: new { code = "famille_produit_supprimee" }
             );
 
             return response;
@@ -186,7 +186,7 @@ public class FamilleProduitService : IFamilleProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.NotFound,
-                data: new { message = e.Message }
+                data: new { code = e.Message }
             );
 
             return response;
@@ -195,7 +195,7 @@ public class FamilleProduitService : IFamilleProduitService
         {
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
-                data: new { message = e.Message }
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;

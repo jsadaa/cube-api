@@ -1,3 +1,4 @@
+using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Services.Promotion;
@@ -21,16 +22,16 @@ namespace ApiCube.Controllers
         /// </summary>
         /// <param name="promotionRequest"></param>
         /// <returns></returns>
-        /// <response code="201">La promotion a été ajoutée avec succès</response>
-        /// <response code="400">La promotion n'a pas pu être ajoutée</response>
-        /// <response code="409">La promotion existe déjà</response>
-        /// <response code="500">Erreur interne</response>
+        /// <response code="201">promotion_ajoute</response>
+        /// <response code="400">donnees_invalides</response>
+        /// <response code="409">promotion_existe_deja</response>
+        /// <response code="500">unexpected_error</response>
         [HttpPost("")]
         [ActionName("AjouterUnePromotion")]
         [ProducesResponseType(typeof(string), 201)]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 409)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 400)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 409)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult AjouterUnePromotion([FromBody] PromotionRequest promotionRequest)
         {
@@ -42,12 +43,12 @@ namespace ApiCube.Controllers
         /// Lister les promotions
         /// </summary>
         /// <returns> Liste des promotions </returns>
-        /// <response code="200">Liste des promotions</response>
-        /// <response code="500">Erreur interne</response>
+        /// <response code="200"></response>
+        /// <response code="500">unexpected_error</response>
         [HttpGet("")]
         [ActionName("ListerLesPromotions")]
         [ProducesResponseType(typeof(PromotionResponse), 200)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult ListerLesPromotions()
         {
@@ -60,16 +61,16 @@ namespace ApiCube.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns> Promotion </returns>
-        /// <response code="200">Promotion</response>
-        /// <response code="404">Promotion non trouvée</response>
-        /// <response code="500">Erreur interne</response>
-        /// <response code="400">Id invalide</response>
+        /// <response code="200"></response>
+        /// <response code="400">donnees_invalides</response>
+        /// <response code="404">promotion_introuvable</response>
+        /// <response code="500">erreur_interne</response>
         [HttpGet("{id:int}")]
         [ActionName("TrouverUnePromotionParId")]
         [ProducesResponseType(typeof(PromotionResponse), 200)]
-        [ProducesResponseType(typeof(string), 404)]
-        [ProducesResponseType(typeof(string), 500)]
-        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 400)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 404)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult TrouverUnePromotion(int id)
         {
@@ -83,18 +84,18 @@ namespace ApiCube.Controllers
         /// <param name="id"></param>
         /// <param name="promotionRequest"></param>
         /// <returns></returns>
-        /// <response code="200">La promotion a été modifiée avec succès</response>
-        /// <response code="400">Id invalide</response>
-        /// <response code="404">La promotion n'a pas été trouvée</response>
-        /// <response code="409">La promotion existe déjà</response>
-        /// <response code="500">Erreur interne</response>
+        /// <response code="200">promotion_modifiee</response>
+        /// <response code="400">donnees_invalides</response>
+        /// <response code="404">promotion_introuvable</response>
+        /// <response code="409">promotion_existe_deja</response>
+        /// <response code="500">unexpected_error</response>
         [HttpPut("{id:int}")]
         [ActionName("ModifierUnePromotion")]
         [ProducesResponseType(typeof(string), 200)]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 404)]
-        [ProducesResponseType(typeof(string), 409)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 400)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 404)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 409)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult ModifierUnePromotion(int id, [FromBody] PromotionRequest promotionRequest)
         {
@@ -107,16 +108,16 @@ namespace ApiCube.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        /// <response code="200">La promotion a été supprimée avec succès</response>
-        /// <response code="400">Id invalide</response>
-        /// <response code="404">La promotion n'a pas été trouvée</response>
-        /// <response code="500">Erreur interne</response>
+        /// <response code="200">promotion_supprimee</response>
+        /// <response code="400">donnees_invalides</response>
+        /// <response code="404">promotion_introuvable</response>
+        /// <response code="500">unexpected_error</response>
         [HttpDelete("{id:int}")]
         [ActionName("SupprimerUnePromotion")]
         [ProducesResponseType(typeof(string), 200)]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 404)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 400)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 404)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult SupprimerUnePromotion(int id)
         {

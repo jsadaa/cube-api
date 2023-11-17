@@ -1,3 +1,4 @@
+using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Services.FamilleProduit;
@@ -21,16 +22,16 @@ namespace ApiCube.Controllers
         /// </summary>
         /// <param name="familleProduitRequest"></param>
         /// <returns></returns>
-        /// <response code="201">La famille de produit a été ajoutée avec succès</response>
-        /// <response code="400">La famille de produit n'a pas pu être ajoutée</response>
-        /// <response code="409">La famille de produit existe déjà</response>
-        /// <response code="500">Erreur interne</response>
+        /// <response code="201">famille_produit_ajoute</response>
+        /// <response code="400">donnees_invalides</response>
+        /// <response code="409">famille_produit_existe_deja</response>
+        /// <response code="500">unexpected_error</response>
         [HttpPost("")]
         [ActionName("AjouterUneFamilleProduit")]
         [ProducesResponseType(typeof(string), 201)]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 409)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 400)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 409)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult AjouterUneFamilleProduit([FromBody] FamilleProduitRequest familleProduitRequest)
         {
@@ -42,12 +43,12 @@ namespace ApiCube.Controllers
         /// Lister les familles de produits
         /// </summary>
         /// <returns> Liste des familles de produits </returns>
-        /// <response code="200">Liste des familles de produits</response>
-        /// <response code="500">Erreur interne</response>
+        /// <response code="200"></response>
+        /// <response code="500">unexpected_error</response>
         [HttpGet("")]
         [ActionName("ListerLesFamillesProduits")]
         [ProducesResponseType(typeof(List<FamilleProduitResponse>), 200)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult ListerLesFamillesProduits()
         {
@@ -60,14 +61,14 @@ namespace ApiCube.Controllers
         /// </summary>
         /// <param name="id">Identifiant de la famille de produit</param>
         /// <returns> Famille de produit </returns>
-        /// <response code="200">Famille de produit</response>
-        /// <response code="404">Famille de produit non trouvée</response>
-        /// <response code="500">Erreur interne</response>
+        /// <response code="200"></response>
+        /// <response code="404">famille_produit_introuvable</response>
+        /// <response code="500">unexpected_error</response>
         [HttpGet("{id:int}")]
         [ActionName("TrouverUneFamilleProduitParId")]
         [ProducesResponseType(typeof(FamilleProduitResponse), 200)]
-        [ProducesResponseType(typeof(string), 404)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 404)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult TrouverUneFamilleProduit(int id)
         {
@@ -81,16 +82,18 @@ namespace ApiCube.Controllers
         /// <param name="id">Identifiant de la famille de produit</param>
         /// <param name="familleProduitRequest"></param>
         /// <returns></returns>
-        /// <response code="200">La famille de produit a été modifiée avec succès</response>
-        /// <response code="400">La famille de produit n'a pas pu être modifiée</response>
-        /// <response code="404">La famille de produit n'a pas été trouvée</response>
-        /// <response code="500">Erreur interne</response>
+        /// <response code="200">famille_produit_modifiee</response>
+        /// <response code="400">donnees_invalides</response>
+        /// <response code="404">famille_produit_introuvable</response>
+        /// <response code="409">famille_produit_existe_deja</response>
+        /// <response code="500">unexpected_error</response>
         [HttpPut("{id:int}")]
         [ActionName("ModifierUneFamilleProduit")]
         [ProducesResponseType(typeof(string), 200)]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 404)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 400)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 404)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 409)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult ModifierUneFamilleProduit(int id, [FromBody] FamilleProduitRequest familleProduitRequest)
         {
@@ -103,16 +106,16 @@ namespace ApiCube.Controllers
         /// </summary>
         /// <param name="id">Identifiant de la famille de produit</param>
         /// <returns></returns>
-        /// <response code="200">La famille de produit a été supprimée avec succès</response>
-        /// <response code="400">La famille de produit n'a pas pu être supprimée</response>
-        /// <response code="404">La famille de produit n'a pas été trouvée</response>
-        /// <response code="500">Erreur interne</response>
+        /// <response code="200">famille_produit_supprimee</response>
+        /// <response code="400">donnees_invalides</response>
+        /// <response code="404">famille_produit_introuvable</response>
+        /// <response code="500">unexpected_error</response>
         [HttpDelete("{id:int}")]
         [ActionName("SupprimerUneFamilleProduit")]
         [ProducesResponseType(typeof(string), 200)]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 404)]
-        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 400)]
+        [ProducesResponseType(typeof(ExpectedErrorResponse), 404)]
+        [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult SupprimerUneFamilleProduit(int id)
         {

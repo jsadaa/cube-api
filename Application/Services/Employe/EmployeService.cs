@@ -73,7 +73,7 @@ public class EmployeService : IEmployeService
 
             var response = new BaseResponse(
                 HttpStatusCode.Created,
-                "L'employé a été ajouté avec succès"
+                new { code = "employe_ajoute" }
             );
 
             return response;
@@ -82,25 +82,25 @@ public class EmployeService : IEmployeService
         {
             var response = new BaseResponse(
                 HttpStatusCode.Conflict,
-                "L'employé existe déjà"
+                "employe_existe_deja"
             );
 
             return response;
         }
-        catch (UtilisateurExisteDeja)
+        catch (UtilisateurExisteDeja e)
         {
             var response = new BaseResponse(
                 HttpStatusCode.Conflict,
-                "Un utilisateur avec ce nom ou cet email existe déjà"
+                new { code = e.Message }
             );
 
             return response;
         }
-        catch (FormatMotDePasseInvalide)
+        catch (FormatMotDePasseInvalide e)
         {
             var response = new BaseResponse(
                 HttpStatusCode.BadRequest,
-                "Le mot de passe doit contenir au moins 6 caractères dont une majuscule, une minuscule, un chiffre et un caractère spécial"
+                new { code = e.Message }
             );
 
             return response;
@@ -108,8 +108,8 @@ public class EmployeService : IEmployeService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                HttpStatusCode.InternalServerError,
-                e.Message
+                statusCode: HttpStatusCode.InternalServerError,
+                data: new { code = "unexpected_error", message = e.Message }
             );
 
             return response;

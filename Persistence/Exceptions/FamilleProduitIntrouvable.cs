@@ -2,7 +2,7 @@ namespace ApiCube.Persistence.Exceptions;
 
 public class FamilleProduitIntrouvable : Exception
 {
-    public FamilleProduitIntrouvable() : base("La famille de produit n'a pas été trouvée.")
+    public FamilleProduitIntrouvable() : base("famille_produit_introuvable")
     {
     }
 

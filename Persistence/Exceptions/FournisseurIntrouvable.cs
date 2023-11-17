@@ -2,7 +2,7 @@ namespace ApiCube.Persistence.Exceptions;
 
 public class FournisseurIntrouvable : Exception
 {
-    public FournisseurIntrouvable() : base("Le fournisseur n'a pas été trouvé.")
+    public FournisseurIntrouvable() : base("fournisseur_introuvable")
     {
     }
 

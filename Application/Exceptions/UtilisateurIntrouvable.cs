@@ -2,7 +2,7 @@ namespace ApiCube.Application.Exceptions;
 
 public class UtilisateurIntrouvable : Exception
 {
-    public UtilisateurIntrouvable() : base("L'utilisateur est introuvable.")
+    public UtilisateurIntrouvable() : base("utilisateur_introuvable")
     {
     }
 

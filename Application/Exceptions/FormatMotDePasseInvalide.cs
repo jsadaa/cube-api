@@ -3,7 +3,7 @@ namespace ApiCube.Application.Exceptions;
 public class FormatMotDePasseInvalide : Exception
 {
     public FormatMotDePasseInvalide() : base(
-        "Le mot de passe doit contenir au moins 8 caractères dont une majuscule, une minuscule, un chiffre et un caractère spécial")
+        "format_mot_de_passe_invalide")
     {
     }
 
