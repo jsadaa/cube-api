@@ -19,7 +19,8 @@ public class EmployeRepository : IEmployeRepository
         _userManager = userManager;
     }
 
-    public async Task Ajouter(Domain.Entities.Employe employe, ApplicationUserModel applicationUserModel, string password)
+    public async Task Ajouter(Domain.Entities.Employe employe, ApplicationUserModel applicationUserModel,
+        string password)
     {
         var creationAppUser = await _userManager.CreateAsync(applicationUserModel, password);
         if (!creationAppUser.Succeeded)
@@ -41,7 +42,7 @@ public class EmployeRepository : IEmployeRepository
                     throw new Exception("Erreur lors de la création de l'utilisateur");
             }
         }
-        
+
         await _userManager.AddToRoleAsync(applicationUserModel, Role.Employe.ToString());
 
         var userId = await _userManager.GetUserIdAsync(applicationUserModel);

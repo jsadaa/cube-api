@@ -27,9 +27,9 @@ public class ApiDbContext : IdentityDbContext<ApplicationUserModel>
     public DbSet<LigneCommandeFournisseurModel> LignesCommandesFournisseurs { get; set; }
 
     public DbSet<FactureFournisseurModel> FacturesFournisseurs { get; set; }
-    
+
     public DbSet<EmployeModel> Employes { get; set; }
-    
+
     public DbSet<ClientModel> Clients { get; set; }
 
     public DbSet<ApplicationUserModel> ApplicationUsers { get; set; }

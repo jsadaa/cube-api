@@ -2,10 +2,8 @@ using System.Net;
 using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.Exceptions;
-using ApiCube.Domain.Enums.Administration;
 using ApiCube.Persistence.Models;
 using ApiCube.Persistence.Repositories.Employe;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 
@@ -30,7 +28,7 @@ public class EmployeService : IEmployeService
                 Email = employeRequest.Email,
                 EmailConfirmed = true
             };
-            
+
             var employe = new Domain.Entities.Employe(
                 nom: employeRequest.Nom,
                 prenom: employeRequest.Prenom,

@@ -1,11 +1,11 @@
 using System.Net;
 using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
+using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Exceptions;
-using ApiCube.Domain.Enums.Administration;
 using ApiCube.Persistence.Models;
 using ApiCube.Persistence.Repositories.Client;
-using Microsoft.AspNetCore.Identity;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 
@@ -14,11 +14,12 @@ namespace ApiCube.Application.Services.Client;
 public class ClientService : IClientService
 {
     private readonly IClientRepository _clientRepository;
+    private readonly IMapper _mapper;
 
-    public ClientService(
-        IClientRepository clientRepository)
+    public ClientService(IClientRepository clientRepository, IMapper mapper)
     {
         _clientRepository = clientRepository;
+        _mapper = mapper;
     }
 
     public async Task<BaseResponse> AjouterUnClient(ClientRequest clientRequest)
@@ -87,6 +88,31 @@ public class ClientService : IClientService
             var response = new BaseResponse(
                 statusCode: HttpStatusCode.InternalServerError,
                 data: new { code = "unexpected_error", message = e.Message }
+            );
+
+            return response;
+        }
+    }
+
+    public BaseResponse ListerLesClients()
+    {
+        try
+        {
+            var listeClients = _clientRepository.Lister();
+            var clients = _mapper.Map<List<ClientResponse>>(listeClients);
+
+            var response = new BaseResponse(
+                HttpStatusCode.OK,
+                clients
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;

@@ -38,7 +38,7 @@ namespace ApiCube.Controllers
             var response = await _clientService.AjouterUnClient(clientRequest);
             return StatusCode(response.StatusCode, response.Data);
         }
-        /*
+
         /// <summary>
         /// Lister les clients
         /// </summary>
@@ -50,11 +50,10 @@ namespace ApiCube.Controllers
         [ProducesResponseType(typeof(IEnumerable<ClientResponse>), 200)]
         [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
-        public async Task<IActionResult> ListerLesClients()
+        public IActionResult ListerLesClients()
         {
-            var response = await _clientService.ListerLesClients();
+            var response = _clientService.ListerLesClients();
             return StatusCode(response.StatusCode, response.Data);
         }
-        */
     }
 }
