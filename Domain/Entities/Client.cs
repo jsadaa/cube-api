@@ -99,4 +99,15 @@ public class Client
     {
         Factures?.Remove(factureClient);
     }
+
+    public void MettreAJour(string nom, string prenom, string adresse, string codePostal, string ville, string pays,
+        string telephone, string email, DateTime dateNaissance)
+    {
+        Nom = nom;
+        Prenom = prenom;
+        Adresse = new Adresse(adresse, codePostal, ville, pays);
+        Telephone = new Telephone(telephone);
+        Email = email;
+        DateNaissance = dateNaissance;
+    }
 }

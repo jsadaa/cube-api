@@ -3,6 +3,7 @@ using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Exceptions;
+using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
 using ApiCube.Persistence.Repositories.Client;
 using AutoMapper;
@@ -104,6 +105,158 @@ public class ClientService : IClientService
             var response = new BaseResponse(
                 HttpStatusCode.OK,
                 clients
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
+            );
+
+            return response;
+        }
+    }
+
+    public BaseResponse TrouverUnClient(int id)
+    {
+        try
+        {
+            var client = _clientRepository.Trouver(id);
+            var clientResponse = _mapper.Map<ClientResponse>(client);
+
+            var response = new BaseResponse(
+                HttpStatusCode.OK,
+                clientResponse
+            );
+
+            return response;
+        }
+        catch (ClientIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
+            );
+
+            return response;
+        }
+    }
+
+    public async Task<BaseResponse> ModifierUnClient(int id, ClientRequest clientRequest)
+    {
+        try
+        {
+            var client = _clientRepository.Trouver(id);
+
+            client.MettreAJour(
+                nom: clientRequest.Nom,
+                prenom: clientRequest.Prenom,
+                adresse: clientRequest.Adresse,
+                codePostal: clientRequest.CodePostal,
+                ville: clientRequest.Ville,
+                pays: clientRequest.Pays,
+                telephone: clientRequest.Telephone,
+                email: clientRequest.Email,
+                dateNaissance: clientRequest.DateNaissance
+            );
+
+            await _clientRepository.Modifier(client, clientRequest.Password);
+
+            var response = new BaseResponse(
+                HttpStatusCode.OK,
+                new { code = "client_modifie" }
+            );
+
+            return response;
+        }
+        catch (ClientIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (UtilisateurIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (FormatMotDePasseInvalide e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.BadRequest,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.Conflict,
+                new { code = "client_existe_deja" }
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
+            );
+
+            return response;
+        }
+    }
+
+    public async Task<BaseResponse> SupprimerUnClient(int id)
+    {
+        try
+        {
+            var client = _clientRepository.Trouver(id);
+
+            await _clientRepository.Supprimer(client);
+
+            var response = new BaseResponse(
+                HttpStatusCode.OK,
+                new { code = "client_supprime" }
+            );
+
+            return response;
+        }
+        catch (ClientIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (UtilisateurIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;

@@ -7,4 +7,7 @@ public interface IClientService
 {
     public Task<BaseResponse> AjouterUnClient(ClientRequest clientRequest);
     public BaseResponse ListerLesClients();
+    public BaseResponse TrouverUnClient(int id);
+    public Task<BaseResponse> ModifierUnClient(int id, ClientRequest clientRequest);
+    public Task<BaseResponse> SupprimerUnClient(int id);
 }
