@@ -19,8 +19,9 @@ public class EmployeService : IEmployeService
     private readonly IEmployeRepository _employeRepository;
     private readonly IMapper _mapper;
     private readonly UserManager<ApplicationUserModel> _userManager;
-    
-    public EmployeService(IEmployeRepository employeRepository, IMapper mapper, UserManager<ApplicationUserModel> userManager)
+
+    public EmployeService(IEmployeRepository employeRepository, IMapper mapper,
+        UserManager<ApplicationUserModel> userManager)
     {
         _employeRepository = employeRepository;
         _mapper = mapper;
@@ -37,7 +38,7 @@ public class EmployeService : IEmployeService
                 Email = employeRequest.Email,
                 EmailConfirmed = true
             };
-            
+
             var employe = new Domain.Entities.Employe(
                 nom: employeRequest.Nom,
                 prenom: employeRequest.Prenom,
@@ -45,7 +46,7 @@ public class EmployeService : IEmployeService
                 dateEmbauche: employeRequest.DateEmbauche,
                 statut: employeRequest.Statut
             );
-            
+
             var creationAppUser = await _userManager.CreateAsync(applicationUserModel, employeRequest.Password);
             if (!creationAppUser.Succeeded)
             {
@@ -116,7 +117,7 @@ public class EmployeService : IEmployeService
             return response;
         }
     }
-    
+
     public BaseResponse ListerLesEmployes()
     {
         var listeEmployes = _employeRepository.Lister();
@@ -129,7 +130,7 @@ public class EmployeService : IEmployeService
 
         return response;
     }
-    
+
     public BaseResponse TrouverUnEmploye(int id)
     {
         var employe = _employeRepository.Trouver(id);
@@ -142,19 +143,19 @@ public class EmployeService : IEmployeService
 
         return response;
     }
-    
+
     public async Task<BaseResponse> ModifierUnEmploye(int id, EmployeRequest employeRequest)
     {
         try
         {
             var employe = _employeRepository.Trouver(id);
             var applicationUser = await _userManager.FindByEmailAsync(employe.Email);
-            
+
             if (applicationUser == null)
             {
                 throw new UtilisateurIntrouvable();
             }
-            
+
             employe.MettreAJour(
                 nom: employeRequest.Nom,
                 prenom: employeRequest.Prenom,
@@ -162,10 +163,10 @@ public class EmployeService : IEmployeService
                 dateEmbauche: employeRequest.DateEmbauche,
                 statut: employeRequest.Statut
             );
-        
+
             applicationUser.Email = employeRequest.Email;
             applicationUser.UserName = employeRequest.Nom + employeRequest.Prenom;
-        
+
             var token = await _userManager.GeneratePasswordResetTokenAsync(applicationUser);
             var resetPassword = await _userManager.ResetPasswordAsync(applicationUser, token, employeRequest.Password);
 
@@ -185,7 +186,7 @@ public class EmployeService : IEmployeService
                         throw new Exception("error_reset_password");
                 }
             }
-        
+
             var updateUtilisateur = await _userManager.UpdateAsync(applicationUser);
             if (!updateUtilisateur.Succeeded)
             {
@@ -199,7 +200,7 @@ public class EmployeService : IEmployeService
                         throw new Exception("error_update_user");
                 }
             }
-            
+
             var appUserId = await _userManager.GetUserIdAsync(applicationUser);
             _employeRepository.Modifier(employe, appUserId);
 
@@ -247,19 +248,19 @@ public class EmployeService : IEmployeService
             return response;
         }
     }
-    
+
     public async Task<BaseResponse> SupprimerUnEmploye(int id)
     {
         try
         {
             var employe = _employeRepository.Trouver(id);
             var applicationUser = await _userManager.FindByEmailAsync(employe.Email);
-        
+
             if (applicationUser == null)
             {
                 throw new UtilisateurIntrouvable();
             }
-        
+
             // Ici on supprime l'utilisateur et l'employé
             // Pas besoin de supprimer l'employé avec le repository car il est supprimé en cascade avec l'utilisateur
             var deleteAppUser = await _userManager.DeleteAsync(applicationUser);
@@ -267,7 +268,7 @@ public class EmployeService : IEmployeService
             {
                 throw new Exception("error_delete_user");
             }
-            
+
             var response = new BaseResponse(
                 HttpStatusCode.OK,
                 new { code = "employe_supprime" }

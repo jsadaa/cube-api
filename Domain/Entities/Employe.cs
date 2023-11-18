@@ -36,7 +36,7 @@ public class Employe
         DateDepart = dateDepart;
         Statut = statut;
     }
-    
+
     public void MettreAJour(string nom, string prenom, string email, DateTime dateEmbauche, string statut)
     {
         Nom = nom;

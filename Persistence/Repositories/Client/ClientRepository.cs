@@ -1,10 +1,7 @@
-using ApiCube.Application.Exceptions;
-using ApiCube.Domain.Enums.Administration;
 using ApiCube.Domain.Mappers.Client;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
 using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiCube.Persistence.Repositories.Client;
@@ -14,15 +11,12 @@ public class ClientRepository : IClientRepository
     private readonly ApiDbContext _context;
     private readonly IClientMapper _clientMapper;
     private readonly IMapper _mapper;
-    private readonly UserManager<ApplicationUserModel> _userManager;
 
-    public ClientRepository(ApiDbContext context, IClientMapper clientMapper, IMapper mapper,
-        UserManager<ApplicationUserModel> userManager)
+    public ClientRepository(ApiDbContext context, IClientMapper clientMapper, IMapper mapper)
     {
         _context = context;
         _clientMapper = clientMapper;
         _mapper = mapper;
-        _userManager = userManager;
     }
 
     public void Ajouter(Domain.Entities.Client nouveauClient, string applicationUserId)
@@ -55,7 +49,7 @@ public class ClientRepository : IClientRepository
     {
         var clientModifié = _mapper.Map<ClientModel>(client);
         clientModifié.ApplicationUserId = applicationUserId;
-        
+
         _context.Clients.Update(clientModifié);
         _context.SaveChanges();
     }

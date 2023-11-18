@@ -27,7 +27,7 @@ public class ClientService : IClientService
         _mapper = mapper;
         _userManager = userManager;
     }
-    
+
     public async Task<BaseResponse> AjouterUnClient(ClientRequest clientRequest)
     {
         try
@@ -38,7 +38,7 @@ public class ClientService : IClientService
                 Email = clientRequest.Email,
                 EmailConfirmed = true
             };
-            
+
             var creationAppUser = await _userManager.CreateAsync(applicationUserModel, clientRequest.Password);
             if (!creationAppUser.Succeeded)
             {
@@ -59,10 +59,10 @@ public class ClientService : IClientService
                         throw new Exception("error_create_user");
                 }
             }
-            
+
             await _userManager.AddToRoleAsync(applicationUserModel, Role.Client.ToString());
             var appUserId = await _userManager.GetUserIdAsync(applicationUserModel);
-            
+
             var client = new Domain.Entities.Client(
                 username: clientRequest.Nom + clientRequest.Prenom,
                 nom: clientRequest.Nom,
@@ -206,13 +206,13 @@ public class ClientService : IClientService
                 email: clientRequest.Email,
                 dateNaissance: clientRequest.DateNaissance
             );
-            
+
             applicationUser.Email = clientRequest.Email;
             applicationUser.UserName = clientRequest.Nom + clientRequest.Prenom;
-            
+
             var token = await _userManager.GeneratePasswordResetTokenAsync(applicationUser);
             var resetPassword = await _userManager.ResetPasswordAsync(applicationUser, token, clientRequest.Password);
-            
+
             if (!resetPassword.Succeeded)
             {
                 var firstError = resetPassword.Errors.First();
@@ -229,7 +229,7 @@ public class ClientService : IClientService
                         throw new Exception("error_reset_password");
                 }
             }
-            
+
             var updateAppUser = await _userManager.UpdateAsync(applicationUser);
             if (!updateAppUser.Succeeded)
             {
@@ -243,7 +243,7 @@ public class ClientService : IClientService
                         throw new Exception("error_update_user");
                 }
             }
-            
+
             var appUserId = await _userManager.GetUserIdAsync(applicationUser);
             _clientRepository.Modifier(client, appUserId);
 
@@ -312,7 +312,7 @@ public class ClientService : IClientService
             {
                 throw new UtilisateurIntrouvable();
             }
-            
+
             // Ici on supprime l'utilisateur et le client
             // Pas besoin de supprimer le client avec le repository car il est supprimé en cascade avec l'utilisateur
             var deleteAppUser = await _userManager.DeleteAsync(applicationUser);
@@ -321,7 +321,7 @@ public class ClientService : IClientService
             {
                 throw new Exception("error_delete_user");
             }
-            
+
             var response = new BaseResponse(
                 HttpStatusCode.OK,
                 new { code = "client_supprime" }

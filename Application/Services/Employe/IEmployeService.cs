@@ -10,5 +10,4 @@ public interface IEmployeService
     public BaseResponse TrouverUnEmploye(int id);
     public Task<BaseResponse> ModifierUnEmploye(int id, EmployeRequest employeRequest);
     public Task<BaseResponse> SupprimerUnEmploye(int id);
-    
 }

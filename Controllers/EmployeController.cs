@@ -38,7 +38,7 @@ namespace ApiCube.Controllers
             var response = await _employeService.AjouterUnEmploye(employeRequest);
             return StatusCode(response.StatusCode, response.Data);
         }
-        
+
         /// <summary>
         /// Lister les employés
         /// </summary>
@@ -55,7 +55,7 @@ namespace ApiCube.Controllers
             var response = _employeService.ListerLesEmployes();
             return StatusCode(response.StatusCode, response.Data);
         }
-        
+
         /// <summary>
         /// Trouver un employé par son identifiant
         /// </summary>
@@ -75,7 +75,7 @@ namespace ApiCube.Controllers
             var response = _employeService.TrouverUnEmploye(id);
             return StatusCode(response.StatusCode, response.Data);
         }
-        
+
         /// <summary>
         /// Modifier un employé
         /// </summary>
@@ -100,7 +100,7 @@ namespace ApiCube.Controllers
             var response = await _employeService.ModifierUnEmploye(id, employeRequest);
             return StatusCode(response.StatusCode, response.Data);
         }
-        
+
         /// <summary>
         /// Supprimer un employé
         /// </summary>
