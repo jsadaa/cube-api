@@ -12,6 +12,7 @@ using ApiCube.Application.Services.Stock;
 using ApiCube.Configurations.AutoMapper;
 using ApiCube.Domain.Enums.Stock;
 using ApiCube.Domain.Mappers.Client;
+using ApiCube.Domain.Mappers.Employe;
 using ApiCube.Domain.Mappers.FamilleProduit;
 using ApiCube.Domain.Mappers.Fournisseur;
 using ApiCube.Domain.Mappers.Produit;
@@ -108,6 +109,7 @@ builder.Services.AddScoped<IStockMapper, StockMapper>();
 builder.Services.AddScoped<IFamilleProduitMapper, FamilleProduitMapper>();
 builder.Services.AddScoped<IPromotionMapper, PromotionMapper>();
 builder.Services.AddScoped<IClientMapper, ClientMapper>();
+builder.Services.AddScoped<IEmployeMapper, EmployeMapper>();
 
 // Configure enums mappers
 builder.Services.AddScoped<TypeTransactionStockMapper>();

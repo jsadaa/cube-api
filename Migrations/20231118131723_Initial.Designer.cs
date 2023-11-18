@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiCube.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20231117162627_Initial")]
+    [Migration("20231118131723_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -252,7 +252,7 @@ namespace ApiCube.Migrations
                         .HasColumnType("varchar(255)")
                         .HasColumnName("application_user_id");
 
-                    b.Property<DateTime?>("DateDepart")
+                    b.Property<DateTime>("DateDepart")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date_depart");
 

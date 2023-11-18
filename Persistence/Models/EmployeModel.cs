@@ -28,7 +28,7 @@ public class EmployeModel
 
     [Column("date_embauche")] [Required] public required DateTime DateEmbauche { get; set; }
 
-    [Column("date_depart")] public DateTime? DateDepart { get; set; }
+    [Column("date_depart")] public DateTime DateDepart { get; set; }
 
     [Column("statut")]
     [Required]

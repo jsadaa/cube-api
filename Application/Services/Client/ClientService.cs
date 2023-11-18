@@ -3,9 +3,12 @@ using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Exceptions;
+using ApiCube.Domain.Enums.Administration;
 using ApiCube.Persistence.Exceptions;
+using ApiCube.Persistence.Models;
 using ApiCube.Persistence.Repositories.Client;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 
@@ -15,17 +18,51 @@ public class ClientService : IClientService
 {
     private readonly IClientRepository _clientRepository;
     private readonly IMapper _mapper;
+    private readonly UserManager<ApplicationUserModel> _userManager;
 
-    public ClientService(IClientRepository clientRepository, IMapper mapper)
+    public ClientService(IClientRepository clientRepository, IMapper mapper,
+        UserManager<ApplicationUserModel> userManager)
     {
         _clientRepository = clientRepository;
         _mapper = mapper;
+        _userManager = userManager;
     }
-
+    
     public async Task<BaseResponse> AjouterUnClient(ClientRequest clientRequest)
     {
         try
         {
+            var applicationUserModel = new ApplicationUserModel
+            {
+                UserName = clientRequest.Nom + clientRequest.Prenom,
+                Email = clientRequest.Email,
+                EmailConfirmed = true
+            };
+            
+            var creationAppUser = await _userManager.CreateAsync(applicationUserModel, clientRequest.Password);
+            if (!creationAppUser.Succeeded)
+            {
+                var firstError = creationAppUser.Errors.First();
+                switch (firstError.Code)
+                {
+                    case "DuplicateUserName":
+                    case "DuplicateEmail":
+                        throw new UtilisateurExisteDeja();
+                    case "PasswordTooShort":
+                    case "PasswordRequiresDigit":
+                    case "PasswordRequiresLower":
+                    case "PasswordRequiresUpper":
+                    case "PasswordRequiresUniqueChars":
+                    case "PasswordRequiresNonAlphanumeric":
+                        throw new FormatMotDePasseInvalide();
+                    default:
+                        throw new Exception("error_create_user");
+                }
+            }
+            
+            await _userManager.AddToRoleAsync(applicationUserModel, Role.Client.ToString());
+            var appUserId = await _userManager.GetUserIdAsync(applicationUserModel);
+            
             var client = new Domain.Entities.Client(
                 username: clientRequest.Nom + clientRequest.Prenom,
                 nom: clientRequest.Nom,
@@ -40,7 +77,7 @@ public class ClientService : IClientService
                 dateInscription: DateTime.Now
             );
 
-            await _clientRepository.Ajouter(client, clientRequest.Password);
+            _clientRepository.Ajouter(client, appUserId);
 
             var response = new BaseResponse(
                 HttpStatusCode.Created,
@@ -151,6 +188,12 @@ public class ClientService : IClientService
         try
         {
             var client = _clientRepository.Trouver(id);
+            var applicationUser = await _userManager.FindByEmailAsync(client.Email);
+
+            if (applicationUser == null)
+            {
+                throw new UtilisateurIntrouvable();
+            }
 
             client.MettreAJour(
                 nom: clientRequest.Nom,
@@ -163,8 +206,46 @@ public class ClientService : IClientService
                 email: clientRequest.Email,
                 dateNaissance: clientRequest.DateNaissance
             );
-
-            await _clientRepository.Modifier(client, clientRequest.Password);
+            
+            applicationUser.Email = clientRequest.Email;
+            applicationUser.UserName = clientRequest.Nom + clientRequest.Prenom;
+            
+            var token = await _userManager.GeneratePasswordResetTokenAsync(applicationUser);
+            var resetPassword = await _userManager.ResetPasswordAsync(applicationUser, token, clientRequest.Password);
+            
+            if (!resetPassword.Succeeded)
+            {
+                var firstError = resetPassword.Errors.First();
+                switch (firstError.Code)
+                {
+                    case "PasswordTooShort":
+                    case "PasswordRequiresDigit":
+                    case "PasswordRequiresLower":
+                    case "PasswordRequiresUpper":
+                    case "PasswordRequiresUniqueChars":
+                    case "PasswordRequiresNonAlphanumeric":
+                        throw new FormatMotDePasseInvalide();
+                    default:
+                        throw new Exception("error_reset_password");
+                }
+            }
+            
+            var updateAppUser = await _userManager.UpdateAsync(applicationUser);
+            if (!updateAppUser.Succeeded)
+            {
+                var firstError = updateAppUser.Errors.First();
+                switch (firstError.Code)
+                {
+                    case "DuplicateUserName":
+                    case "DuplicateEmail":
+                        throw new UtilisateurExisteDeja();
+                    default:
+                        throw new Exception("error_update_user");
+                }
+            }
+            
+            var appUserId = await _userManager.GetUserIdAsync(applicationUser);
+            _clientRepository.Modifier(client, appUserId);
 
             var response = new BaseResponse(
                 HttpStatusCode.OK,
@@ -225,9 +306,22 @@ public class ClientService : IClientService
         try
         {
             var client = _clientRepository.Trouver(id);
+            var applicationUser = await _userManager.FindByEmailAsync(client.Email);
 
-            await _clientRepository.Supprimer(client);
+            if (applicationUser == null)
+            {
+                throw new UtilisateurIntrouvable();
+            }
+            
+            // Ici on supprime l'utilisateur et le client
+            // Pas besoin de supprimer le client avec le repository car il est supprimé en cascade avec l'utilisateur
+            var deleteAppUser = await _userManager.DeleteAsync(applicationUser);
 
+            if (!deleteAppUser.Succeeded)
+            {
+                throw new Exception("error_delete_user");
+            }
+            
             var response = new BaseResponse(
                 HttpStatusCode.OK,
                 new { code = "client_supprime" }

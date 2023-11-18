@@ -249,7 +249,7 @@ namespace ApiCube.Migrations
                         .HasColumnType("varchar(255)")
                         .HasColumnName("application_user_id");
 
-                    b.Property<DateTime?>("DateDepart")
+                    b.Property<DateTime>("DateDepart")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date_depart");
 

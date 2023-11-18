@@ -312,7 +312,7 @@ namespace ApiCube.Migrations
                     email = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     date_embauche = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    date_depart = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    date_depart = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     statut = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     application_user_id = table.Column<string>(type: "varchar(255)", nullable: false)

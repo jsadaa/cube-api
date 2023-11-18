@@ -5,5 +5,10 @@ namespace ApiCube.Application.Services.Employe;
 
 public interface IEmployeService
 {
-    Task<BaseResponse> AjouterUnEmploye(EmployeRequest employeRequest);
+    public Task<BaseResponse> AjouterUnEmploye(EmployeRequest employeRequest);
+    public BaseResponse ListerLesEmployes();
+    public BaseResponse TrouverUnEmploye(int id);
+    public Task<BaseResponse> ModifierUnEmploye(int id, EmployeRequest employeRequest);
+    public Task<BaseResponse> SupprimerUnEmploye(int id);
+    
 }

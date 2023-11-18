@@ -25,44 +25,13 @@ public class ClientRepository : IClientRepository
         _userManager = userManager;
     }
 
-    public async Task Ajouter(Domain.Entities.Client nouveauClient, string password)
+    public void Ajouter(Domain.Entities.Client nouveauClient, string applicationUserId)
     {
         var nouveauClientModel = _mapper.Map<ClientModel>(nouveauClient);
-        var applicationUserModel = new ApplicationUserModel
-        {
-            UserName = nouveauClient.Nom + nouveauClient.Prenom,
-            Email = nouveauClient.Email,
-            EmailConfirmed = true
-        };
-
-        var creationAppUser = await _userManager.CreateAsync(applicationUserModel, password);
-        if (!creationAppUser.Succeeded)
-        {
-            var firstError = creationAppUser.Errors.First();
-            switch (firstError.Code)
-            {
-                case "DuplicateUserName":
-                case "DuplicateEmail":
-                    throw new UtilisateurExisteDeja();
-                case "PasswordTooShort":
-                case "PasswordRequiresDigit":
-                case "PasswordRequiresLower":
-                case "PasswordRequiresUpper":
-                case "PasswordRequiresUniqueChars":
-                case "PasswordRequiresNonAlphanumeric":
-                    throw new FormatMotDePasseInvalide();
-                default:
-                    throw new Exception("error_create_user");
-            }
-        }
-
-        await _userManager.AddToRoleAsync(applicationUserModel, Role.Client.ToString());
-
-        var userId = await _userManager.GetUserIdAsync(applicationUserModel);
-        nouveauClientModel.ApplicationUserId = userId;
+        nouveauClientModel.ApplicationUserId = applicationUserId;
 
         _context.Clients.Add(nouveauClientModel);
-        await _context.SaveChangesAsync();
+        _context.SaveChangesAsync();
     }
 
     public List<Domain.Entities.Client> Lister()
@@ -82,76 +51,12 @@ public class ClientRepository : IClientRepository
         return _clientMapper.Mapper(client);
     }
 
-    public async Task Modifier(Domain.Entities.Client client, string password)
+    public void Modifier(Domain.Entities.Client client, string applicationUserId)
     {
         var clientModifié = _mapper.Map<ClientModel>(client);
-        var applicationUser = await _userManager.FindByEmailAsync(clientModifié.Email);
-
-        if (applicationUser == null)
-        {
-            throw new UtilisateurIntrouvable();
-        }
-
-        applicationUser.Email = clientModifié.Email;
-        applicationUser.UserName = clientModifié.Nom + clientModifié.Prenom;
-
-        var token = await _userManager.GeneratePasswordResetTokenAsync(applicationUser);
-        var resetPassword = await _userManager.ResetPasswordAsync(applicationUser, token, password);
-
-        if (!resetPassword.Succeeded)
-        {
-            var firstError = resetPassword.Errors.First();
-            switch (firstError.Code)
-            {
-                case "PasswordTooShort":
-                case "PasswordRequiresDigit":
-                case "PasswordRequiresLower":
-                case "PasswordRequiresUpper":
-                case "PasswordRequiresUniqueChars":
-                case "PasswordRequiresNonAlphanumeric":
-                    throw new FormatMotDePasseInvalide();
-                default:
-                    throw new Exception("error_reset_password");
-            }
-        }
-
-        var updateAppUser = await _userManager.UpdateAsync(applicationUser);
-
-        if (!updateAppUser.Succeeded)
-        {
-            var firstError = updateAppUser.Errors.First();
-            switch (firstError.Code)
-            {
-                case "DuplicateUserName":
-                case "DuplicateEmail":
-                    throw new UtilisateurExisteDeja();
-                default:
-                    throw new Exception("error_update_user");
-            }
-        }
-
-        clientModifié.ApplicationUser = applicationUser;
+        clientModifié.ApplicationUserId = applicationUserId;
+        
         _context.Clients.Update(clientModifié);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task Supprimer(Domain.Entities.Client client)
-    {
-        var clientSupprimé = _mapper.Map<ClientModel>(client);
-        var applicationUser = await _userManager.FindByEmailAsync(clientSupprimé.Email);
-
-        if (applicationUser == null)
-        {
-            throw new UtilisateurIntrouvable();
-        }
-
-        // Ici on supprime l'utilisateur et le client
-        // Pas besoin de supprimer le client avec le contexte car il est supprimé en cascade avec l'utilisateur
-        var deleteAppUser = await _userManager.DeleteAsync(applicationUser);
-
-        if (!deleteAppUser.Succeeded)
-        {
-            throw new Exception("error_delete_user");
-        }
+        _context.SaveChanges();
     }
 }
