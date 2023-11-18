@@ -44,7 +44,7 @@ public class EmployeService : IEmployeService
                 prenom: employeRequest.Prenom,
                 email: employeRequest.Email,
                 dateEmbauche: employeRequest.DateEmbauche,
-                statut: employeRequest.Statut
+                poste: employeRequest.Poste
             );
 
             var creationAppUser = await _userManager.CreateAsync(applicationUserModel, employeRequest.Password);
@@ -161,7 +161,7 @@ public class EmployeService : IEmployeService
                 prenom: employeRequest.Prenom,
                 email: employeRequest.Email,
                 dateEmbauche: employeRequest.DateEmbauche,
-                statut: employeRequest.Statut
+                poste: employeRequest.Poste
             );
 
             applicationUser.Email = employeRequest.Email;

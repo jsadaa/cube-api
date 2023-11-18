@@ -14,5 +14,5 @@ public class EmployeRequest
 
     [Required] public required DateTime DateEmbauche { get; set; }
 
-    [Required] public required string Statut { get; set; }
+    [Required] public required string Poste { get; set; }
 }

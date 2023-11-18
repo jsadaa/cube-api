@@ -8,5 +8,5 @@ public class EmployeResponse
     public required string Email { get; set; }
     public required DateTime DateEmbauche { get; set; }
     public required DateTime? DateDepart { get; set; }
-    public required string Statut { get; set; }
+    public required string Poste { get; set; }
 }

@@ -13,7 +13,7 @@ public class EmployeMapper : IEmployeMapper
             email: employeModel.Email,
             dateEmbauche: employeModel.DateEmbauche,
             dateDepart: employeModel.DateDepart,
-            statut: employeModel.Statut
+            poste: employeModel.Poste
         );
     }
 }

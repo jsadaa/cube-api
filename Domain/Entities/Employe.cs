@@ -12,21 +12,21 @@ public class Employe
 
     public DateTime DateEmbauche { get; set; }
 
-    public DateTime? DateDepart { get; set; }
+    public DateTime? DateDepart { get; set; } = null;
 
-    public string Statut { get; set; }
+    public string Poste { get; set; }
 
-    public Employe(string nom, string prenom, string email, DateTime dateEmbauche, string statut)
+    public Employe(string nom, string prenom, string email, DateTime dateEmbauche, string poste)
     {
         Nom = nom;
         Prenom = prenom;
         Email = email;
         DateEmbauche = dateEmbauche;
-        Statut = statut;
+        Poste = poste;
     }
 
-    public Employe(int id, string nom, string prenom, string email, DateTime dateEmbauche, DateTime dateDepart,
-        string statut)
+    public Employe(int id, string nom, string prenom, string email, DateTime dateEmbauche, DateTime? dateDepart,
+        string poste)
     {
         Id = id;
         Nom = nom;
@@ -34,15 +34,15 @@ public class Employe
         Email = email;
         DateEmbauche = dateEmbauche;
         DateDepart = dateDepart;
-        Statut = statut;
+        Poste = poste;
     }
 
-    public void MettreAJour(string nom, string prenom, string email, DateTime dateEmbauche, string statut)
+    public void MettreAJour(string nom, string prenom, string email, DateTime dateEmbauche, string poste)
     {
         Nom = nom;
         Prenom = prenom;
         Email = email;
         DateEmbauche = dateEmbauche;
-        Statut = statut;
+        Poste = poste;
     }
 }
