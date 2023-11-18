@@ -138,8 +138,9 @@ builder.Services.AddScoped<IEmployeService, EmployeService>();
 // Configure domain services
 builder.Services.AddScoped<PreparateurDeStock>();
 
-// Configure Role seeder
+// Configure Production Seeder
 builder.Services.AddScoped<RoleSeeder>();
+builder.Services.AddScoped<EmployeSeeder>();
 
 // Configure Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -193,6 +194,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         await RoleSeeder.CreateRoles(services);
+        await EmployeSeeder.CreateEmployes(services);
     }
     catch (Exception ex)
     {
