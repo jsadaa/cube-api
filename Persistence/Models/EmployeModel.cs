@@ -30,7 +30,7 @@ public class EmployeModel
 
     [Column("date_depart")] public DateTime? DateDepart { get; set; }
 
-    [Column("statut")]
+    [Column("poste")]
     [Required]
     [StringLength(50)]
     public required string Poste { get; set; }
