@@ -273,7 +273,7 @@ namespace ApiCube.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("statut");
+                        .HasColumnName("poste");
 
                     b.Property<string>("Prenom")
                         .IsRequired()

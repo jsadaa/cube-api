@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiCube.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20231118215956_Initial")]
+    [Migration("20231118221351_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -276,7 +276,7 @@ namespace ApiCube.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
-                        .HasColumnName("statut");
+                        .HasColumnName("poste");
 
                     b.Property<string>("Prenom")
                         .IsRequired()
