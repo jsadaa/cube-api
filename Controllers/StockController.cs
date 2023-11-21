@@ -48,7 +48,6 @@ namespace ApiCube.Controllers
         [HttpGet("")]
         [ActionName("ListerLesStocks")]
         [ProducesResponseType(typeof(List<StockResponse>), 200)]
-        [ProducesResponseType(typeof(ExpectedErrorResponse), 200)]
         [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
         [Produces("application/json")]
         public IActionResult ListerLesStocks()
