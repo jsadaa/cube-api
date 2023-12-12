@@ -30,7 +30,6 @@ using ApiCube.Persistence.Repositories.CommandeFournisseur;
 using ApiCube.Persistence.Repositories.Employe;
 using ApiCube.Persistence.Repositories.FamilleProduit;
 using ApiCube.Persistence.Repositories.Fournisseur;
-using ApiCube.Persistence.Repositories.LigneCommandeFournisseur;
 using ApiCube.Persistence.Repositories.Produit;
 using ApiCube.Persistence.Repositories.Promotion;
 using ApiCube.Persistence.Repositories.Stock;
@@ -136,7 +135,6 @@ builder.Services.AddScoped<IPromotionRepository, PromotionRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IEmployeRepository, EmployeRepository>();
 builder.Services.AddScoped<ICommandeFournisseurRepository, CommandeFournisseurRepository>();
-builder.Services.AddScoped<ILigneCommandeFournisseurRepository, LigneCommandeFournisseurRepository>();
 
 // Configure application services
 builder.Services.AddScoped<IProduitService, ProduitService>();
