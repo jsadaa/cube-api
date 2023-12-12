@@ -24,8 +24,6 @@ public class CommandeFournisseurService : ICommandeFournisseurService
     private readonly IMapper _mapper;
     private readonly PreparateurDeCommande _preparateurDeCommande;
     private readonly PreparateurDeStock _preparateurDeStock;
-    private readonly IProduitRepository _produitRepository;
-    private readonly StatutCommandeMapper _statutCommandeMapper;
     private readonly IStockRepository _stockRepository;
 
     public CommandeFournisseurService(
@@ -42,10 +40,8 @@ public class CommandeFournisseurService : ICommandeFournisseurService
     {
         _preparateurDeCommande = preparateurDeCommande;
         _preparateurDeStock = preparateurDeStock;
-        _statutCommandeMapper = statutCommandeMapper;
         _commandeFournisseurRepository = commandeFournisseurRepository;
         _employeRepository = employeRepository;
-        _produitRepository = produitRepository;
         _fournisseurRepository = fournisseurRepository;
         _stockRepository = stockRepository;
         _mapper = mapper;
