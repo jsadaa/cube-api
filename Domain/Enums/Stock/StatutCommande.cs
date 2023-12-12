@@ -20,7 +20,7 @@ public class StatutCommandeMapper
             "Livree" => StatutCommande.Livree,
             "Annulee" => StatutCommande.Annulee,
             "Autre" => StatutCommande.Autre,
-            _ => throw new StatutCommandeInexistant()
+            _ => throw new StatutCommandeInvalide()
         };
     }
 }

@@ -3,6 +3,7 @@ using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Domain.Enums.Stock;
+using ApiCube.Domain.Exceptions;
 using ApiCube.Domain.Services;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Repositories.CommandeFournisseur;
@@ -76,6 +77,42 @@ public class CommandeFournisseurService : ICommandeFournisseurService
                 new { code = "commande_fournisseur_existe_deja" }
             );
 
+            return response;
+        }
+        catch (StatutCommandeInvalide e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.BadRequest,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (FournisseurIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (EmployeIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (ProduitIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+            
             return response;
         }
         catch (Exception e)
@@ -154,19 +191,8 @@ public class CommandeFournisseurService : ICommandeFournisseurService
         try
         {
             var commandeFournisseur = _commandeFournisseurRepository.Trouver(id);
-            BaseResponse response;
-
-            // si la commande est déjà livrée, on ne peut pas la modifier
-            if (commandeFournisseur.Statut == StatutCommande.Livree)
-            {
-                response = new BaseResponse(
-                    HttpStatusCode.BadRequest,
-                    new { code = "commande_fournisseur_deja_livree" }
-                );
-
-                return response;
-            }
-
+            commandeFournisseur.VerifierValidite();
+            
             var fournisseur = _fournisseurRepository.Trouver(commandeFournisseurRequest.FournisseurId);
             var employe = _employeRepository.Trouver(commandeFournisseurRequest.EmployeId);
 
@@ -179,7 +205,7 @@ public class CommandeFournisseurService : ICommandeFournisseurService
 
             _commandeFournisseurRepository.Modifier(commandeFournisseurModifiee);
 
-            response = new BaseResponse(
+            var response = new BaseResponse(
                 HttpStatusCode.OK,
                 new { code = "commande_fournisseur_modifiee" }
             );
@@ -213,6 +239,42 @@ public class CommandeFournisseurService : ICommandeFournisseurService
 
             return response;
         }
+        catch (DateCommandeInvalide e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.BadRequest,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (StatutCommandeInvalide e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.BadRequest,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (CommandeDejaLivree e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.BadRequest,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (CommandeAnnulee e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.BadRequest,
+                new { code = e.Message }
+            );
+            
+            return response;
+        }
         catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
         {
             var response = new BaseResponse(
@@ -238,22 +300,11 @@ public class CommandeFournisseurService : ICommandeFournisseurService
         try
         {
             var commandeFournisseur = _commandeFournisseurRepository.Trouver(id);
-            BaseResponse response;
-
-            // si la commande est déjà livrée, on ne peut pas la supprimer
-            if (commandeFournisseur.Statut == StatutCommande.Livree)
-            {
-                response = new BaseResponse(
-                    HttpStatusCode.BadRequest,
-                    new { code = "commande_fournisseur_deja_livree" }
-                );
-
-                return response;
-            }
+            commandeFournisseur.VerifierValidite();
 
             _commandeFournisseurRepository.Supprimer(commandeFournisseur);
 
-            response = new BaseResponse(
+            var response = new BaseResponse(
                 HttpStatusCode.OK,
                 new { code = "commande_fournisseur_supprimee" }
             );
@@ -267,6 +318,33 @@ public class CommandeFournisseurService : ICommandeFournisseurService
                 new { code = e.Message }
             );
 
+            return response;
+        }
+        catch (DateCommandeInvalide e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.BadRequest,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (CommandeDejaLivree e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.BadRequest,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (CommandeAnnulee e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.BadRequest,
+                new { code = e.Message }
+            );
+            
             return response;
         }
         catch (Exception e)
@@ -285,6 +363,8 @@ public class CommandeFournisseurService : ICommandeFournisseurService
         try
         {
             var commandeFournisseur = _commandeFournisseurRepository.Trouver(id);
+            commandeFournisseur.VerifierValidite();
+            
             var commandeFournisseurLivree = _preparateurDeCommande.Reception(commandeFournisseur);
 
             // Mise à jour du stock
@@ -316,6 +396,33 @@ public class CommandeFournisseurService : ICommandeFournisseurService
 
             return response;
         }
+        catch (DateCommandeInvalide e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.BadRequest,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (CommandeDejaLivree e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.BadRequest,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (CommandeAnnulee e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.BadRequest,
+                new { code = e.Message }
+            );
+            
+            return response;
+        }
         catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
         {
             var response = new BaseResponse(
@@ -339,15 +446,6 @@ public class CommandeFournisseurService : ICommandeFournisseurService
             var response = new BaseResponse(
                 HttpStatusCode.BadRequest,
                 new { code = e.Message }
-            );
-
-            return response;
-        }
-        catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
-        {
-            var response = new BaseResponse(
-                HttpStatusCode.Conflict,
-                new { code = "commande_fournisseur_existe_deja" }
             );
 
             return response;

@@ -82,12 +82,18 @@ public class CommandeFournisseur
         LigneCommandeFournisseurs.Clear();
     }
 
-    public void VerifierValiditeStatut()
+    private void VerifierValiditeStatut()
     {
-        if (Statut is StatutCommande.Annulee or StatutCommande.Livree) throw new StatutCommandeInvalide();
+        switch (Statut)
+        {
+            case StatutCommande.Livree:
+                throw new CommandeDejaLivree();
+            case StatutCommande.Annulee:
+                throw new CommandeAnnulee();
+        }
     }
 
-    public void VerifierValiditeDateCommande()
+    private void VerifierValiditeDateCommande()
     {
         if (DateCommande > DateTime.Now) throw new DateCommandeInvalide();
     }
@@ -103,8 +109,9 @@ public class CommandeFournisseur
         Statut = StatutCommande.Annulee;
     }
 
-    public void Livrer()
+    public void Receptionner()
     {
+        DateReception = DateTime.Now;
         Statut = StatutCommande.Livree;
     }
 }

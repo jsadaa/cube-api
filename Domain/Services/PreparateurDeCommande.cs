@@ -72,8 +72,7 @@ public class PreparateurDeCommande
 
     public CommandeFournisseur Reception(CommandeFournisseur commandeFournisseur)
     {
-        commandeFournisseur.DateReception = DateTime.Now;
-        commandeFournisseur.Statut = StatutCommande.Livree;
+        commandeFournisseur.Receptionner();
         return commandeFournisseur;
     }
 }
