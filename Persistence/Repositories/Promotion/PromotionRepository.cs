@@ -9,8 +9,8 @@ namespace ApiCube.Persistence.Repositories.Promotion;
 public class PromotionRepository : IPromotionRepository
 {
     private readonly ApiDbContext _context;
-    private readonly IPromotionMapper _promotionMapper;
     private readonly IMapper _mapper;
+    private readonly IPromotionMapper _promotionMapper;
 
     public PromotionRepository(ApiDbContext context, IPromotionMapper promotionMapper, IMapper mapper)
     {

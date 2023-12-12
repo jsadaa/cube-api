@@ -47,7 +47,7 @@ public class ApiDbContext : IdentityDbContext<ApplicationUserModel>
     }
 
     public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
-        CancellationToken cancellationToken = default(CancellationToken))
+        CancellationToken cancellationToken = default)
     {
         UpdateTimestamps();
         return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
@@ -63,10 +63,7 @@ public class ApiDbContext : IdentityDbContext<ApplicationUserModel>
             var type = entity.Entity.GetType();
             var dateModificationProperty = type.GetProperty("DateModification");
 
-            if (dateModificationProperty != null)
-            {
-                dateModificationProperty.SetValue(entity.Entity, DateTime.Now);
-            }
+            if (dateModificationProperty != null) dateModificationProperty.SetValue(entity.Entity, DateTime.Now);
         }
     }
 

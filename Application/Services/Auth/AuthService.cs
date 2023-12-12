@@ -14,9 +14,9 @@ namespace ApiCube.Application.Services.Auth;
 
 public class AuthService : IAuthService
 {
-    private readonly UserManager<ApplicationUserModel> _userManager;
     private readonly IConfiguration _configuration;
     private readonly ILogger<AuthService> _logger;
+    private readonly UserManager<ApplicationUserModel> _userManager;
 
     public AuthService(UserManager<ApplicationUserModel> userManager, IConfiguration configuration,
         ILogger<AuthService> logger)
@@ -40,15 +40,15 @@ public class AuthService : IAuthService
             const string refreshTokenName = "RefreshToken";
             await _userManager.SetAuthenticationTokenAsync(user, "ApiCube", refreshTokenName, refreshToken);
 
-            var tokenResponse = new TokenResponse()
+            var tokenResponse = new TokenResponse
             {
                 AccessToken = tokenString,
                 RefreshToken = refreshToken
             };
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: tokenResponse
+                HttpStatusCode.OK,
+                tokenResponse
             );
 
             return response;
@@ -56,8 +56,8 @@ public class AuthService : IAuthService
         catch (IdentifiantsIncorrects e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.Unauthorized,
-                data: new { code = e.Message }
+                HttpStatusCode.Unauthorized,
+                new { code = e.Message }
             );
 
             return response;
@@ -65,8 +65,8 @@ public class AuthService : IAuthService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -92,15 +92,15 @@ public class AuthService : IAuthService
 
             await _userManager.SetAuthenticationTokenAsync(user, "ApiCube", "RefreshToken", newRefreshToken);
 
-            var tokenResponse = new TokenResponse()
+            var tokenResponse = new TokenResponse
             {
                 AccessToken = newJwtToken,
                 RefreshToken = newRefreshToken
             };
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: tokenResponse
+                HttpStatusCode.OK,
+                tokenResponse
             );
 
             return response;
@@ -108,8 +108,8 @@ public class AuthService : IAuthService
         catch (UtilisateurIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.NotFound,
-                data: new { code = e.Message }
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -117,8 +117,8 @@ public class AuthService : IAuthService
         catch (ClaimInvalide e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.Unauthorized,
-                data: new { code = e.Message }
+                HttpStatusCode.Unauthorized,
+                new { code = e.Message }
             );
 
             return response;
@@ -126,8 +126,8 @@ public class AuthService : IAuthService
         catch (RefreshTokenInvalide e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.Unauthorized,
-                data: new { code = e.Message }
+                HttpStatusCode.Unauthorized,
+                new { code = e.Message }
             );
 
             return response;
@@ -135,8 +135,8 @@ public class AuthService : IAuthService
         catch (SecurityTokenException e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.Unauthorized,
-                data: new { code = e.Message }
+                HttpStatusCode.Unauthorized,
+                new { code = e.Message }
             );
 
             return response;
@@ -144,8 +144,8 @@ public class AuthService : IAuthService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -165,14 +165,14 @@ public class AuthService : IAuthService
             new(JwtRegisteredClaimNames.Sub,
                 user.UserName ?? throw new InvalidOperationException("User.UserName is null")),
             new(JwtRegisteredClaimNames.Email, user.Email ?? throw new InvalidOperationException("User.Email is null")),
-            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
         claims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
 
         var token = new JwtSecurityToken(
-            issuer: _configuration["Jwt:Issuer"],
-            audience: _configuration["Jwt:Audience"],
-            claims: claims,
+            _configuration["Jwt:Issuer"],
+            _configuration["Jwt:Audience"],
+            claims,
             expires: DateTime.UtcNow.AddMinutes(30),
             signingCredentials: credentials
         );

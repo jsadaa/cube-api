@@ -8,8 +8,8 @@ namespace ApiCube.Persistence.Repositories.Client;
 
 public class ClientRepository : IClientRepository
 {
-    private readonly ApiDbContext _context;
     private readonly IClientMapper _clientMapper;
+    private readonly ApiDbContext _context;
     private readonly IMapper _mapper;
 
     public ClientRepository(ApiDbContext context, IClientMapper clientMapper, IMapper mapper)
@@ -37,10 +37,7 @@ public class ClientRepository : IClientRepository
     public Domain.Entities.Client Trouver(int id)
     {
         var client = _context.Clients.AsNoTracking().FirstOrDefault(client => client.Id == id);
-        if (client == null)
-        {
-            throw new ClientIntrouvable();
-        }
+        if (client == null) throw new ClientIntrouvable();
 
         return _clientMapper.Mapper(client);
     }

@@ -4,24 +4,6 @@ namespace ApiCube.Domain.Entities;
 
 public class Stock
 {
-    public int Id { get; set; } = 0;
-
-    public int Quantite { get; set; }
-
-    public int SeuilDisponibilite { get; set; }
-
-    public StatutStock Statut { get; set; } = StatutStock.EnStock;
-
-    public Produit Produit { get; set; }
-
-    public List<TransactionStock> Transactions { get; set; }
-
-    public DateTime DateCreation { get; set; }
-
-    public DateTime DateModification { get; set; }
-
-    public DateTime? DateSuppression { get; set; } = null;
-
     public Stock(int id, int quantite, int seuilDisponibilite, StatutStock statut, Produit produit,
         List<TransactionStock> transactionStocks, DateTime dateCreation,
         DateTime dateModification, DateTime? dateSuppression)
@@ -50,6 +32,24 @@ public class Stock
         DateSuppression = dateSuppression;
         MettreAJourStatut();
     }
+
+    public int Id { get; set; }
+
+    public int Quantite { get; set; }
+
+    public int SeuilDisponibilite { get; set; }
+
+    public StatutStock Statut { get; set; } = StatutStock.EnStock;
+
+    public Produit Produit { get; set; }
+
+    public List<TransactionStock> Transactions { get; set; }
+
+    public DateTime DateCreation { get; set; }
+
+    public DateTime DateModification { get; set; }
+
+    public DateTime? DateSuppression { get; set; }
 
     public bool EstSupprime()
     {

@@ -26,15 +26,15 @@ public class FamilleProduitService : IFamilleProduitService
         try
         {
             var nouvelleFamilleProduit = new Domain.Entities.FamilleProduit(
-                nom: familleProduitRequest.Nom,
-                description: familleProduitRequest.Description
+                familleProduitRequest.Nom,
+                familleProduitRequest.Description
             );
 
             _familleProduitRepository.Ajouter(nouvelleFamilleProduit);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.Created,
-                data: new { code = "famille_produit_ajoute" }
+                HttpStatusCode.Created,
+                new { code = "famille_produit_ajoute" }
             );
 
             return response;
@@ -42,8 +42,8 @@ public class FamilleProduitService : IFamilleProduitService
         catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.Conflict,
-                data: new { code = "famille_produit_existe_deja" }
+                HttpStatusCode.Conflict,
+                new { code = "famille_produit_existe_deja" }
             );
 
             return response;
@@ -51,8 +51,8 @@ public class FamilleProduitService : IFamilleProduitService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -67,8 +67,8 @@ public class FamilleProduitService : IFamilleProduitService
             var famillesProduits = _mapper.Map<List<FamilleProduitResponse>>(listeFamillesProduits);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: famillesProduits
+                HttpStatusCode.OK,
+                famillesProduits
             );
 
             return response;
@@ -76,8 +76,8 @@ public class FamilleProduitService : IFamilleProduitService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -92,8 +92,8 @@ public class FamilleProduitService : IFamilleProduitService
             var familleProduitResponse = _mapper.Map<FamilleProduitResponse>(familleProduit);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: familleProduitResponse
+                HttpStatusCode.OK,
+                familleProduitResponse
             );
 
             return response;
@@ -101,8 +101,8 @@ public class FamilleProduitService : IFamilleProduitService
         catch (FamilleProduitIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.NotFound,
-                data: new { code = e.Message }
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -110,8 +110,8 @@ public class FamilleProduitService : IFamilleProduitService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -125,15 +125,15 @@ public class FamilleProduitService : IFamilleProduitService
             var familleProduitAModifier = _familleProduitRepository.Trouver(id);
 
             familleProduitAModifier.MettreAJour(
-                nom: familleProduitRequest.Nom,
-                description: familleProduitRequest.Description
+                familleProduitRequest.Nom,
+                familleProduitRequest.Description
             );
 
             _familleProduitRepository.Modifier(familleProduitAModifier);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: new { code = "famille_produit_modifiee" }
+                HttpStatusCode.OK,
+                new { code = "famille_produit_modifiee" }
             );
 
             return response;
@@ -141,8 +141,8 @@ public class FamilleProduitService : IFamilleProduitService
         catch (FamilleProduitIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.NotFound,
-                data: new { code = e.Message }
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -150,8 +150,8 @@ public class FamilleProduitService : IFamilleProduitService
         catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.Conflict,
-                data: new { code = "famille_produit_existe_deja" }
+                HttpStatusCode.Conflict,
+                new { code = "famille_produit_existe_deja" }
             );
 
             return response;
@@ -159,8 +159,8 @@ public class FamilleProduitService : IFamilleProduitService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -176,8 +176,8 @@ public class FamilleProduitService : IFamilleProduitService
             _familleProduitRepository.Supprimer(familleProduitASupprimer);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: new { code = "famille_produit_supprimee" }
+                HttpStatusCode.OK,
+                new { code = "famille_produit_supprimee" }
             );
 
             return response;
@@ -185,8 +185,8 @@ public class FamilleProduitService : IFamilleProduitService
         catch (FamilleProduitIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.NotFound,
-                data: new { code = e.Message }
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -194,8 +194,8 @@ public class FamilleProduitService : IFamilleProduitService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;

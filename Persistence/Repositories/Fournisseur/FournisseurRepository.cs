@@ -9,8 +9,8 @@ namespace ApiCube.Persistence.Repositories.Fournisseur;
 public class FournisseurRepository : IFournisseurRepository
 {
     private readonly ApiDbContext _context;
-    private readonly IMapper _mapper;
     private readonly IFournisseurMapper _fournisseurMapper;
+    private readonly IMapper _mapper;
 
     public FournisseurRepository(ApiDbContext context, IMapper mapper, IFournisseurMapper fournisseurMapper)
     {

@@ -9,40 +9,40 @@ public class PreparateurDeStock
     public Stock AjoutInterne(Produit produit, StockRequest stockRequest)
     {
         var nouveauStock = new Stock(
-            quantite: 0,
-            seuilDisponibilite: stockRequest.SeuilDisponibilite,
-            produit: produit,
-            transactionStocks: new List<TransactionStock>(),
-            dateCreation: DateTime.Now,
-            dateModification: DateTime.Now,
-            dateSuppression: null
+            0,
+            stockRequest.SeuilDisponibilite,
+            produit,
+            new List<TransactionStock>(),
+            DateTime.Now,
+            DateTime.Now,
+            null
         );
 
         var nouvelleTransactionStock = new TransactionStock(
-            quantite: stockRequest.Quantite,
-            date: DateTime.Now,
-            type: TypeTransactionStock.AjoutInterne,
-            stock: nouveauStock,
-            prixUnitaire: produit.PrixAchat,
-            quantiteAvant: 0,
-            quantiteApres: stockRequest.Quantite
+            stockRequest.Quantite,
+            DateTime.Now,
+            TypeTransactionStock.AjoutInterne,
+            nouveauStock,
+            produit.PrixAchat,
+            0,
+            stockRequest.Quantite
         );
 
         nouveauStock.AjouterTransaction(nouvelleTransactionStock);
 
         return nouveauStock;
     }
-    
+
     public Stock Achat(Stock stock, LigneCommandeFournisseur ligneCommandeFournisseur)
     {
         var nouvelleTransactionStock = new TransactionStock(
-            quantite: ligneCommandeFournisseur.Quantite,
-            date: DateTime.Now,
-            type: TypeTransactionStock.Achat,
-            stock: stock,
-            prixUnitaire: ligneCommandeFournisseur.PrixUnitaire,
-            quantiteAvant: stock.Quantite,
-            quantiteApres: stock.Quantite + ligneCommandeFournisseur.Quantite
+            ligneCommandeFournisseur.Quantite,
+            DateTime.Now,
+            TypeTransactionStock.Achat,
+            stock,
+            ligneCommandeFournisseur.PrixUnitaire,
+            stock.Quantite,
+            stock.Quantite + ligneCommandeFournisseur.Quantite
         );
 
         stock.AjouterTransaction(nouvelleTransactionStock);
@@ -55,13 +55,13 @@ public class PreparateurDeStock
         if (stock.Quantite != stockUpdate.Quantite)
         {
             var nouvelleTransactionStock = new TransactionStock(
-                quantite: stockUpdate.Quantite - stock.Quantite,
-                date: DateTime.Now,
-                type: TypeTransactionStock.ModificationInterne,
-                stock: stock,
-                prixUnitaire: stock.Produit.PrixAchat,
-                quantiteAvant: stock.Quantite,
-                quantiteApres: stockUpdate.Quantite
+                stockUpdate.Quantite - stock.Quantite,
+                DateTime.Now,
+                TypeTransactionStock.ModificationInterne,
+                stock,
+                stock.Produit.PrixAchat,
+                stock.Quantite,
+                stockUpdate.Quantite
             );
 
             stock.AjouterTransaction(nouvelleTransactionStock);
@@ -75,13 +75,13 @@ public class PreparateurDeStock
     public Stock Suppression(Stock stock)
     {
         var nouvelleTransactionStock = new TransactionStock(
-            quantite: -stock.Quantite,
-            date: DateTime.Now,
-            type: TypeTransactionStock.Suppression,
-            stock: stock,
-            prixUnitaire: stock.Produit.PrixAchat,
-            quantiteAvant: stock.Quantite,
-            quantiteApres: 0
+            -stock.Quantite,
+            DateTime.Now,
+            TypeTransactionStock.Suppression,
+            stock,
+            stock.Produit.PrixAchat,
+            stock.Quantite,
+            0
         );
 
         stock.AjouterTransaction(nouvelleTransactionStock);

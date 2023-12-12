@@ -7,14 +7,14 @@ public class FournisseurMapper : IFournisseurMapper
     public Entities.Fournisseur Mapper(FournisseurModel fournisseurModel)
     {
         return new Entities.Fournisseur(
-            id: fournisseurModel.Id,
-            nom: fournisseurModel.Nom,
-            adresse: fournisseurModel.Adresse,
-            codePostal: fournisseurModel.CodePostal,
-            ville: fournisseurModel.Ville,
-            pays: fournisseurModel.Pays,
-            telephone: fournisseurModel.Telephone,
-            email: fournisseurModel.Email
+            fournisseurModel.Id,
+            fournisseurModel.Nom,
+            fournisseurModel.Adresse,
+            fournisseurModel.CodePostal,
+            fournisseurModel.Ville,
+            fournisseurModel.Pays,
+            fournisseurModel.Telephone,
+            fournisseurModel.Email
         );
     }
 }

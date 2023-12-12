@@ -64,17 +64,17 @@ public class ClientService : IClientService
             var appUserId = await _userManager.GetUserIdAsync(applicationUserModel);
 
             var client = new Domain.Entities.Client(
-                username: clientRequest.Nom + clientRequest.Prenom,
-                nom: clientRequest.Nom,
-                prenom: clientRequest.Prenom,
-                adresse: clientRequest.Adresse,
-                codePostal: clientRequest.CodePostal,
-                ville: clientRequest.Ville,
-                pays: clientRequest.Pays,
-                telephone: clientRequest.Telephone,
-                email: clientRequest.Email,
-                dateNaissance: clientRequest.DateNaissance,
-                dateInscription: DateTime.Now
+                clientRequest.Nom + clientRequest.Prenom,
+                clientRequest.Nom,
+                clientRequest.Prenom,
+                clientRequest.Adresse,
+                clientRequest.CodePostal,
+                clientRequest.Ville,
+                clientRequest.Pays,
+                clientRequest.Telephone,
+                clientRequest.Email,
+                clientRequest.DateNaissance,
+                DateTime.Now
             );
 
             _clientRepository.Ajouter(client, appUserId);
@@ -116,8 +116,8 @@ public class ClientService : IClientService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -190,21 +190,18 @@ public class ClientService : IClientService
             var client = _clientRepository.Trouver(id);
             var applicationUser = await _userManager.FindByEmailAsync(client.Email);
 
-            if (applicationUser == null)
-            {
-                throw new UtilisateurIntrouvable();
-            }
+            if (applicationUser == null) throw new UtilisateurIntrouvable();
 
             client.MettreAJour(
-                nom: clientRequest.Nom,
-                prenom: clientRequest.Prenom,
-                adresse: clientRequest.Adresse,
-                codePostal: clientRequest.CodePostal,
-                ville: clientRequest.Ville,
-                pays: clientRequest.Pays,
-                telephone: clientRequest.Telephone,
-                email: clientRequest.Email,
-                dateNaissance: clientRequest.DateNaissance
+                clientRequest.Nom,
+                clientRequest.Prenom,
+                clientRequest.Adresse,
+                clientRequest.CodePostal,
+                clientRequest.Ville,
+                clientRequest.Pays,
+                clientRequest.Telephone,
+                clientRequest.Email,
+                clientRequest.DateNaissance
             );
 
             applicationUser.Email = clientRequest.Email;
@@ -308,19 +305,13 @@ public class ClientService : IClientService
             var client = _clientRepository.Trouver(id);
             var applicationUser = await _userManager.FindByEmailAsync(client.Email);
 
-            if (applicationUser == null)
-            {
-                throw new UtilisateurIntrouvable();
-            }
+            if (applicationUser == null) throw new UtilisateurIntrouvable();
 
             // Ici on supprime l'utilisateur et le client
             // Pas besoin de supprimer le client avec le repository car il est supprimé en cascade avec l'utilisateur
             var deleteAppUser = await _userManager.DeleteAsync(applicationUser);
 
-            if (!deleteAppUser.Succeeded)
-            {
-                throw new Exception("error_delete_user");
-            }
+            if (!deleteAppUser.Succeeded) throw new Exception("error_delete_user");
 
             var response = new BaseResponse(
                 HttpStatusCode.OK,

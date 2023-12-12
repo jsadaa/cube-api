@@ -15,11 +15,11 @@ namespace ApiCube.Application.Services.Produit;
 
 public class ProduitService : IProduitService
 {
-    private readonly IProduitRepository _produitRepository;
     private readonly IFamilleProduitRepository _familleProduitRepository;
     private readonly IFournisseurRepository _fournisseurRepository;
-    private readonly IPromotionRepository _promotionRepository;
     private readonly IMapper _mapper;
+    private readonly IProduitRepository _produitRepository;
+    private readonly IPromotionRepository _promotionRepository;
 
     public ProduitService(
         IProduitRepository produitRepository,
@@ -44,13 +44,13 @@ public class ProduitService : IProduitService
             var familleProduit = _familleProduitRepository.Trouver(produitRequest.FamilleProduitId);
 
             var nouveauProduit = new Domain.Entities.Produit(
-                nom: produitRequest.Nom,
-                description: produitRequest.Description,
-                appellation: produitRequest.Appellation,
-                cepage: produitRequest.Cepage,
-                region: produitRequest.Region,
-                annee: produitRequest.Annee,
-                degreAlcool: produitRequest.DegreAlcool,
+                produitRequest.Nom,
+                produitRequest.Description,
+                produitRequest.Appellation,
+                produitRequest.Cepage,
+                produitRequest.Region,
+                produitRequest.Annee,
+                produitRequest.DegreAlcool,
                 prixAchat: produitRequest.PrixAchat,
                 prixVente: produitRequest.PrixVente,
                 datePeremption: produitRequest.DatePeremption,
@@ -61,8 +61,8 @@ public class ProduitService : IProduitService
             _produitRepository.Ajouter(nouveauProduit);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.Created,
-                data: new { code = "produit_ajoute" }
+                HttpStatusCode.Created,
+                new { code = "produit_ajoute" }
             );
 
             return response;
@@ -70,8 +70,8 @@ public class ProduitService : IProduitService
         catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.Conflict,
-                data: new { code = "produit_existe_deja" }
+                HttpStatusCode.Conflict,
+                new { code = "produit_existe_deja" }
             );
 
             return response;
@@ -79,8 +79,8 @@ public class ProduitService : IProduitService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -95,8 +95,8 @@ public class ProduitService : IProduitService
             var produits = _mapper.Map<List<ProduitResponse>>(listeProduits);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: produits
+                HttpStatusCode.OK,
+                produits
             );
 
             return response;
@@ -104,8 +104,8 @@ public class ProduitService : IProduitService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -123,8 +123,8 @@ public class ProduitService : IProduitService
             _produitRepository.Modifier(produit);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: new { code = "promotion_applique" }
+                HttpStatusCode.OK,
+                new { code = "promotion_applique" }
             );
 
             return response;
@@ -132,8 +132,8 @@ public class ProduitService : IProduitService
         catch (ProduitIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.NotFound,
-                data: new { code = e.Message }
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -141,8 +141,8 @@ public class ProduitService : IProduitService
         catch (PromotionIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.NotFound,
-                data: new { code = e.Message }
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -150,8 +150,8 @@ public class ProduitService : IProduitService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -168,8 +168,8 @@ public class ProduitService : IProduitService
             _produitRepository.Modifier(produit);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: new { code = "promotion_retiree" }
+                HttpStatusCode.OK,
+                new { code = "promotion_retiree" }
             );
 
             return response;
@@ -177,8 +177,8 @@ public class ProduitService : IProduitService
         catch (ProduitIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.NotFound,
-                data: new { code = e.Message }
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -186,8 +186,8 @@ public class ProduitService : IProduitService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -202,8 +202,8 @@ public class ProduitService : IProduitService
             var produitResponseDTO = _mapper.Map<ProduitResponse>(produit);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: produitResponseDTO
+                HttpStatusCode.OK,
+                produitResponseDTO
             );
 
             return response;
@@ -211,8 +211,8 @@ public class ProduitService : IProduitService
         catch (ProduitIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.NotFound,
-                data: new { code = e.Message }
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -220,8 +220,8 @@ public class ProduitService : IProduitService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -235,23 +235,23 @@ public class ProduitService : IProduitService
             var produit = _produitRepository.Trouver(produitId);
 
             produit.MettreAJour(
-                nom: produitUpdate.Nom,
-                description: produitUpdate.Description,
-                appellation: produitUpdate.Appellation,
-                cepage: produitUpdate.Cepage,
-                region: produitUpdate.Region,
-                annee: produitUpdate.Annee,
-                degreAlcool: produitUpdate.DegreAlcool,
-                prixAchat: produitUpdate.PrixAchat,
-                prixVente: produitUpdate.PrixVente,
-                datePeremption: produitUpdate.DatePeremption,
-                enPromotion: produitUpdate.EnPromotion
+                produitUpdate.Nom,
+                produitUpdate.Description,
+                produitUpdate.Appellation,
+                produitUpdate.Cepage,
+                produitUpdate.Region,
+                produitUpdate.Annee,
+                produitUpdate.DegreAlcool,
+                produitUpdate.PrixAchat,
+                produitUpdate.PrixVente,
+                produitUpdate.DatePeremption,
+                produitUpdate.EnPromotion
             );
             _produitRepository.Modifier(produit);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: new { code = "produit_modifie" }
+                HttpStatusCode.OK,
+                new { code = "produit_modifie" }
             );
 
             return response;
@@ -259,8 +259,8 @@ public class ProduitService : IProduitService
         catch (ProduitIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.NotFound,
-                data: new { code = e.Message }
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -268,8 +268,8 @@ public class ProduitService : IProduitService
         catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.Conflict,
-                data: new { code = "produit_existe_deja" }
+                HttpStatusCode.Conflict,
+                new { code = "produit_existe_deja" }
             );
 
             return response;
@@ -277,8 +277,8 @@ public class ProduitService : IProduitService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -293,8 +293,8 @@ public class ProduitService : IProduitService
             _produitRepository.Supprimer(produit);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: new { code = "produit_supprime" }
+                HttpStatusCode.OK,
+                new { code = "produit_supprime" }
             );
 
             return response;
@@ -302,8 +302,8 @@ public class ProduitService : IProduitService
         catch (ProduitIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.NotFound,
-                data: new { code = e.Message }
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -311,8 +311,8 @@ public class ProduitService : IProduitService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;

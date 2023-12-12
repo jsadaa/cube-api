@@ -10,8 +10,8 @@ namespace ApiCube.Application.Services.Promotion;
 
 public class PromotionService : IPromotionService
 {
-    private readonly IPromotionRepository _promotionRepository;
     private readonly IMapper _mapper;
+    private readonly IPromotionRepository _promotionRepository;
 
     public PromotionService(
         IPromotionRepository promotionRepository,
@@ -27,8 +27,8 @@ public class PromotionService : IPromotionService
         try
         {
             var nouvellePromotion = new Domain.Entities.Promotion(
-                nom: promotionRequest.Nom,
-                description: promotionRequest.Description,
+                promotionRequest.Nom,
+                promotionRequest.Description,
                 dateDebut: promotionRequest.DateDebut,
                 dateFin: promotionRequest.DateFin,
                 pourcentage: promotionRequest.Pourcentage
@@ -36,8 +36,8 @@ public class PromotionService : IPromotionService
             _promotionRepository.Ajouter(nouvellePromotion);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.Created,
-                data: new { code = "promotion_ajoute" }
+                HttpStatusCode.Created,
+                new { code = "promotion_ajoute" }
             );
 
             return response;
@@ -45,8 +45,8 @@ public class PromotionService : IPromotionService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -61,8 +61,8 @@ public class PromotionService : IPromotionService
             var promotions = _mapper.Map<List<PromotionResponse>>(listePromotions);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: promotions
+                HttpStatusCode.OK,
+                promotions
             );
 
             return response;
@@ -70,8 +70,8 @@ public class PromotionService : IPromotionService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -86,8 +86,8 @@ public class PromotionService : IPromotionService
             var promotionResponse = _mapper.Map<PromotionResponse>(promotion);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: promotionResponse
+                HttpStatusCode.OK,
+                promotionResponse
             );
 
             return response;
@@ -95,8 +95,8 @@ public class PromotionService : IPromotionService
         catch (PromotionIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.NotFound,
-                data: new { code = e.Message }
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -104,8 +104,8 @@ public class PromotionService : IPromotionService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -119,8 +119,8 @@ public class PromotionService : IPromotionService
             var promotionAModifier = _promotionRepository.Trouver(id);
 
             promotionAModifier.MettreAJour(
-                nom: promotionRequest.Nom,
-                description: promotionRequest.Description,
+                promotionRequest.Nom,
+                promotionRequest.Description,
                 dateDebut: promotionRequest.DateDebut,
                 dateFin: promotionRequest.DateFin,
                 pourcentage: promotionRequest.Pourcentage
@@ -128,8 +128,8 @@ public class PromotionService : IPromotionService
             _promotionRepository.Modifier(promotionAModifier);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: new { code = "promotion_modifiee" }
+                HttpStatusCode.OK,
+                new { code = "promotion_modifiee" }
             );
 
             return response;
@@ -137,8 +137,8 @@ public class PromotionService : IPromotionService
         catch (PromotionIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.NotFound,
-                data: new { code = e.Message }
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -146,8 +146,8 @@ public class PromotionService : IPromotionService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -162,8 +162,8 @@ public class PromotionService : IPromotionService
             _promotionRepository.Supprimer(promotionASupprimer);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: new { code = "promotion_supprimee" }
+                HttpStatusCode.OK,
+                new { code = "promotion_supprimee" }
             );
 
             return response;
@@ -171,8 +171,8 @@ public class PromotionService : IPromotionService
         catch (PromotionIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.NotFound,
-                data: new { code = e.Message }
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -180,8 +180,8 @@ public class PromotionService : IPromotionService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;

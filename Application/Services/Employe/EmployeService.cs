@@ -40,11 +40,11 @@ public class EmployeService : IEmployeService
             };
 
             var employe = new Domain.Entities.Employe(
-                nom: employeRequest.Nom,
-                prenom: employeRequest.Prenom,
-                email: employeRequest.Email,
-                dateEmbauche: employeRequest.DateEmbauche,
-                poste: employeRequest.Poste
+                employeRequest.Nom,
+                employeRequest.Prenom,
+                employeRequest.Email,
+                employeRequest.DateEmbauche,
+                employeRequest.Poste
             );
 
             var creationAppUser = await _userManager.CreateAsync(applicationUserModel, employeRequest.Password);
@@ -110,8 +110,8 @@ public class EmployeService : IEmployeService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -151,17 +151,14 @@ public class EmployeService : IEmployeService
             var employe = _employeRepository.Trouver(id);
             var applicationUser = await _userManager.FindByEmailAsync(employe.Email);
 
-            if (applicationUser == null)
-            {
-                throw new UtilisateurIntrouvable();
-            }
+            if (applicationUser == null) throw new UtilisateurIntrouvable();
 
             employe.MettreAJour(
-                nom: employeRequest.Nom,
-                prenom: employeRequest.Prenom,
-                email: employeRequest.Email,
-                dateEmbauche: employeRequest.DateEmbauche,
-                poste: employeRequest.Poste
+                employeRequest.Nom,
+                employeRequest.Prenom,
+                employeRequest.Email,
+                employeRequest.DateEmbauche,
+                employeRequest.Poste
             );
 
             applicationUser.Email = employeRequest.Email;
@@ -241,8 +238,8 @@ public class EmployeService : IEmployeService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -256,18 +253,12 @@ public class EmployeService : IEmployeService
             var employe = _employeRepository.Trouver(id);
             var applicationUser = await _userManager.FindByEmailAsync(employe.Email);
 
-            if (applicationUser == null)
-            {
-                throw new UtilisateurIntrouvable();
-            }
+            if (applicationUser == null) throw new UtilisateurIntrouvable();
 
             // Ici on supprime l'utilisateur et l'employé
             // Pas besoin de supprimer l'employé avec le repository car il est supprimé en cascade avec l'utilisateur
             var deleteAppUser = await _userManager.DeleteAsync(applicationUser);
-            if (!deleteAppUser.Succeeded)
-            {
-                throw new Exception("error_delete_user");
-            }
+            if (!deleteAppUser.Succeeded) throw new Exception("error_delete_user");
 
             var response = new BaseResponse(
                 HttpStatusCode.OK,

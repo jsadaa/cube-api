@@ -12,14 +12,14 @@ public class EmployeSeeder
 
         if (context.Employes.Any()) return;
 
-        var applicationUser1 = new ApplicationUserModel()
+        var applicationUser1 = new ApplicationUserModel
         {
             UserName = "Admin",
             Email = "admin@gmail.com",
             EmailConfirmed = true
         };
 
-        var applicationUser2 = new ApplicationUserModel()
+        var applicationUser2 = new ApplicationUserModel
         {
             UserName = "Client",
             Email = "client@gmail.com",

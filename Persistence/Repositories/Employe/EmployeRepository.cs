@@ -9,8 +9,8 @@ namespace ApiCube.Persistence.Repositories.Employe;
 public class EmployeRepository : IEmployeRepository
 {
     private readonly ApiDbContext _context;
-    private readonly IMapper _mapper;
     private readonly IEmployeMapper _employeMapper;
+    private readonly IMapper _mapper;
 
     public EmployeRepository(ApiDbContext context, IMapper mapper, IEmployeMapper employeMapper)
     {
@@ -37,10 +37,7 @@ public class EmployeRepository : IEmployeRepository
     public Domain.Entities.Employe Trouver(int id)
     {
         var employe = _context.Employes.AsNoTracking().FirstOrDefault(e => e.Id == id);
-        if (employe == null)
-        {
-            throw new EmployeIntrouvable();
-        }
+        if (employe == null) throw new EmployeIntrouvable();
 
         return _employeMapper.Mapper(employe);
     }

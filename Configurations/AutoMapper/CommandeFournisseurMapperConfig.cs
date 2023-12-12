@@ -1,3 +1,4 @@
+using ApiCube.Application.DTOs.Responses;
 using ApiCube.Domain.Entities;
 using ApiCube.Persistence.Models;
 using AutoMapper;
@@ -14,8 +15,9 @@ public class CommandeFournisseurMapperConfig : Profile
             .ForMember(dest => dest.EmployeId, opt => opt.MapFrom(src => src.Employe.Id))
             .ForMember(dest => dest.Employe, opt => opt.Ignore())
             .ForMember(dest => dest.Statut, opt => opt.MapFrom(src => src.Statut.ToString()))
-            .ForMember(dest => dest.LigneCommandeFournisseurs, opt => opt.MapFrom(src => src.LigneCommandeFournisseurs));
-        CreateMap<CommandeFournisseur, Application.DTOs.Responses.CommandeFournisseurResponse>()
+            .ForMember(dest => dest.LigneCommandeFournisseurs,
+                opt => opt.MapFrom(src => src.LigneCommandeFournisseurs));
+        CreateMap<CommandeFournisseur, CommandeFournisseurResponse>()
             .ForMember(dest => dest.Fournisseur, opt => opt.MapFrom(src => src.Fournisseur))
             .ForMember(dest => dest.Employe, opt => opt.MapFrom(src => src.Employe))
             .ForMember(dest => dest.Statut, opt => opt.MapFrom(src => src.Statut.ToString()));

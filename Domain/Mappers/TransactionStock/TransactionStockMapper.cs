@@ -9,14 +9,14 @@ public class TransactionStockMapper : ITransactionStockMapper
         TypeTransactionStock typeTransactionStock)
     {
         return new Entities.TransactionStock(
-            id: transactionStockModel.Id,
-            quantite: transactionStockModel.Quantite,
-            date: transactionStockModel.Date,
-            type: typeTransactionStock,
-            stock: stock,
-            prixUnitaire: transactionStockModel.PrixUnitaire,
-            quantiteAvant: transactionStockModel.QuantiteAvant,
-            quantiteApres: transactionStockModel.QuantiteApres
+            transactionStockModel.Id,
+            transactionStockModel.Quantite,
+            transactionStockModel.Date,
+            typeTransactionStock,
+            stock,
+            transactionStockModel.PrixUnitaire,
+            transactionStockModel.QuantiteAvant,
+            transactionStockModel.QuantiteApres
         );
     }
 }

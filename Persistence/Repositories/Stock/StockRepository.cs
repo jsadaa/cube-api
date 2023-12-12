@@ -13,12 +13,12 @@ namespace ApiCube.Persistence.Repositories.Stock;
 public class StockRepository : IStockRepository
 {
     private readonly ApiDbContext _context;
-    private readonly StatutStockMapper _statutStockMapper;
-    private readonly IStockMapper _stockMapper;
-    private readonly IProduitMapper _produitMapper;
     private readonly IFamilleProduitMapper _familleProduitMapper;
     private readonly IFournisseurMapper _fournisseurMapper;
     private readonly IMapper _mapper;
+    private readonly IProduitMapper _produitMapper;
+    private readonly StatutStockMapper _statutStockMapper;
+    private readonly IStockMapper _stockMapper;
 
     public StockRepository(ApiDbContext context, StatutStockMapper statutStockMapper, IStockMapper stockMapper,
         IProduitMapper produitMapper, IFamilleProduitMapper familleProduitMapper, IFournisseurMapper fournisseurMapper,

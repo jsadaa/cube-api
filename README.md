@@ -151,4 +151,5 @@ Elles sont chargées au démarrage de l'API (voir Persistence/Seeders).
 ### Tests
 
 En environnement de développement, l'api utilise SwaggerUI pour tester les endpoints.
-Pour accéder à SwaggerUI, lancer l'API et se rendre sur l'URL suivante : http://localhost:5273/swagger/index.html (adapter le port si besoin) ou lancer le runner de l'API.
+Pour accéder à SwaggerUI, lancer l'API et se rendre sur l'URL suivante : http://localhost:5273/swagger/index.html (
+adapter le port si besoin) ou lancer le runner de l'API.

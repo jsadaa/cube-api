@@ -4,24 +4,6 @@ namespace ApiCube.Domain.Entities;
 
 public class TransactionStock
 {
-    public int Id { get; set; } = 0;
-
-    public int Quantite { get; set; }
-
-    public DateTime Date { get; set; }
-
-    public TypeTransactionStock Type { get; set; }
-
-    public Stock Stock { get; set; }
-
-    public double PrixUnitaire { get; set; }
-
-    public double PrixTotal { get; set; }
-
-    public int QuantiteAvant { get; set; }
-
-    public int QuantiteApres { get; set; }
-
     public TransactionStock(int id, int quantite, DateTime date, TypeTransactionStock type, Stock stock,
         double prixUnitaire, int quantiteAvant, int quantiteApres)
     {
@@ -48,6 +30,24 @@ public class TransactionStock
         QuantiteAvant = quantiteAvant;
         QuantiteApres = quantiteApres;
     }
+
+    public int Id { get; set; }
+
+    public int Quantite { get; set; }
+
+    public DateTime Date { get; set; }
+
+    public TypeTransactionStock Type { get; set; }
+
+    public Stock Stock { get; set; }
+
+    public double PrixUnitaire { get; set; }
+
+    public double PrixTotal { get; set; }
+
+    public int QuantiteAvant { get; set; }
+
+    public int QuantiteApres { get; set; }
 
     public double CalculerPrixTotal()
     {

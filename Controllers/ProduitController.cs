@@ -18,7 +18,7 @@ public class ProduitController : ControllerBase
     }
 
     /// <summary>
-    /// Ajouter un produit au catalogue
+    ///     Ajouter un produit au catalogue
     /// </summary>
     /// <param name="produitRequest"></param>
     /// <returns></returns>
@@ -35,13 +35,13 @@ public class ProduitController : ControllerBase
     [Produces("application/json")]
     public IActionResult AjouterUnProduitAuCatalogue([FromBody] ProduitRequest produitRequest)
     {
-        BaseResponse response = _produitService.AjouterUnProduitAuCatalogue(produitRequest);
+        var response = _produitService.AjouterUnProduitAuCatalogue(produitRequest);
 
         return StatusCode(response.StatusCode, response.Data);
     }
 
     /// <summary>
-    /// Lister les produits
+    ///     Lister les produits
     /// </summary>
     /// <returns> Liste des produits </returns>
     /// <response code="200"></response>
@@ -58,7 +58,7 @@ public class ProduitController : ControllerBase
     }
 
     /// <summary>
-    /// Trouver un produit par son identifiant
+    ///     Trouver un produit par son identifiant
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -78,7 +78,7 @@ public class ProduitController : ControllerBase
     }
 
     /// <summary>
-    /// Modifier un produit
+    ///     Modifier un produit
     /// </summary>
     /// <param name="id"></param>
     /// <param name="produitUpdate"></param>
@@ -103,7 +103,7 @@ public class ProduitController : ControllerBase
     }
 
     /// <summary>
-    /// Supprimer un produit
+    ///     Supprimer un produit
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -125,7 +125,7 @@ public class ProduitController : ControllerBase
     }
 
     /// <summary>
-    /// Appliquer une promotion sur un produit
+    ///     Appliquer une promotion sur un produit
     /// </summary>
     /// <param name="produitId"></param>
     /// <param name="promotionId"></param>
@@ -148,7 +148,7 @@ public class ProduitController : ControllerBase
     }
 
     /// <summary>
-    /// Supprimer une promotion d'un produit
+    ///     Supprimer une promotion d'un produit
     /// </summary>
     /// <param name="produitId"></param>
     /// <returns></returns>

@@ -8,11 +8,11 @@ public class ProduitMapper : IProduitMapper
         Entities.Fournisseur fournisseur)
     {
         var produit = new Entities.Produit(
-            id: produitModel.Id,
-            nom: produitModel.Nom,
-            description: produitModel.Description,
-            appellation: produitModel.Appellation,
-            cepage: produitModel.Cepage,
+            produitModel.Id,
+            produitModel.Nom,
+            produitModel.Description,
+            produitModel.Appellation,
+            produitModel.Cepage,
             region: produitModel.Region,
             annee: produitModel.Annee,
             degreAlcool: produitModel.DegreAlcool,
@@ -31,14 +31,14 @@ public class ProduitMapper : IProduitMapper
         Entities.Fournisseur fournisseur, Entities.Promotion promotion)
     {
         var produit = new Entities.Produit(
-            id: produitModel.Id,
-            nom: produitModel.Nom,
-            description: produitModel.Description,
-            appellation: produitModel.Appellation,
-            cepage: produitModel.Cepage,
-            region: produitModel.Region,
-            annee: produitModel.Annee,
-            degreAlcool: produitModel.DegreAlcool,
+            produitModel.Id,
+            produitModel.Nom,
+            produitModel.Description,
+            produitModel.Appellation,
+            produitModel.Cepage,
+            produitModel.Region,
+            produitModel.Annee,
+            produitModel.DegreAlcool,
             prixAchat: produitModel.PrixAchat,
             prixVente: produitModel.PrixVente,
             datePeremption: produitModel.DatePeremption,

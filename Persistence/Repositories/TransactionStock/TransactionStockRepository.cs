@@ -14,14 +14,14 @@ namespace ApiCube.Persistence.Repositories.TransactionStock;
 public class TransactionStockRepository : ITransactionStockRepository
 {
     private readonly ApiDbContext _context;
-    private readonly IMapper _mapper;
-    private readonly ITransactionStockMapper _transactionStockMapper;
     private readonly IFamilleProduitMapper _familleProduitMapper;
     private readonly IFournisseurMapper _fournisseurMapper;
-    private readonly IStockMapper _stockMapper;
+    private readonly IMapper _mapper;
     private readonly IProduitMapper _produitMapper;
-    private readonly TypeTransactionStockMapper _typeTransactionStockMapper;
     private readonly StatutStockMapper _statutStockMapper;
+    private readonly IStockMapper _stockMapper;
+    private readonly ITransactionStockMapper _transactionStockMapper;
+    private readonly TypeTransactionStockMapper _typeTransactionStockMapper;
 
     public TransactionStockRepository(ApiDbContext context, IMapper mapper,
         ITransactionStockMapper transactionStockMapper, IFamilleProduitMapper familleProduitMapper,

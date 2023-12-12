@@ -4,5 +4,6 @@ namespace ApiCube.Domain.Mappers.LigneCommandeFournisseur;
 
 public interface ILigneCommandeFournisseurMapper
 {
-    public Domain.Entities.LigneCommandeFournisseur Mapper(LigneCommandeFournisseurModel ligneCommandeFournisseurModel, Domain.Entities.Produit produit, int commandeFournisseurId);
+    public Entities.LigneCommandeFournisseur Mapper(LigneCommandeFournisseurModel ligneCommandeFournisseurModel,
+        Entities.Produit produit, int commandeFournisseurId);
 }

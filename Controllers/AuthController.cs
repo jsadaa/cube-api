@@ -18,7 +18,7 @@ public class AuthController : ControllerBase
     }
 
     /// <summary>
-    /// Login d'un employé ou d'un client
+    ///     Login d'un employé ou d'un client
     /// </summary>
     /// <param name="loginRequest"></param>
     /// <returns></returns>
@@ -39,7 +39,7 @@ public class AuthController : ControllerBase
 
 
     /// <summary>
-    /// Rafraîchir un token expiré
+    ///     Rafraîchir un token expiré
     /// </summary>
     /// <param name="refreshTokenRequest"></param>
     /// <returns></returns>

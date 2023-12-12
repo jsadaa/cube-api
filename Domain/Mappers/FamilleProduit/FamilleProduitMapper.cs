@@ -7,9 +7,9 @@ public class FamilleProduitMapper : IFamilleProduitMapper
     public Entities.FamilleProduit Mapper(FamilleProduitModel familleProduitModel)
     {
         return new Entities.FamilleProduit(
-            id: familleProduitModel.Id,
-            nom: familleProduitModel.Nom,
-            description: familleProduitModel.Description
+            familleProduitModel.Id,
+            familleProduitModel.Nom,
+            familleProduitModel.Description
         );
     }
 }

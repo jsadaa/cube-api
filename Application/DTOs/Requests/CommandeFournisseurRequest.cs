@@ -12,4 +12,3 @@ public class ProduitCommandeRequest
     public int ProduitId { get; set; }
     public int Quantite { get; set; }
 }
-

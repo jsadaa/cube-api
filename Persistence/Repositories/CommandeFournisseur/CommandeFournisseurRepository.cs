@@ -1,3 +1,4 @@
+using ApiCube.Domain.Entities;
 using ApiCube.Domain.Enums.Stock;
 using ApiCube.Domain.Mappers.CommandeFournisseur;
 using ApiCube.Domain.Mappers.Employe;
@@ -14,17 +15,21 @@ namespace ApiCube.Persistence.Repositories.CommandeFournisseur;
 
 public class CommandeFournisseurRepository : ICommandeFournisseurRepository
 {
-    private readonly ApiDbContext _context;
-    private readonly StatutCommandeMapper _statutCommandeMapper;
     private readonly ICommandeFournisseurMapper _commandeFournisseurMapper;
-    private readonly ILigneCommandeFournisseurMapper _ligneCommandeFournisseurMapper;
-    private readonly IFournisseurMapper _fournisseurMapper;
+    private readonly ApiDbContext _context;
     private readonly IEmployeMapper _employeMapper;
-    private readonly IProduitMapper _produitMapper;
     private readonly IFamilleProduitMapper _familleProduitMapper;
+    private readonly IFournisseurMapper _fournisseurMapper;
+    private readonly ILigneCommandeFournisseurMapper _ligneCommandeFournisseurMapper;
     private readonly IMapper _mapper;
-    
-    public CommandeFournisseurRepository(ApiDbContext context, StatutCommandeMapper statutCommandeMapper, ICommandeFournisseurMapper commandeFournisseurMapper, ILigneCommandeFournisseurMapper ligneCommandeFournisseurMapper, IFournisseurMapper fournisseurMapper, IEmployeMapper employeMapper, IProduitMapper produitMapper, IFamilleProduitMapper familleProduitMapper, IMapper mapper)
+    private readonly IProduitMapper _produitMapper;
+    private readonly StatutCommandeMapper _statutCommandeMapper;
+
+    public CommandeFournisseurRepository(ApiDbContext context, StatutCommandeMapper statutCommandeMapper,
+        ICommandeFournisseurMapper commandeFournisseurMapper,
+        ILigneCommandeFournisseurMapper ligneCommandeFournisseurMapper, IFournisseurMapper fournisseurMapper,
+        IEmployeMapper employeMapper, IProduitMapper produitMapper, IFamilleProduitMapper familleProduitMapper,
+        IMapper mapper)
     {
         _context = context;
         _statutCommandeMapper = statutCommandeMapper;
@@ -36,7 +41,7 @@ public class CommandeFournisseurRepository : ICommandeFournisseurRepository
         _familleProduitMapper = familleProduitMapper;
         _mapper = mapper;
     }
-    
+
     public void Ajouter(Domain.Entities.CommandeFournisseur nouvelleCommandeFournisseur)
     {
         var nouvelleCommandeFournisseurModel = _mapper.Map<CommandeFournisseurModel>(nouvelleCommandeFournisseur);
@@ -60,21 +65,23 @@ public class CommandeFournisseurRepository : ICommandeFournisseurRepository
         var fournisseur = _fournisseurMapper.Mapper(commandeFournisseurModel.Fournisseur);
         var employe = _employeMapper.Mapper(commandeFournisseurModel.Employe);
         var statutCommande = _statutCommandeMapper.Mapper(commandeFournisseurModel.Statut);
-        var listeLigneCommandeFournisseur = new List<Domain.Entities.LigneCommandeFournisseur>();
-        
+        var listeLigneCommandeFournisseur = new List<LigneCommandeFournisseur>();
+
         foreach (var ligneCommandeFournisseurModel in commandeFournisseurModel.LigneCommandeFournisseurs)
         {
             var familleProduit = _familleProduitMapper.Mapper(ligneCommandeFournisseurModel.Produit.FamilleProduit);
             var produit = _produitMapper.Mapper(ligneCommandeFournisseurModel.Produit, familleProduit, fournisseur);
-            var ligneCommandeFournisseur = _ligneCommandeFournisseurMapper.Mapper(ligneCommandeFournisseurModel, produit, commandeFournisseurModel.Id);
+            var ligneCommandeFournisseur = _ligneCommandeFournisseurMapper.Mapper(ligneCommandeFournisseurModel,
+                produit, commandeFournisseurModel.Id);
             listeLigneCommandeFournisseur.Add(ligneCommandeFournisseur);
         }
-        
-        var commandeFournisseur = _commandeFournisseurMapper.Mapper(commandeFournisseurModel, fournisseur, employe, listeLigneCommandeFournisseur, statutCommande);
-        
+
+        var commandeFournisseur = _commandeFournisseurMapper.Mapper(commandeFournisseurModel, fournisseur, employe,
+            listeLigneCommandeFournisseur, statutCommande);
+
         return commandeFournisseur;
     }
-    
+
     public List<Domain.Entities.CommandeFournisseur> Lister()
     {
         var commandesFournisseursModels = _context.CommandesFournisseurs
@@ -87,36 +94,38 @@ public class CommandeFournisseurRepository : ICommandeFournisseurRepository
             .ToList();
 
         var commandesFournisseurs = new List<Domain.Entities.CommandeFournisseur>();
-        
+
         foreach (var commandeFournisseurModel in commandesFournisseursModels)
         {
             var fournisseur = _fournisseurMapper.Mapper(commandeFournisseurModel.Fournisseur);
             var employe = _employeMapper.Mapper(commandeFournisseurModel.Employe);
             var statutCommande = _statutCommandeMapper.Mapper(commandeFournisseurModel.Statut);
-            var listeLigneCommandeFournisseur = new List<Domain.Entities.LigneCommandeFournisseur>();
-        
+            var listeLigneCommandeFournisseur = new List<LigneCommandeFournisseur>();
+
             foreach (var ligneCommandeFournisseurModel in commandeFournisseurModel.LigneCommandeFournisseurs)
             {
                 var familleProduit = _familleProduitMapper.Mapper(ligneCommandeFournisseurModel.Produit.FamilleProduit);
                 var produit = _produitMapper.Mapper(ligneCommandeFournisseurModel.Produit, familleProduit, fournisseur);
-                var ligneCommandeFournisseur = _ligneCommandeFournisseurMapper.Mapper(ligneCommandeFournisseurModel, produit, commandeFournisseurModel.Id);
+                var ligneCommandeFournisseur = _ligneCommandeFournisseurMapper.Mapper(ligneCommandeFournisseurModel,
+                    produit, commandeFournisseurModel.Id);
                 listeLigneCommandeFournisseur.Add(ligneCommandeFournisseur);
             }
-        
-            var commandeFournisseur = _commandeFournisseurMapper.Mapper(commandeFournisseurModel, fournisseur, employe, listeLigneCommandeFournisseur, statutCommande);
+
+            var commandeFournisseur = _commandeFournisseurMapper.Mapper(commandeFournisseurModel, fournisseur, employe,
+                listeLigneCommandeFournisseur, statutCommande);
             commandesFournisseurs.Add(commandeFournisseur);
         }
 
         return commandesFournisseurs;
     }
-    
+
     public void Modifier(Domain.Entities.CommandeFournisseur commandeFournisseur)
     {
         var commandeFournisseurModel = _mapper.Map<CommandeFournisseurModel>(commandeFournisseur);
         _context.Update(commandeFournisseurModel);
         _context.SaveChanges();
     }
-    
+
     public void Supprimer(Domain.Entities.CommandeFournisseur commandeFournisseur)
     {
         var commandeFournisseurModel = _mapper.Map<CommandeFournisseurModel>(commandeFournisseur);

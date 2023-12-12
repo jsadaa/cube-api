@@ -21,7 +21,7 @@ public static class StockSeeder
                 SeuilDisponibilite = new Faker().Random.Number(2, 5),
                 Statut = "EnStock",
                 DateCreation = new Faker().Date.Past(),
-                DateModification = new Faker().Date.Recent(),
+                DateModification = new Faker().Date.Recent()
             };
             context.Stocks.Add(stock);
         }

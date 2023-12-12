@@ -14,10 +14,10 @@ namespace ApiCube.Application.Services.Stock;
 
 public class StockService : IStockService
 {
-    private readonly IStockRepository _stockRepository;
-    private readonly IProduitRepository _produitRepository;
-    private readonly PreparateurDeStock _preparateurDeStock;
     private readonly IMapper _mapper;
+    private readonly PreparateurDeStock _preparateurDeStock;
+    private readonly IProduitRepository _produitRepository;
+    private readonly IStockRepository _stockRepository;
 
     public StockService(
         IStockRepository stockRepository,
@@ -39,15 +39,15 @@ public class StockService : IStockService
             var produit = _produitRepository.Trouver(stockRequest.ProduitId);
 
             var nouveauStock = _preparateurDeStock.AjoutInterne(
-                produit: produit,
-                stockRequest: stockRequest
+                produit,
+                stockRequest
             );
 
             _stockRepository.Ajouter(nouveauStock);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.Created,
-                data: new { code = "stock_ajoute" }
+                HttpStatusCode.Created,
+                new { code = "stock_ajoute" }
             );
 
             return response;
@@ -55,8 +55,8 @@ public class StockService : IStockService
         catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.Conflict,
-                data: new { code = "stock_existe_deja" }
+                HttpStatusCode.Conflict,
+                new { code = "stock_existe_deja" }
             );
 
             return response;
@@ -64,8 +64,8 @@ public class StockService : IStockService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -80,8 +80,8 @@ public class StockService : IStockService
             var stocks = _mapper.Map<List<StockResponse>>(listeStocks);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: stocks
+                HttpStatusCode.OK,
+                stocks
             );
 
             return response;
@@ -89,8 +89,8 @@ public class StockService : IStockService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -105,8 +105,8 @@ public class StockService : IStockService
             var stockResponse = _mapper.Map<StockResponse>(stock);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: stockResponse
+                HttpStatusCode.OK,
+                stockResponse
             );
 
             return response;
@@ -114,8 +114,8 @@ public class StockService : IStockService
         catch (StockIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.NotFound,
-                data: new { code = e.Message }
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -123,8 +123,8 @@ public class StockService : IStockService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -138,15 +138,15 @@ public class StockService : IStockService
             var stock = _stockRepository.Trouver(id);
 
             var stockModifié = _preparateurDeStock.ModificationInterne(
-                stock: stock,
-                stockUpdate: stockUpdate
+                stock,
+                stockUpdate
             );
 
             _stockRepository.Modifier(stockModifié);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: new { code = "stock_modifie" }
+                HttpStatusCode.OK,
+                new { code = "stock_modifie" }
             );
 
             return response;
@@ -154,8 +154,8 @@ public class StockService : IStockService
         catch (StockIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.NotFound,
-                data: new { code = e.Message }
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -163,8 +163,8 @@ public class StockService : IStockService
         catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.Conflict,
-                data: new { code = "stock_existe_deja" }
+                HttpStatusCode.Conflict,
+                new { code = "stock_existe_deja" }
             );
 
             return response;
@@ -172,8 +172,8 @@ public class StockService : IStockService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -192,8 +192,8 @@ public class StockService : IStockService
             _stockRepository.Modifier(stockSupprimé);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: new { code = "stock_supprime" }
+                HttpStatusCode.OK,
+                new { code = "stock_supprime" }
             );
 
             return response;
@@ -201,8 +201,8 @@ public class StockService : IStockService
         catch (StockIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.NotFound,
-                data: new { code = e.Message }
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -210,8 +210,8 @@ public class StockService : IStockService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;

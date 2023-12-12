@@ -26,20 +26,20 @@ public class FournisseurService : IFournisseurService
         try
         {
             var nouveauFournisseur = new Domain.Entities.Fournisseur(
-                nom: fournisseurRequest.Nom,
-                adresse: fournisseurRequest.Adresse,
-                codePostal: fournisseurRequest.CodePostal,
-                ville: fournisseurRequest.Ville,
-                pays: fournisseurRequest.Pays,
-                telephone: fournisseurRequest.Telephone,
-                email: fournisseurRequest.Email
+                fournisseurRequest.Nom,
+                fournisseurRequest.Adresse,
+                fournisseurRequest.CodePostal,
+                fournisseurRequest.Ville,
+                fournisseurRequest.Pays,
+                fournisseurRequest.Telephone,
+                fournisseurRequest.Email
             );
 
             _fournisseurRepository.Ajouter(nouveauFournisseur);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.Created,
-                data: new { code = "fournisseur_ajoute" }
+                HttpStatusCode.Created,
+                new { code = "fournisseur_ajoute" }
             );
 
             return response;
@@ -47,8 +47,8 @@ public class FournisseurService : IFournisseurService
         catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.Conflict,
-                data: new { code = "fournisseur_existe_deja" }
+                HttpStatusCode.Conflict,
+                new { code = "fournisseur_existe_deja" }
             );
 
             return response;
@@ -56,8 +56,8 @@ public class FournisseurService : IFournisseurService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -72,8 +72,8 @@ public class FournisseurService : IFournisseurService
             var fournisseurs = _mapper.Map<List<FournisseurResponse>>(listeFournisseurs);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: fournisseurs
+                HttpStatusCode.OK,
+                fournisseurs
             );
 
             return response;
@@ -81,8 +81,8 @@ public class FournisseurService : IFournisseurService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -96,8 +96,8 @@ public class FournisseurService : IFournisseurService
             var fournisseur = _fournisseurRepository.Trouver(id);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: _mapper.Map<FournisseurResponse>(fournisseur)
+                HttpStatusCode.OK,
+                _mapper.Map<FournisseurResponse>(fournisseur)
             );
 
             return response;
@@ -105,8 +105,8 @@ public class FournisseurService : IFournisseurService
         catch (FournisseurIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.NotFound,
-                data: new { code = e.Message }
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -114,8 +114,8 @@ public class FournisseurService : IFournisseurService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -129,20 +129,20 @@ public class FournisseurService : IFournisseurService
             var fournisseur = _fournisseurRepository.Trouver(id);
 
             fournisseur.MettreAJour(
-                nom: fournisseurRequest.Nom,
-                adresse: fournisseurRequest.Adresse,
-                codePostal: fournisseurRequest.CodePostal,
-                ville: fournisseurRequest.Ville,
-                pays: fournisseurRequest.Pays,
-                telephone: fournisseurRequest.Telephone,
-                email: fournisseurRequest.Email
+                fournisseurRequest.Nom,
+                fournisseurRequest.Adresse,
+                fournisseurRequest.CodePostal,
+                fournisseurRequest.Ville,
+                fournisseurRequest.Pays,
+                fournisseurRequest.Telephone,
+                fournisseurRequest.Email
             );
 
             _fournisseurRepository.Modifier(fournisseur);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: new { code = "fournisseur_modifie" }
+                HttpStatusCode.OK,
+                new { code = "fournisseur_modifie" }
             );
 
             return response;
@@ -150,8 +150,8 @@ public class FournisseurService : IFournisseurService
         catch (FournisseurIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.NotFound,
-                data: new { code = e.Message }
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -159,8 +159,8 @@ public class FournisseurService : IFournisseurService
         catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.Conflict,
-                data: new { code = "fournisseur_existe_deja" }
+                HttpStatusCode.Conflict,
+                new { code = "fournisseur_existe_deja" }
             );
 
             return response;
@@ -168,8 +168,8 @@ public class FournisseurService : IFournisseurService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;
@@ -185,8 +185,8 @@ public class FournisseurService : IFournisseurService
             _fournisseurRepository.Supprimer(fournisseur);
 
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.OK,
-                data: new { code = "fournisseur_supprime" }
+                HttpStatusCode.OK,
+                new { code = "fournisseur_supprime" }
             );
 
             return response;
@@ -194,8 +194,8 @@ public class FournisseurService : IFournisseurService
         catch (FournisseurIntrouvable e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.NotFound,
-                data: new { code = e.Message }
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -203,8 +203,8 @@ public class FournisseurService : IFournisseurService
         catch (Exception e)
         {
             var response = new BaseResponse(
-                statusCode: HttpStatusCode.InternalServerError,
-                data: new { code = "unexpected_error", message = e.Message }
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
             );
 
             return response;

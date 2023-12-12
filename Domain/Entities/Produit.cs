@@ -4,22 +4,6 @@ namespace ApiCube.Domain.Entities;
 
 public class Produit
 {
-    public int Id { get; set; } = 0;
-    public string Nom { get; set; }
-    public string Description { get; set; }
-    public string Appellation { get; set; }
-    public string Cepage { get; set; }
-    public string Region { get; set; }
-    public int Annee { get; set; }
-    public double DegreAlcool { get; set; }
-    public double PrixAchat { get; set; }
-    public double PrixVente { get; set; }
-    public DateTime DatePeremption { get; set; }
-    public bool EnPromotion { get; set; }
-    public Promotion? Promotion { get; set; }
-    public FamilleProduit FamilleProduit { get; set; }
-    public Fournisseur Fournisseur { get; set; }
-
     public Produit(string nom, string description, string appellation, string cepage, string region, int annee,
         double degreAlcool,
         bool enPromotion, double prixAchat, double prixVente, DateTime datePeremption, FamilleProduit familleProduit,
@@ -89,6 +73,22 @@ public class Produit
         VerifierValiditePromotion();
     }
 
+    public int Id { get; set; }
+    public string Nom { get; set; }
+    public string Description { get; set; }
+    public string Appellation { get; set; }
+    public string Cepage { get; set; }
+    public string Region { get; set; }
+    public int Annee { get; set; }
+    public double DegreAlcool { get; set; }
+    public double PrixAchat { get; set; }
+    public double PrixVente { get; set; }
+    public DateTime DatePeremption { get; set; }
+    public bool EnPromotion { get; set; }
+    public Promotion? Promotion { get; set; }
+    public FamilleProduit FamilleProduit { get; set; }
+    public Fournisseur Fournisseur { get; set; }
+
     public void VerifierValiditePromotion()
     {
         if (Promotion != null && !Promotion.EstValide()) SupprimerPromotion();
@@ -105,7 +105,7 @@ public class Produit
     {
         if (Promotion == null) throw new ProduitNonEnPromotion();
         var pourcentageReduction = Promotion.Pourcentage / 100;
-        PrixVente /= (1 - pourcentageReduction);
+        PrixVente /= 1 - pourcentageReduction;
         Promotion = null;
         EnPromotion = false;
     }
@@ -122,9 +122,9 @@ public class Produit
 
     private double CalculerPrixAvecPromotion()
     {
-        double prix = PrixVente;
+        var prix = PrixVente;
 
-        if (Promotion != null) prix = PrixVente - (PrixVente * Promotion.Pourcentage / 100);
+        if (Promotion != null) prix = PrixVente - PrixVente * Promotion.Pourcentage / 100;
 
         return prix;
     }

@@ -2,13 +2,6 @@ namespace ApiCube.Domain.Entities;
 
 public class Promotion
 {
-    public int Id { get; set; } = 0;
-    public string Nom { get; set; }
-    public string Description { get; set; }
-    public double Pourcentage { get; set; }
-    public DateTime DateDebut { get; set; }
-    public DateTime DateFin { get; set; }
-
     public Promotion(string nom, string description, double pourcentage, DateTime dateDebut, DateTime dateFin)
     {
         Nom = nom;
@@ -27,6 +20,13 @@ public class Promotion
         DateDebut = dateDebut;
         DateFin = dateFin;
     }
+
+    public int Id { get; set; }
+    public string Nom { get; set; }
+    public string Description { get; set; }
+    public double Pourcentage { get; set; }
+    public DateTime DateDebut { get; set; }
+    public DateTime DateFin { get; set; }
 
     public bool EstValide()
     {

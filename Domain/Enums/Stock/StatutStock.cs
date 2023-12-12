@@ -17,7 +17,7 @@ public enum StatutStock
     Vole,
     Casse,
     Supprime,
-    Autre,
+    Autre
 }
 
 public class StatutStockMapper

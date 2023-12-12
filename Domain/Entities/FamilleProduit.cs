@@ -2,11 +2,6 @@ namespace ApiCube.Domain.Entities;
 
 public class FamilleProduit
 {
-    public int Id { get; set; } = 0;
-    public string Nom { get; set; }
-    public string Description { get; set; }
-    private ICollection<Produit?> Produits { get; set; } = new List<Produit?>();
-
     public FamilleProduit(string nom, string description)
     {
         Nom = nom;
@@ -19,6 +14,11 @@ public class FamilleProduit
         Nom = nom;
         Description = description;
     }
+
+    public int Id { get; set; }
+    public string Nom { get; set; }
+    public string Description { get; set; }
+    private ICollection<Produit?> Produits { get; } = new List<Produit?>();
 
     public void AjouterProduitALaFamille(Produit produit)
     {

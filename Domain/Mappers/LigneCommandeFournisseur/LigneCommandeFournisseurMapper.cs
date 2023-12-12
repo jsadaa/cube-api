@@ -1,17 +1,20 @@
+using ApiCube.Persistence.Models;
+
 namespace ApiCube.Domain.Mappers.LigneCommandeFournisseur;
 
 public class LigneCommandeFournisseurMapper : ILigneCommandeFournisseurMapper
 {
-    public Domain.Entities.LigneCommandeFournisseur Mapper(Persistence.Models.LigneCommandeFournisseurModel ligneCommandeFournisseurModel, Domain.Entities.Produit produit, int commandeFournisseurId)
+    public Entities.LigneCommandeFournisseur Mapper(LigneCommandeFournisseurModel ligneCommandeFournisseurModel,
+        Entities.Produit produit, int commandeFournisseurId)
     {
-        return new Domain.Entities.LigneCommandeFournisseur(
-            id: ligneCommandeFournisseurModel.Id,
-            quantite: ligneCommandeFournisseurModel.Quantite,
-            prixUnitaire: ligneCommandeFournisseurModel.PrixUnitaire,
-            remise: ligneCommandeFournisseurModel.Remise,
-            total: ligneCommandeFournisseurModel.Total,
-            produit: produit,
-            commandeFournisseurId: commandeFournisseurId
+        return new Entities.LigneCommandeFournisseur(
+            ligneCommandeFournisseurModel.Id,
+            ligneCommandeFournisseurModel.Quantite,
+            ligneCommandeFournisseurModel.PrixUnitaire,
+            ligneCommandeFournisseurModel.Remise,
+            ligneCommandeFournisseurModel.Total,
+            produit,
+            commandeFournisseurId
         );
     }
 }

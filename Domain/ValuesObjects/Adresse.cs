@@ -2,14 +2,6 @@ namespace ApiCube.Domain.ValuesObjects;
 
 public class Adresse
 {
-    public string Rue { get; set; }
-
-    public string CodePostal { get; set; }
-
-    public string Ville { get; set; }
-
-    public string Pays { get; set; }
-
     public Adresse(string rue, string codePostal, string ville, string pays)
     {
         Rue = rue;
@@ -17,6 +9,14 @@ public class Adresse
         Ville = ville;
         Pays = pays;
     }
+
+    public string Rue { get; set; }
+
+    public string CodePostal { get; set; }
+
+    public string Ville { get; set; }
+
+    public string Pays { get; set; }
 
     public override string ToString()
     {

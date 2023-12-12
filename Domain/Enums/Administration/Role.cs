@@ -5,5 +5,5 @@ public enum Role
     Admin,
     Employe,
     Manager,
-    Client,
+    Client
 }

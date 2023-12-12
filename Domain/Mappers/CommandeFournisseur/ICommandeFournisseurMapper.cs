@@ -5,5 +5,7 @@ namespace ApiCube.Domain.Mappers.CommandeFournisseur;
 
 public interface ICommandeFournisseurMapper
 {
-    public Entities.CommandeFournisseur Mapper(CommandeFournisseurModel commandeFournisseurModel, Entities.Fournisseur fournisseur, Entities.Employe employe, List<Entities.LigneCommandeFournisseur> ligneCommandeFournisseurs, StatutCommande statutCommande);
+    public Entities.CommandeFournisseur Mapper(CommandeFournisseurModel commandeFournisseurModel,
+        Entities.Fournisseur fournisseur, Entities.Employe employe,
+        List<Entities.LigneCommandeFournisseur> ligneCommandeFournisseurs, StatutCommande statutCommande);
 }

@@ -12,11 +12,11 @@ namespace ApiCube.Persistence.Repositories.Produit;
 public class ProduitRepository : IProduitRepository
 {
     private readonly ApiDbContext _context;
-    private readonly IProduitMapper _produitMapper;
     private readonly IFamilleProduitMapper _familleProduitMapper;
     private readonly IFournisseurMapper _fournisseurMapper;
-    private readonly IPromotionMapper _promotionMapper;
     private readonly IMapper _mapper;
+    private readonly IProduitMapper _produitMapper;
+    private readonly IPromotionMapper _promotionMapper;
 
     public ProduitRepository(ApiDbContext context, IProduitMapper produitMapper,
         IFamilleProduitMapper familleProduitMapper, IFournisseurMapper fournisseurMapper,
