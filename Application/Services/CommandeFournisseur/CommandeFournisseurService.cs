@@ -88,6 +88,15 @@ public class CommandeFournisseurService : ICommandeFournisseurService
 
             return response;
         }
+        catch (QuantiteProduitCommandeInvalide e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.BadRequest,
+                new { code = e.Message }
+            );
+            
+            return response;
+        }
         catch (FournisseurIntrouvable e)
         {
             var response = new BaseResponse(
@@ -191,8 +200,6 @@ public class CommandeFournisseurService : ICommandeFournisseurService
         try
         {
             var commandeFournisseur = _commandeFournisseurRepository.Trouver(id);
-            commandeFournisseur.VerifierValidite();
-
             var fournisseur = _fournisseurRepository.Trouver(commandeFournisseurRequest.FournisseurId);
             var employe = _employeRepository.Trouver(commandeFournisseurRequest.EmployeId);
 
@@ -255,6 +262,15 @@ public class CommandeFournisseurService : ICommandeFournisseurService
                 new { code = e.Message }
             );
 
+            return response;
+        }
+        catch (QuantiteProduitCommandeInvalide e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.BadRequest,
+                new { code = e.Message }
+            );
+            
             return response;
         }
         catch (CommandeDejaLivree e)
@@ -363,8 +379,6 @@ public class CommandeFournisseurService : ICommandeFournisseurService
         try
         {
             var commandeFournisseur = _commandeFournisseurRepository.Trouver(id);
-            commandeFournisseur.VerifierValidite();
-
             var commandeFournisseurLivree = _preparateurDeCommande.Reception(commandeFournisseur);
 
             // Mise à jour du stock

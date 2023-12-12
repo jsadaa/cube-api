@@ -35,8 +35,14 @@ public class PreparateurDeCommande
                 produit,
                 nouvelleCommandeFournisseur.Id
             );
+            
+            // On vérifie la validité de la ligne de commande
+            nouvelleLigneCommandeFournisseur.VerifierValidite();
             nouvelleCommandeFournisseur.AjouterLigneCommandeFournisseur(nouvelleLigneCommandeFournisseur);
         }
+        
+        // On vérifie la validité de la commande
+        nouvelleCommandeFournisseur.VerifierValidite();
 
         return nouvelleCommandeFournisseur;
     }
@@ -63,8 +69,14 @@ public class PreparateurDeCommande
                 produit,
                 commandeFournisseur.Id
             );
+            
+            // On vérifie la validité de la ligne de commande
+            nouvelleLigneCommandeFournisseur.VerifierValidite();
             commandeFournisseur.AjouterLigneCommandeFournisseur(nouvelleLigneCommandeFournisseur);
         }
+        
+        // On vérifie la validité de la commande
+        commandeFournisseur.VerifierValidite();
 
         return commandeFournisseur;
     }
@@ -72,6 +84,7 @@ public class PreparateurDeCommande
 
     public CommandeFournisseur Reception(CommandeFournisseur commandeFournisseur)
     {
+        commandeFournisseur.VerifierValidite();
         commandeFournisseur.Receptionner();
         return commandeFournisseur;
     }

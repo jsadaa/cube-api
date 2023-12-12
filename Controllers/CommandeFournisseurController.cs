@@ -23,7 +23,7 @@ public class CommandeFournisseurController : ControllerBase
     /// <param name="commandeFournisseurRequest"></param>
     /// <returns></returns>
     /// <response code="201">commande_fournisseur_ajoute</response>
-    /// <response code="400">statut_commande_invalide</response>
+    /// <response code="400">statut_commande_invalide | quantite_produit_commande_invalide | date_commande_invalide </response>
     /// <response code="404">fournisseur_introuvable | employe_introuvable | produit_introuvable</response>
     /// <response code="409">commande_fournisseur_existe_deja</response>
     /// <response code="500">unexpected_error</response>
@@ -86,7 +86,7 @@ public class CommandeFournisseurController : ControllerBase
     /// <param name="commandeFournisseurRequest"></param>
     /// <returns></returns>
     /// <response code="200">commande_fournisseur_modifiee</response>
-    /// <response code="400">date_commande_invalide | commande_deja_livree | commande_annulee | statut_commande_invalide</response>
+    /// <response code="400">date_commande_invalide | commande_deja_livree | commande_annulee | statut_commande_invalide | quantite_produit_commande_invalide</response>
     /// <response code="404">commande_fournisseur_introuvable | fournisseur_introuvable | employe_introuvable</response>
     /// <response code="500">unexpected_error</response>
     [HttpPut("{id:int}")]

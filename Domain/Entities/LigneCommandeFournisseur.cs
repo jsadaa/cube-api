@@ -46,7 +46,7 @@ public class LigneCommandeFournisseur
         CommandeFournisseurId = commandeFournisseurId;
     }
 
-    public void VerifierValiditeQuantite()
+    private void VerifierValiditeQuantite()
     {
         if (Quantite <= 0) throw new QuantiteProduitCommandeInvalide();
     }
