@@ -5,6 +5,7 @@ namespace ApiCube.Domain.Enums.Stock;
 public enum TypeTransactionStock
 {
     Achat,
+    AjoutInterne,
     Vente,
     Retour,
     Perte,

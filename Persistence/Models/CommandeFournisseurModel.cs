@@ -13,7 +13,7 @@ public class CommandeFournisseurModel
 
     [Column("date_commande")] [Required] public required DateTime DateCommande { get; set; }
 
-    [Column("date_livraison")] [Required] public required DateTime DateLivraison { get; set; }
+    [Column("date_reception")] public required DateTime? DateReception { get; set; }
 
     [Column("statut")]
     [Required]

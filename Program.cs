@@ -3,6 +3,7 @@ using System.Text;
 using ApiCube;
 using ApiCube.Application.Services.Auth;
 using ApiCube.Application.Services.Client;
+using ApiCube.Application.Services.CommandeFournisseur;
 using ApiCube.Application.Services.Employe;
 using ApiCube.Application.Services.FamilleProduit;
 using ApiCube.Application.Services.Fournisseur;
@@ -10,11 +11,14 @@ using ApiCube.Application.Services.Produit;
 using ApiCube.Application.Services.Promotion;
 using ApiCube.Application.Services.Stock;
 using ApiCube.Configurations.AutoMapper;
+using ApiCube.Domain.Entities;
 using ApiCube.Domain.Enums.Stock;
 using ApiCube.Domain.Mappers.Client;
+using ApiCube.Domain.Mappers.CommandeFournisseur;
 using ApiCube.Domain.Mappers.Employe;
 using ApiCube.Domain.Mappers.FamilleProduit;
 using ApiCube.Domain.Mappers.Fournisseur;
+using ApiCube.Domain.Mappers.LigneCommandeFournisseur;
 using ApiCube.Domain.Mappers.Produit;
 using ApiCube.Domain.Mappers.Promotion;
 using ApiCube.Domain.Mappers.Stock;
@@ -22,9 +26,11 @@ using ApiCube.Domain.Mappers.TransactionStock;
 using ApiCube.Domain.Services;
 using ApiCube.Persistence.Models;
 using ApiCube.Persistence.Repositories.Client;
+using ApiCube.Persistence.Repositories.CommandeFournisseur;
 using ApiCube.Persistence.Repositories.Employe;
 using ApiCube.Persistence.Repositories.FamilleProduit;
 using ApiCube.Persistence.Repositories.Fournisseur;
+using ApiCube.Persistence.Repositories.LigneCommandeFournisseur;
 using ApiCube.Persistence.Repositories.Produit;
 using ApiCube.Persistence.Repositories.Promotion;
 using ApiCube.Persistence.Repositories.Stock;
@@ -98,7 +104,9 @@ builder.Services.AddAutoMapper(
     typeof(AdresseMapperConfig),
     typeof(PromotionMapperConfig),
     typeof(ClientMapperConfig),
-    typeof(EmployeMapperConfig)
+    typeof(EmployeMapperConfig),
+    typeof(CommandeFournisseurMapperConfig),
+    typeof(LigneCommandeFournisseurMapperConfig)
 );
 
 // Configure Mappers
@@ -110,10 +118,13 @@ builder.Services.AddScoped<IFamilleProduitMapper, FamilleProduitMapper>();
 builder.Services.AddScoped<IPromotionMapper, PromotionMapper>();
 builder.Services.AddScoped<IClientMapper, ClientMapper>();
 builder.Services.AddScoped<IEmployeMapper, EmployeMapper>();
+builder.Services.AddScoped<ICommandeFournisseurMapper, CommandeFournisseurMapper>();
+builder.Services.AddScoped<ILigneCommandeFournisseurMapper, LigneCommandeFournisseurMapper>();
 
 // Configure enums mappers
 builder.Services.AddScoped<TypeTransactionStockMapper>();
 builder.Services.AddScoped<StatutStockMapper>();
+builder.Services.AddScoped<StatutCommandeMapper>();
 
 // Configure repositories
 builder.Services.AddScoped<IFamilleProduitRepository, FamilleProduitRepository>();
@@ -124,6 +135,8 @@ builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<IPromotionRepository, PromotionRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IEmployeRepository, EmployeRepository>();
+builder.Services.AddScoped<ICommandeFournisseurRepository, CommandeFournisseurRepository>();
+builder.Services.AddScoped<ILigneCommandeFournisseurRepository, LigneCommandeFournisseurRepository>();
 
 // Configure application services
 builder.Services.AddScoped<IProduitService, ProduitService>();
@@ -134,9 +147,11 @@ builder.Services.AddScoped<IPromotionService, PromotionService>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmployeService, EmployeService>();
+builder.Services.AddScoped<ICommandeFournisseurService, CommandeFournisseurService>();
 
 // Configure domain services
 builder.Services.AddScoped<PreparateurDeStock>();
+builder.Services.AddScoped<PreparateurDeCommande>();
 
 // Configure Production Seeder
 builder.Services.AddScoped<RoleSeeder>();

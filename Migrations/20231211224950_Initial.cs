@@ -417,7 +417,7 @@ namespace ApiCube.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     date_commande = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    date_livraison = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    date_reception = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     statut = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     fournisseur_id = table.Column<int>(type: "int", nullable: false),

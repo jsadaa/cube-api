@@ -14,7 +14,6 @@ public class Produit
     public double DegreAlcool { get; set; }
     public double PrixAchat { get; set; }
     public double PrixVente { get; set; }
-
     public DateTime DatePeremption { get; set; }
     public bool EnPromotion { get; set; }
     public Promotion? Promotion { get; set; }

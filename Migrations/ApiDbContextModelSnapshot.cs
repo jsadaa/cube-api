@@ -210,9 +210,9 @@ namespace ApiCube.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date_commande");
 
-                    b.Property<DateTime>("DateLivraison")
+                    b.Property<DateTime?>("DateReception")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("date_livraison");
+                        .HasColumnName("date_reception");
 
                     b.Property<int>("EmployeId")
                         .HasColumnType("int")

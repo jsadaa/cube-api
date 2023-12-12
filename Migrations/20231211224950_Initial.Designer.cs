@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiCube.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20231118221351_Initial")]
+    [Migration("20231211224950_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -213,9 +213,9 @@ namespace ApiCube.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date_commande");
 
-                    b.Property<DateTime>("DateLivraison")
+                    b.Property<DateTime?>("DateReception")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("date_livraison");
+                        .HasColumnName("date_reception");
 
                     b.Property<int>("EmployeId")
                         .HasColumnType("int")

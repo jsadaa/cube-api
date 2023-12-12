@@ -2,7 +2,6 @@ using System.Net;
 using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests.Stock;
 using ApiCube.Application.DTOs.Responses;
-using ApiCube.Domain.Enums.Stock;
 using ApiCube.Domain.Services;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Repositories.Produit;
@@ -39,10 +38,9 @@ public class StockService : IStockService
         {
             var produit = _produitRepository.Trouver(stockRequest.ProduitId);
 
-            var nouveauStock = _preparateurDeStock.Achat(
+            var nouveauStock = _preparateurDeStock.AjoutInterne(
                 produit: produit,
-                stockRequest: stockRequest,
-                typeTransactionStock: TypeTransactionStock.Achat
+                stockRequest: stockRequest
             );
 
             _stockRepository.Ajouter(nouveauStock);

@@ -38,7 +38,7 @@ public static class StockSeeder
                 Stock = stock,
                 Quantite = stock.Quantite,
                 Date = DateTime.Now,
-                Type = "Achat",
+                Type = "AjoutInterne",
                 PrixUnitaire = stock.Produit.PrixAchat,
                 PrixTotal = stock.Quantite * stock.Produit.PrixAchat,
                 QuantiteAvant = 0,

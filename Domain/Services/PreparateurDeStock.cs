@@ -6,7 +6,7 @@ namespace ApiCube.Domain.Services;
 
 public class PreparateurDeStock
 {
-    public Stock Achat(Produit produit, StockRequest stockRequest, TypeTransactionStock typeTransactionStock)
+    public Stock AjoutInterne(Produit produit, StockRequest stockRequest)
     {
         var nouveauStock = new Stock(
             quantite: 0,
@@ -21,7 +21,7 @@ public class PreparateurDeStock
         var nouvelleTransactionStock = new TransactionStock(
             quantite: stockRequest.Quantite,
             date: DateTime.Now,
-            type: TypeTransactionStock.Achat,
+            type: TypeTransactionStock.AjoutInterne,
             stock: nouveauStock,
             prixUnitaire: produit.PrixAchat,
             quantiteAvant: 0,
@@ -31,6 +31,23 @@ public class PreparateurDeStock
         nouveauStock.AjouterTransaction(nouvelleTransactionStock);
 
         return nouveauStock;
+    }
+    
+    public Stock Achat(Stock stock, LigneCommandeFournisseur ligneCommandeFournisseur)
+    {
+        var nouvelleTransactionStock = new TransactionStock(
+            quantite: ligneCommandeFournisseur.Quantite,
+            date: DateTime.Now,
+            type: TypeTransactionStock.Achat,
+            stock: stock,
+            prixUnitaire: ligneCommandeFournisseur.PrixUnitaire,
+            quantiteAvant: stock.Quantite,
+            quantiteApres: stock.Quantite + ligneCommandeFournisseur.Quantite
+        );
+
+        stock.AjouterTransaction(nouvelleTransactionStock);
+
+        return stock;
     }
 
     public Stock ModificationInterne(Stock stock, StockUpdate stockUpdate)
