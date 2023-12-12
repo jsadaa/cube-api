@@ -120,28 +120,61 @@ public class EmployeService : IEmployeService
 
     public BaseResponse ListerLesEmployes()
     {
-        var listeEmployes = _employeRepository.Lister();
-        var employes = _mapper.Map<List<EmployeResponse>>(listeEmployes);
+        try
+        {
+            var listeEmployes = _employeRepository.Lister();
+            var employes = _mapper.Map<List<EmployeResponse>>(listeEmployes);
 
-        var response = new BaseResponse(
-            HttpStatusCode.OK,
-            employes
-        );
+            var response = new BaseResponse(
+                HttpStatusCode.OK,
+                employes
+            );
 
-        return response;
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
+            );
+
+            return response;
+        }
     }
 
     public BaseResponse TrouverUnEmploye(int id)
     {
-        var employe = _employeRepository.Trouver(id);
-        var employeResponse = _mapper.Map<EmployeResponse>(employe);
+        try
+        {
+            var employe = _employeRepository.Trouver(id);
+            var employeResponse = _mapper.Map<EmployeResponse>(employe);
 
-        var response = new BaseResponse(
-            HttpStatusCode.OK,
-            employeResponse
-        );
+            var response = new BaseResponse(
+                HttpStatusCode.OK,
+                employeResponse
+            );
 
-        return response;
+            return response;
+        }
+        catch (EmployeIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
+            );
+
+            return response;
+        }
     }
 
     public async Task<BaseResponse> ModifierUnEmploye(int id, EmployeRequest employeRequest)
