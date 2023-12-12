@@ -112,7 +112,7 @@ public class CommandeFournisseurService : ICommandeFournisseurService
                 HttpStatusCode.NotFound,
                 new { code = e.Message }
             );
-            
+
             return response;
         }
         catch (Exception e)
@@ -192,7 +192,7 @@ public class CommandeFournisseurService : ICommandeFournisseurService
         {
             var commandeFournisseur = _commandeFournisseurRepository.Trouver(id);
             commandeFournisseur.VerifierValidite();
-            
+
             var fournisseur = _fournisseurRepository.Trouver(commandeFournisseurRequest.FournisseurId);
             var employe = _employeRepository.Trouver(commandeFournisseurRequest.EmployeId);
 
@@ -272,7 +272,7 @@ public class CommandeFournisseurService : ICommandeFournisseurService
                 HttpStatusCode.BadRequest,
                 new { code = e.Message }
             );
-            
+
             return response;
         }
         catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
@@ -344,7 +344,7 @@ public class CommandeFournisseurService : ICommandeFournisseurService
                 HttpStatusCode.BadRequest,
                 new { code = e.Message }
             );
-            
+
             return response;
         }
         catch (Exception e)
@@ -364,7 +364,7 @@ public class CommandeFournisseurService : ICommandeFournisseurService
         {
             var commandeFournisseur = _commandeFournisseurRepository.Trouver(id);
             commandeFournisseur.VerifierValidite();
-            
+
             var commandeFournisseurLivree = _preparateurDeCommande.Reception(commandeFournisseur);
 
             // Mise à jour du stock
@@ -420,7 +420,7 @@ public class CommandeFournisseurService : ICommandeFournisseurService
                 HttpStatusCode.BadRequest,
                 new { code = e.Message }
             );
-            
+
             return response;
         }
         catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
