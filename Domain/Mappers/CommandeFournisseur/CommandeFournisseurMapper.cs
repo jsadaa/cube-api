@@ -1,4 +1,4 @@
-using ApiCube.Domain.Enums.Stock;
+using ApiCube.Domain.Enums.Commande;
 using ApiCube.Persistence.Models;
 
 namespace ApiCube.Domain.Mappers.CommandeFournisseur;

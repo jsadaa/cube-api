@@ -1,5 +1,5 @@
 using ApiCube.Domain.Entities;
-using ApiCube.Domain.Enums.Stock;
+using ApiCube.Domain.Enums.Commande;
 using ApiCube.Domain.Mappers.CommandeFournisseur;
 using ApiCube.Domain.Mappers.Employe;
 using ApiCube.Domain.Mappers.FamilleProduit;

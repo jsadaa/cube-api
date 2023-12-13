@@ -11,6 +11,7 @@ using ApiCube.Application.Services.Produit;
 using ApiCube.Application.Services.Promotion;
 using ApiCube.Application.Services.Stock;
 using ApiCube.Configurations.AutoMapper;
+using ApiCube.Domain.Enums.Commande;
 using ApiCube.Domain.Enums.Stock;
 using ApiCube.Domain.Mappers.Client;
 using ApiCube.Domain.Mappers.CommandeFournisseur;

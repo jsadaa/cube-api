@@ -2,7 +2,7 @@ using System.Net;
 using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
-using ApiCube.Domain.Enums.Stock;
+using ApiCube.Domain.Enums.Commande;
 using ApiCube.Domain.Exceptions;
 using ApiCube.Domain.Services;
 using ApiCube.Persistence.Exceptions;
