@@ -1,6 +1,6 @@
 using ApiCube.Domain.Exceptions;
 
-namespace ApiCube.Domain.Enums.Stock;
+namespace ApiCube.Domain.Enums.Commande;
 
 public enum StatutCommande
 {
