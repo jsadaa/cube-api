@@ -2,14 +2,12 @@ using System.Net;
 using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
-using ApiCube.Domain.Enums.Commande;
 using ApiCube.Domain.Exceptions;
 using ApiCube.Domain.Services;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Repositories.CommandeFournisseur;
 using ApiCube.Persistence.Repositories.Employe;
 using ApiCube.Persistence.Repositories.Fournisseur;
-using ApiCube.Persistence.Repositories.Produit;
 using ApiCube.Persistence.Repositories.Stock;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -92,7 +90,7 @@ public class CommandeFournisseurService : ICommandeFournisseurService
                 HttpStatusCode.BadRequest,
                 new { code = e.Message }
             );
-            
+
             return response;
         }
         catch (FournisseurIntrouvable e)
@@ -268,7 +266,7 @@ public class CommandeFournisseurService : ICommandeFournisseurService
                 HttpStatusCode.BadRequest,
                 new { code = e.Message }
             );
-            
+
             return response;
         }
         catch (CommandeDejaLivree e)

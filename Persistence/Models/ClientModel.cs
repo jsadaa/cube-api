@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using ApiCube.Domain.Entities;
 
 namespace ApiCube.Persistence.Models;
 
@@ -65,7 +64,7 @@ public class ClientModel
     [ForeignKey("ApplicationUserId")] public ApplicationUserModel ApplicationUser { get; set; } = null!;
 
     public ICollection<CommandeClientModel>? Commandes { get; set; }
-    
+
     public ICollection<PanierClientModel>? Paniers { get; set; }
 
     public ICollection<FactureClientModel>? Factures { get; set; }

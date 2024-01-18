@@ -1,7 +1,6 @@
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Domain.Entities;
 using ApiCube.Domain.Enums.Commande;
-using ApiCube.Domain.Enums.Stock;
 using ApiCube.Persistence.Repositories.Produit;
 
 namespace ApiCube.Domain.Services;
@@ -36,12 +35,12 @@ public class PreparateurDeCommandeFournisseur
                 produit,
                 nouvelleCommandeFournisseur.Id
             );
-            
+
             // On vérifie la validité de la ligne de commande
             nouvelleLigneCommandeFournisseur.VerifierValidite();
             nouvelleCommandeFournisseur.AjouterLigneCommandeFournisseur(nouvelleLigneCommandeFournisseur);
         }
-        
+
         // On vérifie la validité de la commande
         nouvelleCommandeFournisseur.VerifierValidite();
 
@@ -70,12 +69,12 @@ public class PreparateurDeCommandeFournisseur
                 produit,
                 commandeFournisseur.Id
             );
-            
+
             // On vérifie la validité de la ligne de commande
             nouvelleLigneCommandeFournisseur.VerifierValidite();
             commandeFournisseur.AjouterLigneCommandeFournisseur(nouvelleLigneCommandeFournisseur);
         }
-        
+
         // On vérifie la validité de la commande
         commandeFournisseur.VerifierValidite();
 

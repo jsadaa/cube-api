@@ -35,7 +35,8 @@ public class Client
 
     public Client(string username, string nom, string prenom, string adresse, string codePostal, string ville,
         string pays, string telephone, string email, DateTime dateNaissance,
-        DateTime dateInscription, List<CommandeClient> commandes, List<FactureClient> factures, List<PanierClient> paniers)
+        DateTime dateInscription, List<CommandeClient> commandes, List<FactureClient> factures,
+        List<PanierClient> paniers)
     {
         Username = username;
         Nom = nom;
@@ -52,7 +53,8 @@ public class Client
 
     public Client(int id, string username, string nom, string prenom, string adresse, string codePostal, string ville,
         string pays, string telephone, string email, DateTime dateNaissance,
-        DateTime dateInscription, List<CommandeClient> commandes, List<FactureClient> factures, List<PanierClient> paniers)
+        DateTime dateInscription, List<CommandeClient> commandes, List<FactureClient> factures,
+        List<PanierClient> paniers)
     {
         Id = id;
         Username = username;
@@ -102,13 +104,13 @@ public class Client
     {
         Factures?.Remove(factureClient);
     }
-    
+
     public void AjouterPanier(PanierClient panier)
     {
         Paniers ??= new List<PanierClient>();
         Paniers.Add(panier);
     }
-    
+
     public void SupprimerPanier(PanierClient panier)
     {
         Paniers?.Remove(panier);

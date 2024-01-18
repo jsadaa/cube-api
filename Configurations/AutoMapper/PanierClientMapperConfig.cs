@@ -13,7 +13,7 @@ public class PanierClientMapperConfig : Profile
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))
             .ForMember(dest => dest.LignePanierClients, opt => opt.MapFrom(src => src.LignePanierClients));
-        
+
         CreateMap<PanierClient, PanierClientResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))

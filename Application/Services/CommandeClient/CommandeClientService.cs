@@ -15,14 +15,16 @@ namespace ApiCube.Application.Services.CommandeClient;
 
 public class CommandeClientService : ICommandeClientService
 {
-    private readonly IPanierClientRepository _panierClientRepository;
-    private readonly IProduitRepository _produitRepository;
     private readonly IClientRepository _clientRepository;
-    private readonly IStockRepository _stockRepository;
     private readonly IMapper _mapper;
+    private readonly IPanierClientRepository _panierClientRepository;
     private readonly PreparateurDeStock _preparateurDeStock;
-    
-    public CommandeClientService(IPanierClientRepository panierClientRepository, IProduitRepository produitRepository, IClientRepository clientRepository, IStockRepository stockRepository, IMapper mapper, PreparateurDeStock preparateurDeStock)
+    private readonly IProduitRepository _produitRepository;
+    private readonly IStockRepository _stockRepository;
+
+    public CommandeClientService(IPanierClientRepository panierClientRepository, IProduitRepository produitRepository,
+        IClientRepository clientRepository, IStockRepository stockRepository, IMapper mapper,
+        PreparateurDeStock preparateurDeStock)
     {
         _panierClientRepository = panierClientRepository;
         _produitRepository = produitRepository;
@@ -31,7 +33,7 @@ public class CommandeClientService : ICommandeClientService
         _mapper = mapper;
         _preparateurDeStock = preparateurDeStock;
     }
-    
+
     public BaseResponse CreerUnPanier(int idClient)
     {
         try
@@ -40,7 +42,7 @@ public class CommandeClientService : ICommandeClientService
             var panierClient = new PanierClient(client);
 
             _panierClientRepository.Ajouter(panierClient);
-            
+
             return new BaseResponse(
                 HttpStatusCode.Created,
                 new { code = "panier_cree" }
@@ -65,7 +67,7 @@ public class CommandeClientService : ICommandeClientService
             return response;
         }
     }
-    
+
     public BaseResponse AjouterUnProduitAuPanier(int id, ProduitPanierRequest produitPanierRequest)
     {
         try
@@ -77,7 +79,7 @@ public class CommandeClientService : ICommandeClientService
             panierClient.AjouterLignePanierClient(lignePanierClient);
 
             _panierClientRepository.Ajouter(panierClient);
-            
+
             return new BaseResponse(
                 HttpStatusCode.Created,
                 new { code = "produit_ajoute_au_panier" }

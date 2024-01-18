@@ -6,5 +6,5 @@ namespace ApiCube.Application.Services.CommandeClient;
 public interface ICommandeClientService
 {
     public BaseResponse CreerUnPanier(int idClient);
-    public BaseResponse AjouterUnProduitAuPanier(int id, ProduitPanierRequest produitPanierRequest); 
+    public BaseResponse AjouterUnProduitAuPanier(int id, ProduitPanierRequest produitPanierRequest);
 }

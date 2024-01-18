@@ -10,12 +10,12 @@ namespace ApiCube.Controllers;
 public class CommandeClientController : ControllerBase
 {
     private readonly ICommandeClientService _commandeClientService;
-    
+
     public CommandeClientController(ICommandeClientService commandeClientService)
     {
         _commandeClientService = commandeClientService;
     }
-    
+
     /// <summary>
     ///     Créer un nouveau panier pour un client
     /// </summary>
@@ -37,7 +37,7 @@ public class CommandeClientController : ControllerBase
     }
 
     /// <summary>
-    ///    Ajouter un produit au panier
+    ///     Ajouter un produit au panier
     /// </summary>
     /// <param name="id"></param>
     /// <param name="produitPanierRequest"></param>

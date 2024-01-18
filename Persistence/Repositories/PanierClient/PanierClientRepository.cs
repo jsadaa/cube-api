@@ -1,3 +1,4 @@
+using ApiCube.Domain.Entities;
 using ApiCube.Domain.Mappers.Client;
 using ApiCube.Domain.Mappers.FamilleProduit;
 using ApiCube.Domain.Mappers.Fournisseur;
@@ -13,16 +14,18 @@ namespace ApiCube.Persistence.Repositories.PanierClient;
 
 public class PanierClientRepository : IPanierClientRepository
 {
+    private readonly IClientMapper _clientMapper;
     private readonly ApiDbContext _context;
+    private readonly IFamilleProduitMapper _familleProduitMapper;
+    private readonly IFournisseurMapper _fournisseurMapper;
+    private readonly ILignePanierClientMapper _lignePanierClientMapper;
     private readonly IMapper _mapper;
     private readonly IPanierClientMapper _panierClientMapper;
     private readonly IProduitMapper _produitMapper;
-    private readonly ILignePanierClientMapper _lignePanierClientMapper;
-    private readonly IFamilleProduitMapper _familleProduitMapper;
-    private readonly IFournisseurMapper _fournisseurMapper;
-    private readonly IClientMapper _clientMapper;
-    
-    public PanierClientRepository(ApiDbContext context, IMapper mapper, IPanierClientMapper panierClientMapper, IProduitMapper produitMapper, ILignePanierClientMapper lignePanierClientMapper, IFamilleProduitMapper familleProduitMapper, IFournisseurMapper fournisseurMapper, IClientMapper clientMapper)
+
+    public PanierClientRepository(ApiDbContext context, IMapper mapper, IPanierClientMapper panierClientMapper,
+        IProduitMapper produitMapper, ILignePanierClientMapper lignePanierClientMapper,
+        IFamilleProduitMapper familleProduitMapper, IFournisseurMapper fournisseurMapper, IClientMapper clientMapper)
     {
         _context = context;
         _mapper = mapper;
@@ -33,14 +36,14 @@ public class PanierClientRepository : IPanierClientRepository
         _fournisseurMapper = fournisseurMapper;
         _clientMapper = clientMapper;
     }
-    
+
     public void Ajouter(Domain.Entities.PanierClient nouveauPanierClient)
     {
         var nouveauPanierClientModel = _mapper.Map<PanierClientModel>(nouveauPanierClient);
         _context.PaniersClients.Add(nouveauPanierClientModel);
         _context.SaveChanges();
     }
-    
+
     public List<Domain.Entities.PanierClient> Lister()
     {
         var panierClientModels = _context.PaniersClients
@@ -53,14 +56,14 @@ public class PanierClientRepository : IPanierClientRepository
             .ThenInclude(lignePanierClient => lignePanierClient.Produit)
             .ThenInclude(produitModel => produitModel.FamilleProduit)
             .ToList();
-        
+
         var panierClients = new List<Domain.Entities.PanierClient>();
-        
+
         foreach (var panierClientModel in panierClientModels)
         {
             var client = _clientMapper.Mapper(panierClientModel.Client);
-            var lignePanierClients = new List<Domain.Entities.LignePanierClient>();
-        
+            var lignePanierClients = new List<LignePanierClient>();
+
             foreach (var lignePanierClientModel in panierClientModel.LignePanierClients)
             {
                 var familleProduit = _familleProduitMapper.Mapper(lignePanierClientModel.Produit.FamilleProduit);
@@ -69,14 +72,14 @@ public class PanierClientRepository : IPanierClientRepository
                 var lignePanierClient = _lignePanierClientMapper.Mapper(lignePanierClientModel, produit);
                 lignePanierClients.Add(lignePanierClient);
             }
-        
+
             var panierClient = _panierClientMapper.Mapper(panierClientModel, client, lignePanierClients);
             panierClients.Add(panierClient);
         }
-        
+
         return panierClients;
     }
-    
+
     public Domain.Entities.PanierClient Trouver(int id)
     {
         var panierClientModel = _context.PaniersClients
@@ -89,12 +92,12 @@ public class PanierClientRepository : IPanierClientRepository
             .ThenInclude(lignePanierClient => lignePanierClient.Produit)
             .ThenInclude(produitModel => produitModel.FamilleProduit)
             .FirstOrDefault(panierClient => panierClient.Id == id);
-        
+
         if (panierClientModel == null) throw new PanierClientIntrouvable();
 
         var client = _clientMapper.Mapper(panierClientModel.Client);
-        var lignePanierClients = new List<Domain.Entities.LignePanierClient>();
-        
+        var lignePanierClients = new List<LignePanierClient>();
+
         foreach (var lignePanierClientModel in panierClientModel.LignePanierClients)
         {
             var familleProduit = _familleProduitMapper.Mapper(lignePanierClientModel.Produit.FamilleProduit);
@@ -103,17 +106,17 @@ public class PanierClientRepository : IPanierClientRepository
             var lignePanierClient = _lignePanierClientMapper.Mapper(lignePanierClientModel, produit);
             lignePanierClients.Add(lignePanierClient);
         }
-        
+
         return _panierClientMapper.Mapper(panierClientModel, client, lignePanierClients);
     }
-    
+
     public void Modifier(Domain.Entities.PanierClient panierClient)
     {
         var panierClientModel = _mapper.Map<PanierClientModel>(panierClient);
         _context.PaniersClients.Update(panierClientModel);
         _context.SaveChanges();
     }
-    
+
     public void Supprimer(Domain.Entities.PanierClient panierClient)
     {
         var panierClientModel = _mapper.Map<PanierClientModel>(panierClient);

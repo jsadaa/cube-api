@@ -4,10 +4,6 @@ namespace ApiCube.Domain.Entities;
 
 public class LignePanierClient
 {
-    public int Id { get; set; }
-    public Produit Produit { get; set; }
-    public int Quantite { get; set; }
-
     public LignePanierClient(Produit produit, int quantite)
     {
         Produit = produit;
@@ -23,11 +19,12 @@ public class LignePanierClient
         VerifierQuantite();
     }
 
+    public int Id { get; set; }
+    public Produit Produit { get; set; }
+    public int Quantite { get; set; }
+
     private void VerifierQuantite()
     {
-        if (Quantite < 0)
-        {
-            throw new QuantitePanierInvalide();
-        }
+        if (Quantite < 0) throw new QuantitePanierInvalide();
     }
 }

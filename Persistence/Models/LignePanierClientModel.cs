@@ -21,7 +21,9 @@ public class LignePanierClientModel
 
     [Column("produit_id")] [Required] public required int ProduitId { get; set; }
 
-    [Column("panier_client_id")] [Required] public int PanierClientId { get; set; }
+    [Column("panier_client_id")]
+    [Required]
+    public int PanierClientId { get; set; }
 
     [ForeignKey("ProduitId")] public required ProduitModel Produit { get; set; }
 
