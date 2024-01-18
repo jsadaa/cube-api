@@ -1,4 +1,6 @@
+using System.Globalization;
 using System.Net;
+using System.Text;
 using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
@@ -32,9 +34,16 @@ public class ClientService : IClientService
     {
         try
         {
+            // Normalisation du nom d'utilisateur
+            var userName = clientRequest.Nom + clientRequest.Prenom;
+            userName = userName.Normalize(NormalizationForm.FormD);
+            var chars = userName.Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark);
+            userName = new string(chars.ToArray());
+            userName = userName.Replace(" ", "");
+            
             var applicationUserModel = new ApplicationUserModel
             {
-                UserName = clientRequest.Nom + clientRequest.Prenom,
+                UserName = userName,
                 Email = clientRequest.Email,
                 EmailConfirmed = true
             };
@@ -56,7 +65,7 @@ public class ClientService : IClientService
                     case "PasswordRequiresNonAlphanumeric":
                         throw new FormatMotDePasseInvalide();
                     default:
-                        throw new Exception("error_create_user");
+                        throw new Exception(firstError.Code);
                 }
             }
 
@@ -74,10 +83,11 @@ public class ClientService : IClientService
                 clientRequest.Telephone,
                 clientRequest.Email,
                 clientRequest.DateNaissance,
-                DateTime.Now
+                DateTime.Now,
+                appUserId
             );
 
-            _clientRepository.Ajouter(client, appUserId);
+            _clientRepository.Ajouter(client);
 
             var response = new BaseResponse(
                 HttpStatusCode.Created,
@@ -191,21 +201,16 @@ public class ClientService : IClientService
             var applicationUser = await _userManager.FindByEmailAsync(client.Email);
 
             if (applicationUser == null) throw new UtilisateurIntrouvable();
-
-            client.MettreAJour(
-                clientRequest.Nom,
-                clientRequest.Prenom,
-                clientRequest.Adresse,
-                clientRequest.CodePostal,
-                clientRequest.Ville,
-                clientRequest.Pays,
-                clientRequest.Telephone,
-                clientRequest.Email,
-                clientRequest.DateNaissance
-            );
+            
+            // Normalisation du nom d'utilisateur
+            var userName = clientRequest.Nom + clientRequest.Prenom;
+            userName = userName.Normalize(NormalizationForm.FormD);
+            var chars = userName.Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark);
+            userName = new string(chars.ToArray());
+            userName = userName.Replace(" ", "");
 
             applicationUser.Email = clientRequest.Email;
-            applicationUser.UserName = clientRequest.Nom + clientRequest.Prenom;
+            applicationUser.UserName = userName;
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(applicationUser);
             var resetPassword = await _userManager.ResetPasswordAsync(applicationUser, token, clientRequest.Password);
@@ -242,7 +247,21 @@ public class ClientService : IClientService
             }
 
             var appUserId = await _userManager.GetUserIdAsync(applicationUser);
-            _clientRepository.Modifier(client, appUserId);
+            
+            client.MettreAJour(
+                clientRequest.Nom,
+                clientRequest.Prenom,
+                clientRequest.Adresse,
+                clientRequest.CodePostal,
+                clientRequest.Ville,
+                clientRequest.Pays,
+                clientRequest.Telephone,
+                clientRequest.Email,
+                clientRequest.DateNaissance,
+                appUserId
+            );
+            
+            _clientRepository.Modifier(client);
 
             var response = new BaseResponse(
                 HttpStatusCode.OK,

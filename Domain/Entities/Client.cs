@@ -6,7 +6,7 @@ public class Client
 {
     public Client(int id, string username, string nom, string prenom, string adresse, string codePostal, string ville,
         string pays, string telephone, string email, DateTime dateNaissance,
-        DateTime dateInscription)
+        DateTime dateInscription, string applicationUserId)
     {
         Id = id;
         Username = username;
@@ -17,11 +17,12 @@ public class Client
         Email = email;
         DateNaissance = dateNaissance;
         DateInscription = dateInscription;
+        ApplicationUserId = applicationUserId;
     }
 
     public Client(string username, string nom, string prenom, string adresse, string codePostal, string ville,
         string pays, string telephone, string email, DateTime dateNaissance,
-        DateTime dateInscription)
+        DateTime dateInscription, string applicationUserId)
     {
         Username = username;
         Nom = nom;
@@ -31,12 +32,13 @@ public class Client
         Email = email;
         DateNaissance = dateNaissance;
         DateInscription = dateInscription;
+        ApplicationUserId = applicationUserId;
     }
 
     public Client(string username, string nom, string prenom, string adresse, string codePostal, string ville,
         string pays, string telephone, string email, DateTime dateNaissance,
         DateTime dateInscription, List<CommandeClient> commandes, List<FactureClient> factures,
-        List<PanierClient> paniers)
+        List<PanierClient> paniers, string applicationUserId)
     {
         Username = username;
         Nom = nom;
@@ -49,12 +51,13 @@ public class Client
         Commandes = commandes;
         Factures = factures;
         Paniers = paniers;
+        ApplicationUserId = applicationUserId;
     }
 
     public Client(int id, string username, string nom, string prenom, string adresse, string codePostal, string ville,
         string pays, string telephone, string email, DateTime dateNaissance,
         DateTime dateInscription, List<CommandeClient> commandes, List<FactureClient> factures,
-        List<PanierClient> paniers)
+        List<PanierClient> paniers, string applicationUserId)
     {
         Id = id;
         Username = username;
@@ -68,6 +71,7 @@ public class Client
         Commandes = commandes;
         Factures = factures;
         Paniers = paniers;
+        ApplicationUserId = applicationUserId;
     }
 
     public int Id { get; set; }
@@ -82,6 +86,7 @@ public class Client
     public List<CommandeClient>? Commandes { get; set; }
     public List<FactureClient>? Factures { get; set; }
     public List<PanierClient>? Paniers { get; set; }
+    public string ApplicationUserId { get; set; }
 
     public void AjouterCommande(CommandeClient commande)
     {
@@ -117,7 +122,7 @@ public class Client
     }
 
     public void MettreAJour(string nom, string prenom, string adresse, string codePostal, string ville, string pays,
-        string telephone, string email, DateTime dateNaissance)
+        string telephone, string email, DateTime dateNaissance, string applicationUserId)
     {
         Nom = nom;
         Prenom = prenom;
@@ -125,5 +130,6 @@ public class Client
         Telephone = new Telephone(telephone);
         Email = email;
         DateNaissance = dateNaissance;
+        ApplicationUserId = applicationUserId;
     }
 }

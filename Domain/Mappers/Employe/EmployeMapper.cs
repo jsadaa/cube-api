@@ -13,7 +13,8 @@ public class EmployeMapper : IEmployeMapper
             employeModel.Email,
             employeModel.DateEmbauche,
             employeModel.DateDepart,
-            employeModel.Poste
+            employeModel.Poste,
+            employeModel.ApplicationUserId
         );
     }
 }

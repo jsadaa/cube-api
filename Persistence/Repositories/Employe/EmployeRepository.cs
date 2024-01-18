@@ -19,10 +19,9 @@ public class EmployeRepository : IEmployeRepository
         _employeMapper = employeMapper;
     }
 
-    public void Ajouter(Domain.Entities.Employe employe, string applicationUserId)
+    public void Ajouter(Domain.Entities.Employe employe)
     {
         var employeModel = _mapper.Map<Domain.Entities.Employe, EmployeModel>(employe);
-        employeModel.ApplicationUserId = applicationUserId;
 
         _context.Employes.Add(employeModel);
         _context.SaveChanges();
@@ -42,10 +41,9 @@ public class EmployeRepository : IEmployeRepository
         return _employeMapper.Mapper(employe);
     }
 
-    public void Modifier(Domain.Entities.Employe employe, string applicationUserId)
+    public void Modifier(Domain.Entities.Employe employe)
     {
         var employeModifie = _mapper.Map<EmployeModel>(employe);
-        employeModifie.ApplicationUserId = applicationUserId;
 
         _context.Employes.Update(employeModifie);
         _context.SaveChangesAsync();

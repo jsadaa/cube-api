@@ -18,7 +18,8 @@ public class ClientMapper : IClientMapper
             clientModel.Telephone,
             clientModel.Email,
             clientModel.DateNaissance,
-            clientModel.DateInscription
+            clientModel.DateInscription,
+            clientModel.ApplicationUserId
         );
     }
 }

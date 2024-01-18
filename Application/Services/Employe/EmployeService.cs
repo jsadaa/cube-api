@@ -1,4 +1,6 @@
+using System.Globalization;
 using System.Net;
+using System.Text;
 using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
@@ -32,20 +34,19 @@ public class EmployeService : IEmployeService
     {
         try
         {
+            // Normalisation du nom d'utilisateur
+            var userName = employeRequest.Nom + employeRequest.Prenom;
+            userName = userName.Normalize(NormalizationForm.FormD);
+            var chars = userName.Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark);
+            userName = new string(chars.ToArray());
+            userName = userName.Replace(" ", "");
+            
             var applicationUserModel = new ApplicationUserModel
             {
-                UserName = employeRequest.Nom + employeRequest.Prenom,
+                UserName = userName,
                 Email = employeRequest.Email,
                 EmailConfirmed = true
             };
-
-            var employe = new Domain.Entities.Employe(
-                employeRequest.Nom,
-                employeRequest.Prenom,
-                employeRequest.Email,
-                employeRequest.DateEmbauche,
-                employeRequest.Poste
-            );
 
             var creationAppUser = await _userManager.CreateAsync(applicationUserModel, employeRequest.Password);
             if (!creationAppUser.Succeeded)
@@ -70,8 +71,17 @@ public class EmployeService : IEmployeService
 
             await _userManager.AddToRoleAsync(applicationUserModel, Role.Employe.ToString());
             var userId = await _userManager.GetUserIdAsync(applicationUserModel);
+            
+            var employe = new Domain.Entities.Employe(
+                employeRequest.Nom,
+                employeRequest.Prenom,
+                employeRequest.Email,
+                employeRequest.DateEmbauche,
+                employeRequest.Poste,
+                userId
+            );
 
-            _employeRepository.Ajouter(employe, userId);
+            _employeRepository.Ajouter(employe);
 
             var response = new BaseResponse(
                 HttpStatusCode.Created,
@@ -185,17 +195,16 @@ public class EmployeService : IEmployeService
             var applicationUser = await _userManager.FindByEmailAsync(employe.Email);
 
             if (applicationUser == null) throw new UtilisateurIntrouvable();
-
-            employe.MettreAJour(
-                employeRequest.Nom,
-                employeRequest.Prenom,
-                employeRequest.Email,
-                employeRequest.DateEmbauche,
-                employeRequest.Poste
-            );
+            
+            // Normalisation du nom d'utilisateur
+            var userName = employeRequest.Nom + employeRequest.Prenom;
+            userName = userName.Normalize(NormalizationForm.FormD);
+            var chars = userName.Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark);
+            userName = new string(chars.ToArray());
+            userName = userName.Replace(" ", "");
 
             applicationUser.Email = employeRequest.Email;
-            applicationUser.UserName = employeRequest.Nom + employeRequest.Prenom;
+            applicationUser.UserName = userName;
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(applicationUser);
             var resetPassword = await _userManager.ResetPasswordAsync(applicationUser, token, employeRequest.Password);
@@ -232,7 +241,16 @@ public class EmployeService : IEmployeService
             }
 
             var appUserId = await _userManager.GetUserIdAsync(applicationUser);
-            _employeRepository.Modifier(employe, appUserId);
+            employe.MettreAJour(
+                employeRequest.Nom,
+                employeRequest.Prenom,
+                employeRequest.Email,
+                employeRequest.DateEmbauche,
+                employeRequest.Poste,
+                appUserId
+            );
+            
+            _employeRepository.Modifier(employe);
 
             var response = new BaseResponse(
                 HttpStatusCode.OK,

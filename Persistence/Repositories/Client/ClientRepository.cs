@@ -19,10 +19,9 @@ public class ClientRepository : IClientRepository
         _mapper = mapper;
     }
 
-    public void Ajouter(Domain.Entities.Client nouveauClient, string applicationUserId)
+    public void Ajouter(Domain.Entities.Client nouveauClient)
     {
         var nouveauClientModel = _mapper.Map<ClientModel>(nouveauClient);
-        nouveauClientModel.ApplicationUserId = applicationUserId;
 
         _context.Clients.Add(nouveauClientModel);
         _context.SaveChangesAsync();
@@ -42,10 +41,9 @@ public class ClientRepository : IClientRepository
         return _clientMapper.Mapper(client);
     }
 
-    public void Modifier(Domain.Entities.Client client, string applicationUserId)
+    public void Modifier(Domain.Entities.Client client)
     {
         var clientModifié = _mapper.Map<ClientModel>(client);
-        clientModifié.ApplicationUserId = applicationUserId;
 
         _context.Clients.Update(clientModifié);
         _context.SaveChanges();

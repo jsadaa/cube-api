@@ -1,6 +1,7 @@
 using System.Net;
 using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
+using ApiCube.Application.DTOs.Responses;
 using ApiCube.Domain.Entities;
 using ApiCube.Domain.Exceptions;
 using ApiCube.Domain.Services;
@@ -120,6 +121,61 @@ public class CommandeClientService : ICommandeClientService
             );
 
             return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
+            );
+
+            return response;
+        }
+    }
+    
+    public BaseResponse TrouverUnPanier(int id)
+    {
+        try
+        {
+            var panierClient = _panierClientRepository.Trouver(id);
+            var panierClientResponse = _mapper.Map<PanierClientResponse>(panierClient);
+
+            return new BaseResponse(
+                HttpStatusCode.OK,
+                panierClientResponse
+            );
+        }
+        catch (PanierClientIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
+            );
+
+            return response;
+        }
+    }
+    
+    public BaseResponse ListerLesPaniersDUnClient(int idClient)
+    {
+        try
+        {
+            var paniersClient = _panierClientRepository.ListerParClient(idClient);
+            var paniersClientResponse = _mapper.Map<List<PanierClientResponse>>(paniersClient);
+
+            return new BaseResponse(
+                HttpStatusCode.OK,
+                paniersClientResponse
+            );
         }
         catch (Exception e)
         {
