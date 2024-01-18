@@ -385,6 +385,7 @@ namespace ApiCube.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    total = table.Column<double>(type: "double", nullable: false),
                     client_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -496,7 +497,6 @@ namespace ApiCube.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     quantite = table.Column<int>(type: "int", nullable: false),
                     prix_unitaire = table.Column<double>(type: "double", nullable: false),
-                    remise = table.Column<double>(type: "double", nullable: false),
                     total = table.Column<double>(type: "double", nullable: false),
                     produit_id = table.Column<int>(type: "int", nullable: false),
                     panier_client_id = table.Column<int>(type: "int", nullable: false)

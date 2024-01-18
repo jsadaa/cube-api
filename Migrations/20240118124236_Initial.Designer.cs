@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiCube.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20240118120925_Initial")]
+    [Migration("20240118124236_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -589,10 +589,6 @@ namespace ApiCube.Migrations
                         .HasColumnType("int")
                         .HasColumnName("quantite");
 
-                    b.Property<double>("Remise")
-                        .HasColumnType("double")
-                        .HasColumnName("remise");
-
                     b.Property<double>("Total")
                         .HasColumnType("double")
                         .HasColumnName("total");
@@ -616,6 +612,10 @@ namespace ApiCube.Migrations
                     b.Property<int>("ClientId")
                         .HasColumnType("int")
                         .HasColumnName("client_id");
+
+                    b.Property<double>("Total")
+                        .HasColumnType("double")
+                        .HasColumnName("total");
 
                     b.HasKey("Id");
 

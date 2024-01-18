@@ -9,6 +9,8 @@ public class LignePanierClient
         Produit = produit;
         Quantite = quantite;
         VerifierQuantite();
+        PrixUnitaire = produit.PrixVente;
+        Total = PrixUnitaire * Quantite;
     }
 
     public LignePanierClient(int id, Produit produit, int quantite)
@@ -17,11 +19,15 @@ public class LignePanierClient
         Produit = produit;
         Quantite = quantite;
         VerifierQuantite();
+        PrixUnitaire = produit.PrixVente;
+        Total = PrixUnitaire * Quantite;
     }
 
     public int Id { get; set; }
     public Produit Produit { get; set; }
     public int Quantite { get; set; }
+    public double PrixUnitaire { get; set; }
+    public double Total { get; set; }
 
     private void VerifierQuantite()
     {

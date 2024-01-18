@@ -7,12 +7,14 @@ public class PanierClient
     public PanierClient(Client client)
     {
         Client = client;
+        Total = CalculerTotal();
     }
 
     public PanierClient(int id, Client client)
     {
         Id = id;
         Client = client;
+        Total = CalculerTotal();
     }
 
     public PanierClient(int id, Client client, ICollection<LignePanierClient> lignePanierClients)
@@ -20,10 +22,12 @@ public class PanierClient
         Id = id;
         Client = client;
         LignePanierClients = lignePanierClients;
+        Total = CalculerTotal();
     }
 
     public int Id { get; set; }
     public Client Client { get; set; }
+    public double Total { get; set; }
     public ICollection<LignePanierClient> LignePanierClients { get; set; } = new List<LignePanierClient>();
 
     public void AjouterLignePanierClient(LignePanierClient lignePanierClient)
@@ -46,5 +50,11 @@ public class PanierClient
     {
         if (LignePanierClients.Any(lignePanierClient => lignePanierClient.Produit.Id == produit.Id))
             throw new ProduitDejaDansPanier();
+    }
+    
+    public double CalculerTotal()
+    {
+        if (LignePanierClients.Count == 0) return 0;
+        return LignePanierClients.Sum(lignePanierClient => lignePanierClient.Produit.PrixVente * lignePanierClient.Quantite);
     }
 }

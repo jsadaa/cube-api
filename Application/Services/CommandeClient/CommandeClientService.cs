@@ -41,8 +41,9 @@ public class CommandeClientService : ICommandeClientService
         {
             var client = _clientRepository.Trouver(idClient);
             var panierClient = new PanierClient(client);
+            client.AjouterPanier(panierClient);
 
-            _panierClientRepository.Ajouter(panierClient);
+            _clientRepository.Modifier(client);
 
             return new BaseResponse(
                 HttpStatusCode.Created,
@@ -79,7 +80,7 @@ public class CommandeClientService : ICommandeClientService
 
             panierClient.AjouterLignePanierClient(lignePanierClient);
 
-            _panierClientRepository.Ajouter(panierClient);
+            _panierClientRepository.Modifier(panierClient);
 
             return new BaseResponse(
                 HttpStatusCode.Created,

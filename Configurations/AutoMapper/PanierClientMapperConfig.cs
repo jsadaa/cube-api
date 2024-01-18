@@ -12,11 +12,13 @@ public class PanierClientMapperConfig : Profile
         CreateMap<PanierClient, PanierClientModel>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))
+            .ForMember(dest => dest.Total, opt => opt.MapFrom(src => src.Total))
             .ForMember(dest => dest.LignePanierClients, opt => opt.MapFrom(src => src.LignePanierClients));
 
         CreateMap<PanierClient, PanierClientResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Client, opt => opt.MapFrom(src => src.Client))
+            .ForMember(dest => dest.Total, opt => opt.MapFrom(src => src.Total))
             .ForMember(dest => dest.LignePanierClients, opt => opt.MapFrom(src => src.LignePanierClients));
     }
 }
