@@ -13,12 +13,16 @@ using ApiCube.Application.Services.Promotion;
 using ApiCube.Application.Services.Stock;
 using ApiCube.Configurations.AutoMapper;
 using ApiCube.Domain.Enums.Commande;
+using ApiCube.Domain.Enums.Facture;
 using ApiCube.Domain.Enums.Stock;
 using ApiCube.Domain.Mappers.Client;
+using ApiCube.Domain.Mappers.CommandeClient;
 using ApiCube.Domain.Mappers.CommandeFournisseur;
 using ApiCube.Domain.Mappers.Employe;
+using ApiCube.Domain.Mappers.FactureClient;
 using ApiCube.Domain.Mappers.FamilleProduit;
 using ApiCube.Domain.Mappers.Fournisseur;
+using ApiCube.Domain.Mappers.LigneCommandeClient;
 using ApiCube.Domain.Mappers.LigneCommandeFournisseur;
 using ApiCube.Domain.Mappers.LignePanierClient;
 using ApiCube.Domain.Mappers.PanierClient;
@@ -29,8 +33,10 @@ using ApiCube.Domain.Mappers.TransactionStock;
 using ApiCube.Domain.Services;
 using ApiCube.Persistence.Models;
 using ApiCube.Persistence.Repositories.Client;
+using ApiCube.Persistence.Repositories.CommandeClient;
 using ApiCube.Persistence.Repositories.CommandeFournisseur;
 using ApiCube.Persistence.Repositories.Employe;
+using ApiCube.Persistence.Repositories.FactureClient;
 using ApiCube.Persistence.Repositories.FamilleProduit;
 using ApiCube.Persistence.Repositories.Fournisseur;
 using ApiCube.Persistence.Repositories.PanierClient;
@@ -112,7 +118,8 @@ builder.Services.AddAutoMapper(
     typeof(CommandeFournisseurMapperConfig),
     typeof(LigneCommandeFournisseurMapperConfig),
     typeof(PanierClientMapperConfig),
-    typeof(LignePanierClientMapperConfig)
+    typeof(LignePanierClientMapperConfig),
+    typeof(CommandeClientMapperConfig)
 );
 
 // Configure Mappers
@@ -128,11 +135,15 @@ builder.Services.AddScoped<ICommandeFournisseurMapper, CommandeFournisseurMapper
 builder.Services.AddScoped<ILigneCommandeFournisseurMapper, LigneCommandeFournisseurMapper>();
 builder.Services.AddScoped<IPanierClientMapper, PanierClientMapper>();
 builder.Services.AddScoped<ILignePanierClientMapper, LignePanierClientMapper>();
+builder.Services.AddScoped<ICommandeClientMapper, CommandeClientMapper>();
+builder.Services.AddScoped<ILigneCommandeClientMapper, LigneCommandeClientMapper>();
+builder.Services.AddScoped<IFactureClientMapper, FactureClientMapper>();
 
 // Configure enums mappers
 builder.Services.AddScoped<TypeTransactionStockMapper>();
 builder.Services.AddScoped<StatutStockMapper>();
 builder.Services.AddScoped<StatutCommandeMapper>();
+builder.Services.AddScoped<StatutFactureMapper>();
 
 // Configure repositories
 builder.Services.AddScoped<IFamilleProduitRepository, FamilleProduitRepository>();
@@ -145,6 +156,8 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IEmployeRepository, EmployeRepository>();
 builder.Services.AddScoped<ICommandeFournisseurRepository, CommandeFournisseurRepository>();
 builder.Services.AddScoped<IPanierClientRepository, PanierClientRepository>();
+builder.Services.AddScoped<ICommandeClientRepository, CommandeClientRepository>();
+builder.Services.AddScoped<IFactureClientRepository, FactureClientRepository>();
 
 // Configure application services
 builder.Services.AddScoped<IProduitService, ProduitService>();
@@ -159,8 +172,10 @@ builder.Services.AddScoped<ICommandeFournisseurService, CommandeFournisseurServi
 builder.Services.AddScoped<ICommandeClientService, CommandeClientService>();
 
 // Configure domain services
-builder.Services.AddScoped<PreparateurDeStock>();
+builder.Services.AddScoped<GestionnaireDeStock>();
 builder.Services.AddScoped<PreparateurDeCommandeFournisseur>();
+builder.Services.AddScoped<PreparateurDeCommandeClient>();
+builder.Services.AddScoped<GestionnaireDeFacturation>();
 
 // Configure Production Seeder
 builder.Services.AddScoped<RoleSeeder>();

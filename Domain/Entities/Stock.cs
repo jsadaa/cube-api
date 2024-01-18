@@ -1,4 +1,5 @@
 using ApiCube.Domain.Enums.Stock;
+using ApiCube.Domain.Exceptions;
 
 namespace ApiCube.Domain.Entities;
 
@@ -111,6 +112,9 @@ public class Stock
 
     public void AjouterTransaction(TransactionStock transactionStock)
     {
+        // verifier si le stock à une quantité suffisante pour la transaction
+        if (transactionStock.EstUneSortie()) VerifierDisponibilite(Math.Abs(transactionStock.Quantite));
+
         Transactions.Add(transactionStock);
 
         if (transactionStock.EstUneSortie()) RetirerQuantite(transactionStock.Quantite);
@@ -129,5 +133,10 @@ public class Stock
         Quantite = 0;
         DateSuppression = DateTime.Now;
         Statut = StatutStock.Supprime;
+    }
+
+    private void VerifierDisponibilite(int quantite)
+    {
+        if (quantite > Quantite) throw new QuantiteStockInsuffisante();
     }
 }

@@ -20,14 +20,14 @@ public class CommandeFournisseurService : ICommandeFournisseurService
     private readonly ICommandeFournisseurRepository _commandeFournisseurRepository;
     private readonly IEmployeRepository _employeRepository;
     private readonly IFournisseurRepository _fournisseurRepository;
+    private readonly GestionnaireDeStock _gestionnaireDeStock;
     private readonly IMapper _mapper;
     private readonly PreparateurDeCommandeFournisseur _preparateurDeCommandeFournisseur;
-    private readonly PreparateurDeStock _preparateurDeStock;
     private readonly IStockRepository _stockRepository;
 
     public CommandeFournisseurService(
         PreparateurDeCommandeFournisseur preparateurDeCommandeFournisseur,
-        PreparateurDeStock preparateurDeStock,
+        GestionnaireDeStock gestionnaireDeStock,
         ICommandeFournisseurRepository commandeFournisseurRepository,
         IEmployeRepository employeRepository,
         IFournisseurRepository fournisseurRepository,
@@ -36,7 +36,7 @@ public class CommandeFournisseurService : ICommandeFournisseurService
     )
     {
         _preparateurDeCommandeFournisseur = preparateurDeCommandeFournisseur;
-        _preparateurDeStock = preparateurDeStock;
+        _gestionnaireDeStock = gestionnaireDeStock;
         _commandeFournisseurRepository = commandeFournisseurRepository;
         _employeRepository = employeRepository;
         _fournisseurRepository = fournisseurRepository;
@@ -381,7 +381,7 @@ public class CommandeFournisseurService : ICommandeFournisseurService
             foreach (var ligneCommandeFournisseur in commandeFournisseurLivree.LigneCommandeFournisseurs)
             {
                 var stock = _stockRepository.Trouver(ligneCommandeFournisseur.Produit.Id);
-                var stockModifie = _preparateurDeStock.Approvisionnement(
+                var stockModifie = _gestionnaireDeStock.Approvisionnement(
                     stock,
                     ligneCommandeFournisseur
                 );

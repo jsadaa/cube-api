@@ -176,13 +176,10 @@ namespace ApiCube.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date_commande");
 
-                    b.Property<DateTime>("DateLivraison")
+                    b.Property<DateTime?>("DateLivraison")
+                        .IsRequired()
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date_livraison");
-
-                    b.Property<int>("EmployeId")
-                        .HasColumnType("int")
-                        .HasColumnName("employe_id");
 
                     b.Property<string>("Statut")
                         .IsRequired()
@@ -193,8 +190,6 @@ namespace ApiCube.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
-
-                    b.HasIndex("EmployeId");
 
                     b.ToTable("commande_client");
                 });
@@ -310,10 +305,6 @@ namespace ApiCube.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date_facture");
 
-                    b.Property<int>("EmployeId")
-                        .HasColumnType("int")
-                        .HasColumnName("employe_id");
-
                     b.Property<double>("PrixHt")
                         .HasColumnType("double")
                         .HasColumnName("prix_ht");
@@ -338,65 +329,7 @@ namespace ApiCube.Migrations
 
                     b.HasIndex("CommandeClientId");
 
-                    b.HasIndex("EmployeId");
-
                     b.ToTable("facture_client");
-                });
-
-            modelBuilder.Entity("ApiCube.Persistence.Models.FactureFournisseurModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    b.Property<int>("CommandeFournisseurId")
-                        .HasColumnType("int")
-                        .HasColumnName("commande_fournisseur_id");
-
-                    b.Property<DateTime>("DateEcheance")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("date_echeance");
-
-                    b.Property<DateTime>("DateFacture")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("date_facture");
-
-                    b.Property<int>("EmployeId")
-                        .HasColumnType("int")
-                        .HasColumnName("employe_id");
-
-                    b.Property<int>("FournisseurId")
-                        .HasColumnType("int")
-                        .HasColumnName("fournisseur_id");
-
-                    b.Property<double>("PrixHt")
-                        .HasColumnType("double")
-                        .HasColumnName("prix_ht");
-
-                    b.Property<double>("PrixTtc")
-                        .HasColumnType("double")
-                        .HasColumnName("prix_ttc");
-
-                    b.Property<string>("Statut")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("statut");
-
-                    b.Property<double>("Tva")
-                        .HasColumnType("double")
-                        .HasColumnName("tva");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CommandeFournisseurId");
-
-                    b.HasIndex("EmployeId");
-
-                    b.HasIndex("FournisseurId");
-
-                    b.ToTable("facture_fournisseur");
                 });
 
             modelBuilder.Entity("ApiCube.Persistence.Models.FamilleProduitModel", b =>
@@ -505,10 +438,6 @@ namespace ApiCube.Migrations
                     b.Property<int>("Quantite")
                         .HasColumnType("int")
                         .HasColumnName("quantite");
-
-                    b.Property<double>("Remise")
-                        .HasColumnType("double")
-                        .HasColumnName("remise");
 
                     b.Property<double>("Total")
                         .HasColumnType("double")
@@ -984,15 +913,7 @@ namespace ApiCube.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApiCube.Persistence.Models.EmployeModel", "Employe")
-                        .WithMany()
-                        .HasForeignKey("EmployeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Client");
-
-                    b.Navigation("Employe");
                 });
 
             modelBuilder.Entity("ApiCube.Persistence.Models.CommandeFournisseurModel", b =>
@@ -1039,44 +960,9 @@ namespace ApiCube.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApiCube.Persistence.Models.EmployeModel", "Employe")
-                        .WithMany()
-                        .HasForeignKey("EmployeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Client");
 
                     b.Navigation("CommandeClient");
-
-                    b.Navigation("Employe");
-                });
-
-            modelBuilder.Entity("ApiCube.Persistence.Models.FactureFournisseurModel", b =>
-                {
-                    b.HasOne("ApiCube.Persistence.Models.CommandeFournisseurModel", "CommandeFournisseur")
-                        .WithMany()
-                        .HasForeignKey("CommandeFournisseurId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ApiCube.Persistence.Models.EmployeModel", "Employe")
-                        .WithMany()
-                        .HasForeignKey("EmployeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ApiCube.Persistence.Models.FournisseurModel", "Fournisseur")
-                        .WithMany()
-                        .HasForeignKey("FournisseurId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CommandeFournisseur");
-
-                    b.Navigation("Employe");
-
-                    b.Navigation("Fournisseur");
                 });
 
             modelBuilder.Entity("ApiCube.Persistence.Models.LigneCommandeClientModel", b =>

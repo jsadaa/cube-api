@@ -2,7 +2,8 @@ namespace ApiCube.Domain.Entities;
 
 public class Employe
 {
-    public Employe(string nom, string prenom, string email, DateTime dateEmbauche, string poste, string applicationUserId)
+    public Employe(string nom, string prenom, string email, DateTime dateEmbauche, string poste,
+        string applicationUserId)
     {
         Nom = nom;
         Prenom = prenom;
@@ -38,7 +39,7 @@ public class Employe
     public DateTime? DateDepart { get; set; }
 
     public string Poste { get; set; }
-    
+
     public string ApplicationUserId { get; set; }
 
     public void MettreAJour(string nom, string prenom, string email, DateTime dateEmbauche, string poste,

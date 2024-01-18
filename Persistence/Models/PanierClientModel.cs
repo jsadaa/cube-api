@@ -10,7 +10,7 @@ public class PanierClientModel
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Key]
     public int Id { get; set; }
-    
+
     [Column("total")] [Required] public required double Total { get; set; }
 
     [Column("client_id")] [Required] public required int ClientId { get; set; }

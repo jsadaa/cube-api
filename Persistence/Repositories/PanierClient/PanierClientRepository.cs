@@ -79,7 +79,7 @@ public class PanierClientRepository : IPanierClientRepository
 
         return panierClients;
     }
-    
+
     public List<Domain.Entities.PanierClient> ListerParClient(int idClient)
     {
         var panierClientModels = _context.PaniersClients

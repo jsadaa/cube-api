@@ -15,8 +15,6 @@ public class LigneCommandeClientModel
 
     [Column("prix_unitaire")] [Required] public required double PrixUnitaire { get; set; }
 
-    [Column("remise")] [Required] public required double Remise { get; set; }
-
     [Column("total")] [Required] public required double Total { get; set; }
 
     [Column("produit_id")] [Required] public required int ProduitId { get; set; }

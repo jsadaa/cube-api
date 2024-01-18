@@ -26,11 +26,7 @@ public class FactureClientModel
 
     [Column("client_id")] [Required] public required int ClientId { get; set; }
 
-    [Column("employe_id")] [Required] public required int EmployeId { get; set; }
-
     [ForeignKey("ClientId")] public required ClientModel Client { get; set; }
-
-    [ForeignKey("EmployeId")] public required EmployeModel Employe { get; set; }
 
     [Column("commande_client_id")]
     [Required]

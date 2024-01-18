@@ -40,7 +40,7 @@ public class EmployeService : IEmployeService
             var chars = userName.Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark);
             userName = new string(chars.ToArray());
             userName = userName.Replace(" ", "");
-            
+
             var applicationUserModel = new ApplicationUserModel
             {
                 UserName = userName,
@@ -71,7 +71,7 @@ public class EmployeService : IEmployeService
 
             await _userManager.AddToRoleAsync(applicationUserModel, Role.Employe.ToString());
             var userId = await _userManager.GetUserIdAsync(applicationUserModel);
-            
+
             var employe = new Domain.Entities.Employe(
                 employeRequest.Nom,
                 employeRequest.Prenom,
@@ -195,7 +195,7 @@ public class EmployeService : IEmployeService
             var applicationUser = await _userManager.FindByEmailAsync(employe.Email);
 
             if (applicationUser == null) throw new UtilisateurIntrouvable();
-            
+
             // Normalisation du nom d'utilisateur
             var userName = employeRequest.Nom + employeRequest.Prenom;
             userName = userName.Normalize(NormalizationForm.FormD);
@@ -249,7 +249,7 @@ public class EmployeService : IEmployeService
                 employeRequest.Poste,
                 appUserId
             );
-            
+
             _employeRepository.Modifier(employe);
 
             var response = new BaseResponse(

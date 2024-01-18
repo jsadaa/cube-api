@@ -33,4 +33,11 @@ public class LignePanierClient
     {
         if (Quantite < 0) throw new QuantitePanierInvalide();
     }
+
+    public void ModifierQuantite(int quantite)
+    {
+        Quantite = quantite;
+        VerifierQuantite();
+        Total = PrixUnitaire * Quantite;
+    }
 }

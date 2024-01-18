@@ -85,14 +85,14 @@ public class StockRepository : IStockRepository
         return stock;
     }
 
-    public Domain.Entities.Stock Trouver(string nom)
+    public Domain.Entities.Stock TrouverParProduit(int produitId)
     {
         var stockModel = _context.Stocks
             .AsNoTracking()
             .Include(stock => stock.Produit).ThenInclude(produitModel => produitModel.FamilleProduit)
             .Include(stockModel => stockModel.Produit).ThenInclude(produitModel => produitModel.Fournisseur)
             .Include(stockModel => stockModel.TransactionsStock)
-            .FirstOrDefault(stock => stock.Produit.Nom == nom);
+            .FirstOrDefault(stock => stock.Produit.Id == produitId);
 
         if (stockModel == null) throw new StockIntrouvable();
 

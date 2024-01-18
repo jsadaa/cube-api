@@ -380,6 +380,30 @@ namespace ApiCube.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "commande_client",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    date_commande = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    date_livraison = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    statut = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    client_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_commande_client", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_commande_client_client_client_id",
+                        column: x => x.client_id,
+                        principalTable: "client",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "panier_client",
                 columns: table => new
                 {
@@ -395,37 +419,6 @@ namespace ApiCube.Migrations
                         name: "FK_panier_client_client_client_id",
                         column: x => x.client_id,
                         principalTable: "client",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "commande_client",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    date_commande = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    date_livraison = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    statut = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    client_id = table.Column<int>(type: "int", nullable: false),
-                    employe_id = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_commande_client", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_commande_client_client_client_id",
-                        column: x => x.client_id,
-                        principalTable: "client",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_commande_client_employe_employe_id",
-                        column: x => x.employe_id,
-                        principalTable: "employe",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -490,6 +483,69 @@ namespace ApiCube.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "facture_client",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    date_facture = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    statut = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    prix_ht = table.Column<double>(type: "double", nullable: false),
+                    prix_ttc = table.Column<double>(type: "double", nullable: false),
+                    tva = table.Column<double>(type: "double", nullable: false),
+                    client_id = table.Column<int>(type: "int", nullable: false),
+                    commande_client_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_facture_client", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_facture_client_client_client_id",
+                        column: x => x.client_id,
+                        principalTable: "client",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_facture_client_commande_client_commande_client_id",
+                        column: x => x.commande_client_id,
+                        principalTable: "commande_client",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ligne_commande_client",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    quantite = table.Column<int>(type: "int", nullable: false),
+                    prix_unitaire = table.Column<double>(type: "double", nullable: false),
+                    total = table.Column<double>(type: "double", nullable: false),
+                    produit_id = table.Column<int>(type: "int", nullable: false),
+                    commande_client_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ligne_commande_client", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_ligne_commande_client_commande_client_commande_client_id",
+                        column: x => x.commande_client_id,
+                        principalTable: "commande_client",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ligne_commande_client_produit_produit_id",
+                        column: x => x.produit_id,
+                        principalTable: "produit",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "ligne_panier_client",
                 columns: table => new
                 {
@@ -514,118 +570,6 @@ namespace ApiCube.Migrations
                         name: "FK_ligne_panier_client_produit_produit_id",
                         column: x => x.produit_id,
                         principalTable: "produit",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "facture_client",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    date_facture = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    statut = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    prix_ht = table.Column<double>(type: "double", nullable: false),
-                    prix_ttc = table.Column<double>(type: "double", nullable: false),
-                    tva = table.Column<double>(type: "double", nullable: false),
-                    client_id = table.Column<int>(type: "int", nullable: false),
-                    employe_id = table.Column<int>(type: "int", nullable: false),
-                    commande_client_id = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_facture_client", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_facture_client_client_client_id",
-                        column: x => x.client_id,
-                        principalTable: "client",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_facture_client_commande_client_commande_client_id",
-                        column: x => x.commande_client_id,
-                        principalTable: "commande_client",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_facture_client_employe_employe_id",
-                        column: x => x.employe_id,
-                        principalTable: "employe",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "ligne_commande_client",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    quantite = table.Column<int>(type: "int", nullable: false),
-                    prix_unitaire = table.Column<double>(type: "double", nullable: false),
-                    remise = table.Column<double>(type: "double", nullable: false),
-                    total = table.Column<double>(type: "double", nullable: false),
-                    produit_id = table.Column<int>(type: "int", nullable: false),
-                    commande_client_id = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ligne_commande_client", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_ligne_commande_client_commande_client_commande_client_id",
-                        column: x => x.commande_client_id,
-                        principalTable: "commande_client",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ligne_commande_client_produit_produit_id",
-                        column: x => x.produit_id,
-                        principalTable: "produit",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "facture_fournisseur",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    date_facture = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    date_echeance = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    statut = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    prix_ht = table.Column<double>(type: "double", nullable: false),
-                    prix_ttc = table.Column<double>(type: "double", nullable: false),
-                    tva = table.Column<double>(type: "double", nullable: false),
-                    fournisseur_id = table.Column<int>(type: "int", nullable: false),
-                    employe_id = table.Column<int>(type: "int", nullable: false),
-                    commande_fournisseur_id = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_facture_fournisseur", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_facture_fournisseur_commande_fournisseur_commande_fournisseu~",
-                        column: x => x.commande_fournisseur_id,
-                        principalTable: "commande_fournisseur",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_facture_fournisseur_employe_employe_id",
-                        column: x => x.employe_id,
-                        principalTable: "employe",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_facture_fournisseur_fournisseur_fournisseur_id",
-                        column: x => x.fournisseur_id,
-                        principalTable: "fournisseur",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -744,11 +688,6 @@ namespace ApiCube.Migrations
                 column: "client_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_commande_client_employe_id",
-                table: "commande_client",
-                column: "employe_id");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_commande_fournisseur_employe_id",
                 table: "commande_fournisseur",
                 column: "employe_id");
@@ -778,26 +717,6 @@ namespace ApiCube.Migrations
                 name: "IX_facture_client_commande_client_id",
                 table: "facture_client",
                 column: "commande_client_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_facture_client_employe_id",
-                table: "facture_client",
-                column: "employe_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_facture_fournisseur_commande_fournisseur_id",
-                table: "facture_fournisseur",
-                column: "commande_fournisseur_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_facture_fournisseur_employe_id",
-                table: "facture_fournisseur",
-                column: "employe_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_facture_fournisseur_fournisseur_id",
-                table: "facture_fournisseur",
-                column: "fournisseur_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_famille_produit_nom",
@@ -899,9 +818,6 @@ namespace ApiCube.Migrations
 
             migrationBuilder.DropTable(
                 name: "facture_client");
-
-            migrationBuilder.DropTable(
-                name: "facture_fournisseur");
 
             migrationBuilder.DropTable(
                 name: "ligne_commande_client");

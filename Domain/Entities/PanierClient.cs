@@ -41,7 +41,7 @@ public class PanierClient
         LignePanierClients.Remove(lignePanierClient);
     }
 
-    public void ViderPanier()
+    public void Vider()
     {
         LignePanierClients.Clear();
     }
@@ -51,10 +51,11 @@ public class PanierClient
         if (LignePanierClients.Any(lignePanierClient => lignePanierClient.Produit.Id == produit.Id))
             throw new ProduitDejaDansPanier();
     }
-    
+
     public double CalculerTotal()
     {
         if (LignePanierClients.Count == 0) return 0;
-        return LignePanierClients.Sum(lignePanierClient => lignePanierClient.Produit.PrixVente * lignePanierClient.Quantite);
+        return LignePanierClients.Sum(lignePanierClient =>
+            lignePanierClient.Produit.PrixVente * lignePanierClient.Quantite);
     }
 }

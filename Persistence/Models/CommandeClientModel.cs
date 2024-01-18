@@ -13,7 +13,7 @@ public class CommandeClientModel
 
     [Column("date_commande")] [Required] public required DateTime DateCommande { get; set; }
 
-    [Column("date_livraison")] [Required] public required DateTime DateLivraison { get; set; }
+    [Column("date_livraison")] [Required] public required DateTime? DateLivraison { get; set; }
 
     [Column("statut")]
     [Required]
@@ -22,11 +22,8 @@ public class CommandeClientModel
 
     [Column("client_id")] [Required] public required int ClientId { get; set; }
 
-    [Column("employe_id")] [Required] public required int EmployeId { get; set; }
-
     [ForeignKey("ClientId")] public required ClientModel Client { get; set; }
 
-    [ForeignKey("EmployeId")] public required EmployeModel Employe { get; set; }
-
-    public required ICollection<LigneCommandeClientModel> LigneCommandeClients { get; set; }
+    public required ICollection<LigneCommandeClientModel> LigneCommandeClients { get; set; } =
+        new List<LigneCommandeClientModel>();
 }

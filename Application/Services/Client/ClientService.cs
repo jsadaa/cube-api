@@ -40,7 +40,7 @@ public class ClientService : IClientService
             var chars = userName.Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark);
             userName = new string(chars.ToArray());
             userName = userName.Replace(" ", "");
-            
+
             var applicationUserModel = new ApplicationUserModel
             {
                 UserName = userName,
@@ -201,7 +201,7 @@ public class ClientService : IClientService
             var applicationUser = await _userManager.FindByEmailAsync(client.Email);
 
             if (applicationUser == null) throw new UtilisateurIntrouvable();
-            
+
             // Normalisation du nom d'utilisateur
             var userName = clientRequest.Nom + clientRequest.Prenom;
             userName = userName.Normalize(NormalizationForm.FormD);
@@ -247,7 +247,7 @@ public class ClientService : IClientService
             }
 
             var appUserId = await _userManager.GetUserIdAsync(applicationUser);
-            
+
             client.MettreAJour(
                 clientRequest.Nom,
                 clientRequest.Prenom,
@@ -260,7 +260,7 @@ public class ClientService : IClientService
                 clientRequest.DateNaissance,
                 appUserId
             );
-            
+
             _clientRepository.Modifier(client);
 
             var response = new BaseResponse(

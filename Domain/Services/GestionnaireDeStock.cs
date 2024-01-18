@@ -4,8 +4,25 @@ using ApiCube.Domain.Enums.Stock;
 
 namespace ApiCube.Domain.Services;
 
-public class PreparateurDeStock
+public class GestionnaireDeStock
 {
+    public Stock Achat(Stock stock, LigneCommandeClient ligneCommandeClient)
+    {
+        var nouvelleTransactionStock = new TransactionStock(
+            -ligneCommandeClient.Quantite,
+            DateTime.Now,
+            TypeTransactionStock.Achat,
+            stock,
+            stock.Produit.PrixAchat,
+            stock.Quantite,
+            stock.Quantite - ligneCommandeClient.Quantite
+        );
+
+        stock.AjouterTransaction(nouvelleTransactionStock);
+
+        return stock;
+    }
+
     public Stock AjoutInterne(Produit produit, StockRequest stockRequest)
     {
         var nouveauStock = new Stock(

@@ -14,21 +14,21 @@ namespace ApiCube.Application.Services.Stock;
 
 public class StockService : IStockService
 {
+    private readonly GestionnaireDeStock _gestionnaireDeStock;
     private readonly IMapper _mapper;
-    private readonly PreparateurDeStock _preparateurDeStock;
     private readonly IProduitRepository _produitRepository;
     private readonly IStockRepository _stockRepository;
 
     public StockService(
         IStockRepository stockRepository,
         IProduitRepository produitRepository,
-        PreparateurDeStock preparateurDeStock,
+        GestionnaireDeStock gestionnaireDeStock,
         IMapper mapper
     )
     {
         _stockRepository = stockRepository;
         _produitRepository = produitRepository;
-        _preparateurDeStock = preparateurDeStock;
+        _gestionnaireDeStock = gestionnaireDeStock;
         _mapper = mapper;
     }
 
@@ -38,7 +38,7 @@ public class StockService : IStockService
         {
             var produit = _produitRepository.Trouver(stockRequest.ProduitId);
 
-            var nouveauStock = _preparateurDeStock.AjoutInterne(
+            var nouveauStock = _gestionnaireDeStock.AjoutInterne(
                 produit,
                 stockRequest
             );
@@ -137,7 +137,7 @@ public class StockService : IStockService
         {
             var stock = _stockRepository.Trouver(id);
 
-            var stockModifié = _preparateurDeStock.ModificationInterne(
+            var stockModifié = _gestionnaireDeStock.ModificationInterne(
                 stock,
                 stockUpdate
             );
@@ -185,7 +185,7 @@ public class StockService : IStockService
         try
         {
             var stock = _stockRepository.Trouver(id);
-            var stockSupprimé = _preparateurDeStock.Suppression(stock);
+            var stockSupprimé = _gestionnaireDeStock.Suppression(stock);
 
             // On applique un soft delete ici,
             // On ne supprime pas le stock de la base de données mais on le rend indisponible
