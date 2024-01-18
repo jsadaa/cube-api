@@ -36,7 +36,6 @@ public class ProduitController : ControllerBase
     public IActionResult AjouterUnProduitAuCatalogue([FromBody] ProduitRequest produitRequest)
     {
         var response = _produitService.AjouterUnProduitAuCatalogue(produitRequest);
-
         return StatusCode(response.StatusCode, response.Data);
     }
 

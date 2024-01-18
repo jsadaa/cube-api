@@ -33,12 +33,12 @@ public class PreparateurDeStock
         return nouveauStock;
     }
 
-    public Stock Achat(Stock stock, LigneCommandeFournisseur ligneCommandeFournisseur)
+    public Stock Approvisionnement(Stock stock, LigneCommandeFournisseur ligneCommandeFournisseur)
     {
         var nouvelleTransactionStock = new TransactionStock(
             ligneCommandeFournisseur.Quantite,
             DateTime.Now,
-            TypeTransactionStock.Achat,
+            TypeTransactionStock.Approvisionnement,
             stock,
             ligneCommandeFournisseur.PrixUnitaire,
             stock.Quantite,

@@ -380,6 +380,26 @@ namespace ApiCube.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "panier_client",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    client_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_panier_client", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_panier_client_client_client_id",
+                        column: x => x.client_id,
+                        principalTable: "client",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "commande_client",
                 columns: table => new
                 {
@@ -461,6 +481,37 @@ namespace ApiCube.Migrations
                     table.PrimaryKey("PK_stock", x => x.id);
                     table.ForeignKey(
                         name: "FK_stock_produit_produit_id",
+                        column: x => x.produit_id,
+                        principalTable: "produit",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ligne_panier_client",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    quantite = table.Column<int>(type: "int", nullable: false),
+                    prix_unitaire = table.Column<double>(type: "double", nullable: false),
+                    remise = table.Column<double>(type: "double", nullable: false),
+                    total = table.Column<double>(type: "double", nullable: false),
+                    produit_id = table.Column<int>(type: "int", nullable: false),
+                    panier_client_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ligne_panier_client", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_ligne_panier_client_panier_client_panier_client_id",
+                        column: x => x.panier_client_id,
+                        principalTable: "panier_client",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ligne_panier_client_produit_produit_id",
                         column: x => x.produit_id,
                         principalTable: "produit",
                         principalColumn: "id",
@@ -781,6 +832,21 @@ namespace ApiCube.Migrations
                 column: "produit_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ligne_panier_client_panier_client_id",
+                table: "ligne_panier_client",
+                column: "panier_client_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ligne_panier_client_produit_id",
+                table: "ligne_panier_client",
+                column: "produit_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_panier_client_client_id",
+                table: "panier_client",
+                column: "client_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_produit_famille_produit_id",
                 table: "produit",
                 column: "famille_produit_id");
@@ -844,6 +910,9 @@ namespace ApiCube.Migrations
                 name: "ligne_commande_fournisseur");
 
             migrationBuilder.DropTable(
+                name: "ligne_panier_client");
+
+            migrationBuilder.DropTable(
                 name: "transaction_stock");
 
             migrationBuilder.DropTable(
@@ -856,13 +925,16 @@ namespace ApiCube.Migrations
                 name: "commande_fournisseur");
 
             migrationBuilder.DropTable(
+                name: "panier_client");
+
+            migrationBuilder.DropTable(
                 name: "stock");
 
             migrationBuilder.DropTable(
-                name: "client");
+                name: "employe");
 
             migrationBuilder.DropTable(
-                name: "employe");
+                name: "client");
 
             migrationBuilder.DropTable(
                 name: "produit");

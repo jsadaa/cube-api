@@ -23,23 +23,21 @@ public class CommandeFournisseurService : ICommandeFournisseurService
     private readonly IEmployeRepository _employeRepository;
     private readonly IFournisseurRepository _fournisseurRepository;
     private readonly IMapper _mapper;
-    private readonly PreparateurDeCommande _preparateurDeCommande;
+    private readonly PreparateurDeCommandeFournisseur _preparateurDeCommandeFournisseur;
     private readonly PreparateurDeStock _preparateurDeStock;
     private readonly IStockRepository _stockRepository;
 
     public CommandeFournisseurService(
-        PreparateurDeCommande preparateurDeCommande,
+        PreparateurDeCommandeFournisseur preparateurDeCommandeFournisseur,
         PreparateurDeStock preparateurDeStock,
-        StatutCommandeMapper statutCommandeMapper,
         ICommandeFournisseurRepository commandeFournisseurRepository,
         IEmployeRepository employeRepository,
-        IProduitRepository produitRepository,
         IFournisseurRepository fournisseurRepository,
         IStockRepository stockRepository,
         IMapper mapper
     )
     {
-        _preparateurDeCommande = preparateurDeCommande;
+        _preparateurDeCommandeFournisseur = preparateurDeCommandeFournisseur;
         _preparateurDeStock = preparateurDeStock;
         _commandeFournisseurRepository = commandeFournisseurRepository;
         _employeRepository = employeRepository;
@@ -55,7 +53,7 @@ public class CommandeFournisseurService : ICommandeFournisseurService
             var fournisseur = _fournisseurRepository.Trouver(commandeFournisseurRequest.FournisseurId);
             var employe = _employeRepository.Trouver(commandeFournisseurRequest.EmployeId);
 
-            var nouvelleCommandeFournisseur = _preparateurDeCommande.Commande(
+            var nouvelleCommandeFournisseur = _preparateurDeCommandeFournisseur.Commande(
                 fournisseur,
                 employe,
                 commandeFournisseurRequest.Produits
@@ -203,7 +201,7 @@ public class CommandeFournisseurService : ICommandeFournisseurService
             var fournisseur = _fournisseurRepository.Trouver(commandeFournisseurRequest.FournisseurId);
             var employe = _employeRepository.Trouver(commandeFournisseurRequest.EmployeId);
 
-            var commandeFournisseurModifiee = _preparateurDeCommande.ModificationInterne(
+            var commandeFournisseurModifiee = _preparateurDeCommandeFournisseur.ModificationInterne(
                 commandeFournisseur,
                 commandeFournisseurRequest.Produits,
                 fournisseur,
@@ -379,13 +377,13 @@ public class CommandeFournisseurService : ICommandeFournisseurService
         try
         {
             var commandeFournisseur = _commandeFournisseurRepository.Trouver(id);
-            var commandeFournisseurLivree = _preparateurDeCommande.Reception(commandeFournisseur);
+            var commandeFournisseurLivree = _preparateurDeCommandeFournisseur.Reception(commandeFournisseur);
 
             // Mise à jour du stock
             foreach (var ligneCommandeFournisseur in commandeFournisseurLivree.LigneCommandeFournisseurs)
             {
                 var stock = _stockRepository.Trouver(ligneCommandeFournisseur.Produit.Id);
-                var stockModifie = _preparateurDeStock.Achat(
+                var stockModifie = _preparateurDeStock.Approvisionnement(
                     stock,
                     ligneCommandeFournisseur
                 );

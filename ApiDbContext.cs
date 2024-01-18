@@ -39,6 +39,10 @@ public class ApiDbContext : IdentityDbContext<ApplicationUserModel>
     public DbSet<TransactionStockModel> TransactionsStock { get; set; }
 
     public DbSet<StockModel> Stocks { get; set; }
+    
+    public DbSet<PanierClientModel> PaniersClients { get; set; }
+    
+    public DbSet<LignePanierClientModel> LignesPaniersClients { get; set; }
 
     public override int SaveChanges()
     {

@@ -5,6 +5,7 @@ namespace ApiCube.Domain.Enums.Stock;
 public enum TypeTransactionStock
 {
     Achat,
+    Approvisionnement,
     AjoutInterne,
     Vente,
     Retour,
@@ -22,6 +23,7 @@ public class TypeTransactionStockMapper
         return type switch
         {
             "Achat" => TypeTransactionStock.Achat,
+            "Approvisionnement" => TypeTransactionStock.Approvisionnement,
             "Vente" => TypeTransactionStock.Vente,
             "Retour" => TypeTransactionStock.Retour,
             "Perte" => TypeTransactionStock.Perte,

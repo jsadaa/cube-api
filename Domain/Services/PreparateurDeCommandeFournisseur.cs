@@ -6,11 +6,11 @@ using ApiCube.Persistence.Repositories.Produit;
 
 namespace ApiCube.Domain.Services;
 
-public class PreparateurDeCommande
+public class PreparateurDeCommandeFournisseur
 {
     private readonly IProduitRepository _produitRepository;
 
-    public PreparateurDeCommande(IProduitRepository produitRepository)
+    public PreparateurDeCommandeFournisseur(IProduitRepository produitRepository)
     {
         _produitRepository = produitRepository;
     }

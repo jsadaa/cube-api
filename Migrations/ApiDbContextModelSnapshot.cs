@@ -563,6 +563,64 @@ namespace ApiCube.Migrations
                     b.ToTable("ligne_commande_fournisseur");
                 });
 
+            modelBuilder.Entity("ApiCube.Persistence.Models.LignePanierClientModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<int>("PanierClientId")
+                        .HasColumnType("int")
+                        .HasColumnName("panier_client_id");
+
+                    b.Property<double>("PrixUnitaire")
+                        .HasColumnType("double")
+                        .HasColumnName("prix_unitaire");
+
+                    b.Property<int>("ProduitId")
+                        .HasColumnType("int")
+                        .HasColumnName("produit_id");
+
+                    b.Property<int>("Quantite")
+                        .HasColumnType("int")
+                        .HasColumnName("quantite");
+
+                    b.Property<double>("Remise")
+                        .HasColumnType("double")
+                        .HasColumnName("remise");
+
+                    b.Property<double>("Total")
+                        .HasColumnType("double")
+                        .HasColumnName("total");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PanierClientId");
+
+                    b.HasIndex("ProduitId");
+
+                    b.ToTable("ligne_panier_client");
+                });
+
+            modelBuilder.Entity("ApiCube.Persistence.Models.PanierClientModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int")
+                        .HasColumnName("client_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("panier_client");
+                });
+
             modelBuilder.Entity("ApiCube.Persistence.Models.ProduitModel", b =>
                 {
                     b.Property<int>("Id")
@@ -1059,6 +1117,36 @@ namespace ApiCube.Migrations
                     b.Navigation("Produit");
                 });
 
+            modelBuilder.Entity("ApiCube.Persistence.Models.LignePanierClientModel", b =>
+                {
+                    b.HasOne("ApiCube.Persistence.Models.PanierClientModel", "PanierClient")
+                        .WithMany("LignePanierClients")
+                        .HasForeignKey("PanierClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ApiCube.Persistence.Models.ProduitModel", "Produit")
+                        .WithMany()
+                        .HasForeignKey("ProduitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PanierClient");
+
+                    b.Navigation("Produit");
+                });
+
+            modelBuilder.Entity("ApiCube.Persistence.Models.PanierClientModel", b =>
+                {
+                    b.HasOne("ApiCube.Persistence.Models.ClientModel", "Client")
+                        .WithMany("Paniers")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
             modelBuilder.Entity("ApiCube.Persistence.Models.ProduitModel", b =>
                 {
                     b.HasOne("ApiCube.Persistence.Models.FamilleProduitModel", "FamilleProduit")
@@ -1162,6 +1250,8 @@ namespace ApiCube.Migrations
                     b.Navigation("Commandes");
 
                     b.Navigation("Factures");
+
+                    b.Navigation("Paniers");
                 });
 
             modelBuilder.Entity("ApiCube.Persistence.Models.CommandeClientModel", b =>
@@ -1177,6 +1267,11 @@ namespace ApiCube.Migrations
             modelBuilder.Entity("ApiCube.Persistence.Models.FournisseurModel", b =>
                 {
                     b.Navigation("Produits");
+                });
+
+            modelBuilder.Entity("ApiCube.Persistence.Models.PanierClientModel", b =>
+                {
+                    b.Navigation("LignePanierClients");
                 });
 
             modelBuilder.Entity("ApiCube.Persistence.Models.ProduitModel", b =>

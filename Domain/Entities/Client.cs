@@ -35,7 +35,7 @@ public class Client
 
     public Client(string username, string nom, string prenom, string adresse, string codePostal, string ville,
         string pays, string telephone, string email, DateTime dateNaissance,
-        DateTime dateInscription, List<CommandeClient> commandes, List<FactureClient> factures)
+        DateTime dateInscription, List<CommandeClient> commandes, List<FactureClient> factures, List<PanierClient> paniers)
     {
         Username = username;
         Nom = nom;
@@ -47,11 +47,12 @@ public class Client
         DateInscription = dateInscription;
         Commandes = commandes;
         Factures = factures;
+        Paniers = paniers;
     }
 
     public Client(int id, string username, string nom, string prenom, string adresse, string codePostal, string ville,
         string pays, string telephone, string email, DateTime dateNaissance,
-        DateTime dateInscription, List<CommandeClient> commandes, List<FactureClient> factures)
+        DateTime dateInscription, List<CommandeClient> commandes, List<FactureClient> factures, List<PanierClient> paniers)
     {
         Id = id;
         Username = username;
@@ -64,6 +65,7 @@ public class Client
         DateInscription = dateInscription;
         Commandes = commandes;
         Factures = factures;
+        Paniers = paniers;
     }
 
     public int Id { get; set; }
@@ -77,6 +79,7 @@ public class Client
     public DateTime DateInscription { get; set; }
     public List<CommandeClient>? Commandes { get; set; }
     public List<FactureClient>? Factures { get; set; }
+    public List<PanierClient>? Paniers { get; set; }
 
     public void AjouterCommande(CommandeClient commande)
     {
@@ -98,6 +101,17 @@ public class Client
     public void SupprimerFacture(FactureClient factureClient)
     {
         Factures?.Remove(factureClient);
+    }
+    
+    public void AjouterPanier(PanierClient panier)
+    {
+        Paniers ??= new List<PanierClient>();
+        Paniers.Add(panier);
+    }
+    
+    public void SupprimerPanier(PanierClient panier)
+    {
+        Paniers?.Remove(panier);
     }
 
     public void MettreAJour(string nom, string prenom, string adresse, string codePostal, string ville, string pays,
