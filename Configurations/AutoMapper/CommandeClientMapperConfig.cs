@@ -14,7 +14,7 @@ public class CommandeClientMapperConfig : Profile
             .ForMember(dest => dest.LigneCommandeClients, opt => opt.MapFrom(src => src.LigneCommandeClients))
             .ForMember(dest => dest.DateCommande, opt => opt.MapFrom(src => src.DateCommande))
             .ForMember(dest => dest.DateLivraison, opt => opt.MapFrom(src => src.DateLivraison))
-            .ForMember(dest => dest.Statut, opt => opt.MapFrom(src => src.Statut))
+            .ForMember(dest => dest.Statut, opt => opt.MapFrom(src => src.Statut.ToString()))
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
 
         CreateMap<CommandeClient, CommandeClientModel>()

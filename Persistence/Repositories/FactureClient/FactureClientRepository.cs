@@ -71,7 +71,23 @@ public class FactureClientRepository : IFactureClientRepository
 
         if (factureClientModel == null) throw new FactureClientIntrouvable();
 
-        return _mapper.Map<Domain.Entities.FactureClient>(factureClientModel);
+        var client = _clientMapper.Mapper(factureClientModel.CommandeClient.Client);
+        var statutCommande = _statutCommandeMapper.Mapper(factureClientModel.CommandeClient.Statut);
+        var ligneCommandeClients = new List<LigneCommandeClient>();
+        foreach (var ligneCommandeClientModel in factureClientModel.CommandeClient.LigneCommandeClients)
+        {
+            var familleProduit = _familleProduitMapper.Mapper(ligneCommandeClientModel.Produit.FamilleProduit);
+            var fournisseur = _fournisseurMapper.Mapper(ligneCommandeClientModel.Produit.Fournisseur);
+            var produit = _produitMapper.Mapper(ligneCommandeClientModel.Produit, familleProduit, fournisseur);
+            var ligneCommandeClient = _ligneCommandeClientMapper.Mapper(ligneCommandeClientModel, produit);
+            ligneCommandeClients.Add(ligneCommandeClient);
+        }
+        
+        var commandeClient = _commandeClientMapper.Mapper(factureClientModel.CommandeClient, client, statutCommande,
+            ligneCommandeClients);
+        var statutFacture = Enum.Parse<StatutFacture>(factureClientModel.Statut);
+        
+        return _factureClientMapper.Mapper(factureClientModel, commandeClient, statutFacture);
     }
 
     public List<Domain.Entities.FactureClient> Lister()
@@ -110,6 +126,46 @@ public class FactureClientRepository : IFactureClientRepository
             factureClients.Add(factureClient);
         }
 
+        return factureClients;
+    }
+    
+    public List<Domain.Entities.FactureClient> ListerParClient(int id)
+    {
+        var factureClientModels = _context.FacturesClients
+            .AsNoTracking()
+            .Include(factureClient => factureClient.CommandeClient)
+            .Include(factureClient => factureClient.CommandeClient.Client)
+            .Include(factureClient => factureClient.CommandeClient.LigneCommandeClients)
+            .ThenInclude(ligneCommandeClient => ligneCommandeClient.Produit)
+            .ThenInclude(produitModel => produitModel.Fournisseur)
+            .Include(factureClient => factureClient.CommandeClient.LigneCommandeClients)
+            .ThenInclude(ligneCommandeClient => ligneCommandeClient.Produit)
+            .ThenInclude(produitModel => produitModel.FamilleProduit)
+            .Where(factureClient => factureClient.CommandeClient.Client.Id == id)
+            .ToList();
+
+        var factureClients = new List<Domain.Entities.FactureClient>();
+        foreach (var factureClientModel in factureClientModels)
+        {
+            var client = _clientMapper.Mapper(factureClientModel.CommandeClient.Client);
+            var statutCommande = _statutCommandeMapper.Mapper(factureClientModel.CommandeClient.Statut);
+            var ligneCommandeClients = new List<LigneCommandeClient>();
+            foreach (var ligneCommandeClientModel in factureClientModel.CommandeClient.LigneCommandeClients)
+            {
+                var familleProduit = _familleProduitMapper.Mapper(ligneCommandeClientModel.Produit.FamilleProduit);
+                var fournisseur = _fournisseurMapper.Mapper(ligneCommandeClientModel.Produit.Fournisseur);
+                var produit = _produitMapper.Mapper(ligneCommandeClientModel.Produit, familleProduit, fournisseur);
+                var ligneCommandeClient = _ligneCommandeClientMapper.Mapper(ligneCommandeClientModel, produit);
+                ligneCommandeClients.Add(ligneCommandeClient);
+            }
+
+            var commandeClient = _commandeClientMapper.Mapper(factureClientModel.CommandeClient, client, statutCommande,
+                ligneCommandeClients);
+            var statutFacture = _statutFactureMapper.Mapper(factureClientModel.Statut);
+            var factureClient = _factureClientMapper.Mapper(factureClientModel, commandeClient, statutFacture);
+            factureClients.Add(factureClient);
+        }
+        
         return factureClients;
     }
 

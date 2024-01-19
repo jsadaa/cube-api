@@ -49,4 +49,9 @@ public class FactureClient
     {
         Statut = statut;
     }
+    
+    public void Payer()
+    {
+        MettreAJoutStatut(StatutFacture.Payee);
+    }
 }

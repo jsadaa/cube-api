@@ -6,6 +6,7 @@ using ApiCube.Application.Services.Client;
 using ApiCube.Application.Services.CommandeClient;
 using ApiCube.Application.Services.CommandeFournisseur;
 using ApiCube.Application.Services.Employe;
+using ApiCube.Application.Services.FactureClient;
 using ApiCube.Application.Services.FamilleProduit;
 using ApiCube.Application.Services.Fournisseur;
 using ApiCube.Application.Services.Produit;
@@ -171,6 +172,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmployeService, EmployeService>();
 builder.Services.AddScoped<ICommandeFournisseurService, CommandeFournisseurService>();
 builder.Services.AddScoped<ICommandeClientService, CommandeClientService>();
+builder.Services.AddScoped<IFactureClientService, FactureClientService>();
 
 // Configure domain services
 builder.Services.AddScoped<GestionnaireDeStock>();
