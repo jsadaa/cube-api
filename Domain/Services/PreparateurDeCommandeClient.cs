@@ -1,25 +1,17 @@
 using ApiCube.Domain.Entities;
 using ApiCube.Domain.Enums.Commande;
-using ApiCube.Persistence.Repositories.Produit;
 
 namespace ApiCube.Domain.Services;
 
 public class PreparateurDeCommandeClient
 {
-    private readonly IProduitRepository _produitRepository;
-
-    public PreparateurDeCommandeClient(IProduitRepository produitRepository)
-    {
-        _produitRepository = produitRepository;
-    }
-
-    public CommandeClient Commande(PanierClient panierClient, Client client)
+    public CommandeClient Commande(PanierClient panierClient)
     {
         var nouvelleCommandeClient = new CommandeClient(
             DateTime.Now,
             null,
             StatutCommande.EnCours,
-            client
+            panierClient.Client
         );
 
         foreach (var lignePanierClient in panierClient.LignePanierClients)

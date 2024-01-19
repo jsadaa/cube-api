@@ -11,7 +11,6 @@ public class GestionnaireDeFacturation
             DateTime.Now,
             StatutFacture.EnCours,
             0.2,
-            commandeClient.Client,
             commandeClient
         );
 

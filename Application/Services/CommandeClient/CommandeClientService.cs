@@ -20,6 +20,7 @@ public class CommandeClientService : ICommandeClientService
 {
     private readonly IClientRepository _clientRepository;
     private readonly ICommandeClientRepository _commandeClientRepository;
+    private readonly ApiDbContext _context;
     private readonly IFactureClientRepository _factureClientRepository;
     private readonly GestionnaireDeFacturation _gestionnaireDeFacturation;
     private readonly GestionnaireDeStock _gestionnaireDeStock;
@@ -31,27 +32,29 @@ public class CommandeClientService : ICommandeClientService
 
     public CommandeClientService(
         IClientRepository clientRepository,
+        ICommandeClientRepository commandeClientRepository,
+        IFactureClientRepository factureClientRepository,
+        GestionnaireDeFacturation gestionnaireDeFacturation,
+        GestionnaireDeStock gestionnaireDeStock,
         IMapper mapper,
         IPanierClientRepository panierClientRepository,
-        GestionnaireDeStock gestionnaireDeStock,
         PreparateurDeCommandeClient preparateurDeCommandeClient,
         IProduitRepository produitRepository,
         IStockRepository stockRepository,
-        IFactureClientRepository factureClientRepository,
-        ICommandeClientRepository commandeClientRepository,
-        GestionnaireDeFacturation gestionnaireDeFacturation
+        ApiDbContext context
     )
     {
         _clientRepository = clientRepository;
+        _commandeClientRepository = commandeClientRepository;
+        _factureClientRepository = factureClientRepository;
+        _gestionnaireDeFacturation = gestionnaireDeFacturation;
+        _gestionnaireDeStock = gestionnaireDeStock;
         _mapper = mapper;
         _panierClientRepository = panierClientRepository;
-        _gestionnaireDeStock = gestionnaireDeStock;
         _preparateurDeCommandeClient = preparateurDeCommandeClient;
         _produitRepository = produitRepository;
         _stockRepository = stockRepository;
-        _factureClientRepository = factureClientRepository;
-        _commandeClientRepository = commandeClientRepository;
-        _gestionnaireDeFacturation = gestionnaireDeFacturation;
+        _context = context;
     }
 
     public BaseResponse CreerUnPanier(int idClient)
@@ -189,6 +192,9 @@ public class CommandeClientService : ICommandeClientService
     {
         try
         {
+            // On vérifie que le client existe
+            _ = _clientRepository.Trouver(idClient);
+
             var paniersClient = _panierClientRepository.ListerParClient(idClient);
             var paniersClientResponse = _mapper.Map<List<PanierClientResponse>>(paniersClient);
 
@@ -196,6 +202,15 @@ public class CommandeClientService : ICommandeClientService
                 HttpStatusCode.OK,
                 paniersClientResponse
             );
+        }
+        catch (ClientIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+
+            return response;
         }
         catch (Exception e)
         {
@@ -236,6 +251,15 @@ public class CommandeClientService : ICommandeClientService
 
             return response;
         }
+        catch (PanierClientIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
         catch (QuantitePanierInvalide e)
         {
             var response = new BaseResponse(
@@ -261,9 +285,11 @@ public class CommandeClientService : ICommandeClientService
         try
         {
             var panierClient = _panierClientRepository.Trouver(id);
-            panierClient.Vider();
 
-            _panierClientRepository.Modifier(panierClient);
+            // TODO: Trouver une meilleure solution
+            foreach (var lignePanierClient in panierClient.LignePanierClients)
+                _context.RemoveRange(_context.LignesPaniersClients.Find(lignePanierClient.Id));
+            _context.SaveChanges();
 
             return new BaseResponse(
                 HttpStatusCode.OK,
@@ -298,7 +324,10 @@ public class CommandeClientService : ICommandeClientService
             var lignePanierClient = panierClient.LignePanierClients
                 .FirstOrDefault(lignePanierClient => lignePanierClient.Produit.Id == idProduit);
 
-            if (lignePanierClient is null) throw new ProduitIntrouvable();
+            if (lignePanierClient is null) throw new ProduitNonPresentDansPanier();
+
+            _context.RemoveRange(_context.LignesPaniersClients.Find(lignePanierClient.Id));
+            _context.SaveChanges();
 
             panierClient.SupprimerLignePanierClient(lignePanierClient);
 
@@ -319,6 +348,15 @@ public class CommandeClientService : ICommandeClientService
             return response;
         }
         catch (PanierClientIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (ProduitNonPresentDansPanier e)
         {
             var response = new BaseResponse(
                 HttpStatusCode.NotFound,
@@ -376,12 +414,20 @@ public class CommandeClientService : ICommandeClientService
         {
             var panierClient = _panierClientRepository.Trouver(id);
             var client = panierClient.Client;
-            var commandeClient = _preparateurDeCommandeClient.Commande(panierClient, client);
+            var commandeClient = _preparateurDeCommandeClient.Commande(panierClient);
+            var factureClient = _gestionnaireDeFacturation.Commande(commandeClient);
 
-            // on supprime le panier
-            _panierClientRepository.Supprimer(panierClient);
+            client.AjouterCommande(commandeClient);
+            client.Facturer(factureClient);
+            panierClient.Vider();
 
-            // pour chaque ligne de commande, on met à jour le stock
+            _clientRepository.Modifier(client);
+
+            // Ici, on supprime les lignes de panier client en base de données via le contexte pour éviter les problèmes de tracking
+            // TODO: Trouver une meilleure solution
+            _context.RemoveRange(_context.PaniersClients.Find(panierClient.Id));
+            _context.SaveChanges();
+
             foreach (var ligneCommandeClient in commandeClient.LigneCommandeClients)
             {
                 var produit = ligneCommandeClient.Produit;
@@ -390,9 +436,6 @@ public class CommandeClientService : ICommandeClientService
                 stock = _gestionnaireDeStock.Achat(stock, ligneCommandeClient);
                 _stockRepository.Modifier(stock);
             }
-
-            var factureClient = _gestionnaireDeFacturation.Commande(commandeClient);
-            _factureClientRepository.Ajouter(factureClient);
 
             return new BaseResponse(
                 HttpStatusCode.OK,
@@ -444,15 +487,6 @@ public class CommandeClientService : ICommandeClientService
 
             return response;
         }
-        catch (FactureClientIntrouvable e)
-        {
-            var response = new BaseResponse(
-                HttpStatusCode.Conflict,
-                new { code = e.Message }
-            );
-
-            return response;
-        }
         catch (Exception e)
         {
             var response = new BaseResponse(
@@ -477,6 +511,15 @@ public class CommandeClientService : ICommandeClientService
             );
         }
         catch (CommandeClientIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (FactureClientIntrouvable e)
         {
             var response = new BaseResponse(
                 HttpStatusCode.NotFound,

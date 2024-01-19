@@ -26,7 +26,7 @@ public class StockModel
 
     [ForeignKey("ProduitId")] public required ProduitModel Produit { get; set; }
 
-    public ICollection<TransactionStockModel>? TransactionsStock { get; set; }
+    public List<TransactionStockModel>? TransactionsStock { get; set; }
 
     [Column("date_creation")] [Required] public required DateTime DateCreation { get; set; }
 

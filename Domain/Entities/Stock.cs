@@ -113,16 +113,16 @@ public class Stock
     public void AjouterTransaction(TransactionStock transactionStock)
     {
         // verifier si le stock à une quantité suffisante pour la transaction
-        if (transactionStock.EstUneSortie()) VerifierDisponibilite(Math.Abs(transactionStock.Quantite));
+        if (transactionStock.EstUneSortie()) VerifierDisponibilite(Math.Abs(transactionStock.VariationQuantite));
 
         Transactions.Add(transactionStock);
 
-        if (transactionStock.EstUneSortie()) RetirerQuantite(transactionStock.Quantite);
-        else if (transactionStock.EstUneEntree()) AjouterQuantite(transactionStock.Quantite);
-        else if (transactionStock.EstUneModificationInterne() && transactionStock.Quantite > 0)
-            AjouterQuantite(transactionStock.Quantite);
-        else if (transactionStock.EstUneModificationInterne() && transactionStock.Quantite < 0)
-            RetirerQuantite(transactionStock.Quantite);
+        if (transactionStock.EstUneSortie()) RetirerQuantite(transactionStock.VariationQuantite);
+        else if (transactionStock.EstUneEntree()) AjouterQuantite(transactionStock.VariationQuantite);
+        else if (transactionStock.EstUneModificationInterne() && transactionStock.VariationQuantite > 0)
+            AjouterQuantite(transactionStock.VariationQuantite);
+        else if (transactionStock.EstUneModificationInterne() && transactionStock.VariationQuantite < 0)
+            RetirerQuantite(transactionStock.VariationQuantite);
         else if (transactionStock.EstUneSuppression()) MarquerCommeSupprime();
 
         MettreAJourStatut();

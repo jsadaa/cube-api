@@ -5,6 +5,6 @@ namespace ApiCube.Domain.Mappers.FactureClient;
 
 public interface IFactureClientMapper
 {
-    public Entities.FactureClient Mapper(FactureClientModel model, Entities.Client client,
+    public Entities.FactureClient Mapper(FactureClientModel model,
         Entities.CommandeClient commandeClient, StatutFacture statutFacture);
 }

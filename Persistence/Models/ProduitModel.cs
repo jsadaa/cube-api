@@ -62,5 +62,5 @@ public class ProduitModel
 
     [ForeignKey("FournisseurId")] public required FournisseurModel Fournisseur { get; set; }
 
-    public ICollection<StockModel>? Stocks { get; set; }
+    public List<StockModel>? Stocks { get; set; }
 }

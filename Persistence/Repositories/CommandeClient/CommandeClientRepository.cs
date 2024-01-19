@@ -2,7 +2,6 @@ using ApiCube.Domain.Entities;
 using ApiCube.Domain.Enums.Commande;
 using ApiCube.Domain.Mappers.Client;
 using ApiCube.Domain.Mappers.CommandeClient;
-using ApiCube.Domain.Mappers.FactureClient;
 using ApiCube.Domain.Mappers.FamilleProduit;
 using ApiCube.Domain.Mappers.Fournisseur;
 using ApiCube.Domain.Mappers.LigneCommandeClient;
@@ -19,7 +18,6 @@ public class CommandeClientRepository : ICommandeClientRepository
     private readonly IClientMapper _clientMapper;
     private readonly ICommandeClientMapper _commandeClientMapper;
     private readonly ApiDbContext _context;
-    private readonly IFactureClientMapper _factureClientMapper;
     private readonly IFamilleProduitMapper _familleProduitMapper;
     private readonly IFournisseurMapper _fournisseurMapper;
     private readonly ILigneCommandeClientMapper _ligneCommandeClientMapper;
@@ -27,20 +25,19 @@ public class CommandeClientRepository : ICommandeClientRepository
     private readonly IProduitMapper _produitMapper;
     private readonly StatutCommandeMapper _statutCommandeMapper;
 
-    public CommandeClientRepository(ApiDbContext context, IMapper mapper, ICommandeClientMapper commandeClientMapper,
-        IClientMapper clientMapper, ILigneCommandeClientMapper ligneCommandeClientMapper,
-        IProduitMapper produitMapper, IFamilleProduitMapper familleProduitMapper, IFournisseurMapper fournisseurMapper,
-        IFactureClientMapper factureClientMapper, StatutCommandeMapper statutCommandeMapper)
+    public CommandeClientRepository(ApiDbContext context, IMapper mapper, IClientMapper clientMapper,
+        ICommandeClientMapper commandeClientMapper, IFamilleProduitMapper familleProduitMapper,
+        IFournisseurMapper fournisseurMapper, ILigneCommandeClientMapper ligneCommandeClientMapper,
+        IProduitMapper produitMapper, StatutCommandeMapper statutCommandeMapper)
     {
         _context = context;
         _mapper = mapper;
-        _commandeClientMapper = commandeClientMapper;
         _clientMapper = clientMapper;
-        _ligneCommandeClientMapper = ligneCommandeClientMapper;
-        _produitMapper = produitMapper;
+        _commandeClientMapper = commandeClientMapper;
         _familleProduitMapper = familleProduitMapper;
         _fournisseurMapper = fournisseurMapper;
-        _factureClientMapper = factureClientMapper;
+        _ligneCommandeClientMapper = ligneCommandeClientMapper;
+        _produitMapper = produitMapper;
         _statutCommandeMapper = statutCommandeMapper;
     }
 
@@ -62,7 +59,6 @@ public class CommandeClientRepository : ICommandeClientRepository
             .Include(commandeClient => commandeClient.LigneCommandeClients)
             .ThenInclude(ligneCommandeClient => ligneCommandeClient.Produit)
             .ThenInclude(produitModel => produitModel.FamilleProduit)
-            .Include(commandeClient => commandeClient.Statut)
             .FirstOrDefault(commandeClient => commandeClient.Id == id);
 
         if (commandeClientModel == null) throw new CommandeClientIntrouvable();
@@ -95,7 +91,6 @@ public class CommandeClientRepository : ICommandeClientRepository
             .Include(commandeClient => commandeClient.LigneCommandeClients)
             .ThenInclude(ligneCommandeClient => ligneCommandeClient.Produit)
             .ThenInclude(produitModel => produitModel.FamilleProduit)
-            .Include(commandeClient => commandeClient.Statut)
             .ToList();
 
         var commandeClients = new List<Domain.Entities.CommandeClient>();
@@ -104,6 +99,7 @@ public class CommandeClientRepository : ICommandeClientRepository
             var client = _clientMapper.Mapper(commandeClientModel.Client);
             var statut = _statutCommandeMapper.Mapper(commandeClientModel.Statut);
             var ligneCommandeClients = new List<LigneCommandeClient>();
+
             foreach (var ligneCommandeClientModel in commandeClientModel.LigneCommandeClients)
             {
                 var familleProduit = _familleProduitMapper.Mapper(ligneCommandeClientModel.Produit.FamilleProduit);
@@ -132,7 +128,6 @@ public class CommandeClientRepository : ICommandeClientRepository
             .Include(commandeClient => commandeClient.LigneCommandeClients)
             .ThenInclude(ligneCommandeClient => ligneCommandeClient.Produit)
             .ThenInclude(produitModel => produitModel.FamilleProduit)
-            .Include(commandeClient => commandeClient.Statut)
             .Where(commandeClient => commandeClient.Client.Id == idClient)
             .ToList();
 
@@ -142,6 +137,7 @@ public class CommandeClientRepository : ICommandeClientRepository
             var client = _clientMapper.Mapper(commandeClientModel.Client);
             var statut = _statutCommandeMapper.Mapper(commandeClientModel.Statut);
             var ligneCommandeClients = new List<LigneCommandeClient>();
+
             foreach (var ligneCommandeClientModel in commandeClientModel.LigneCommandeClients)
             {
                 var familleProduit = _familleProduitMapper.Mapper(ligneCommandeClientModel.Produit.FamilleProduit);

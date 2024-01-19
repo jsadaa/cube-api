@@ -74,6 +74,26 @@ public class Client
         ApplicationUserId = applicationUserId;
     }
 
+    public Client(int id, string username, string nom, string prenom, Adresse adresse, Telephone telephone,
+        string email, DateTime dateNaissance,
+        DateTime dateInscription, List<CommandeClient> commandes, List<FactureClient> factures,
+        List<PanierClient> paniers, string applicationUserId)
+    {
+        Id = id;
+        Username = username;
+        Nom = nom;
+        Prenom = prenom;
+        Adresse = adresse;
+        Telephone = telephone;
+        Email = email;
+        DateNaissance = dateNaissance;
+        DateInscription = dateInscription;
+        Commandes = commandes;
+        Factures = factures;
+        Paniers = paniers;
+        ApplicationUserId = applicationUserId;
+    }
+
     public int Id { get; set; }
     public string Username { get; set; }
     public string Nom { get; set; }
@@ -94,7 +114,7 @@ public class Client
         Commandes.Add(commande);
     }
 
-    public void AjouterFacture(FactureClient factureClient)
+    public void Facturer(FactureClient factureClient)
     {
         Factures ??= new List<FactureClient>();
         Factures.Add(factureClient);

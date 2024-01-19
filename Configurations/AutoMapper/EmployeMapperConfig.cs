@@ -11,5 +11,7 @@ public class EmployeMapperConfig : Profile
     {
         CreateMap<Employe, EmployeModel>();
         CreateMap<Employe, EmployeResponse>();
+        CreateMap<EmployeModel, EmployeResponse>();
+        CreateMap<EmployeModel, Employe>();
     }
 }

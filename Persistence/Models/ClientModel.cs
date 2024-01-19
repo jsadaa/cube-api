@@ -63,9 +63,9 @@ public class ClientModel
 
     [ForeignKey("ApplicationUserId")] public ApplicationUserModel ApplicationUser { get; set; } = null!;
 
-    public ICollection<CommandeClientModel>? Commandes { get; set; }
+    public List<CommandeClientModel>? Commandes { get; set; }
 
-    public ICollection<PanierClientModel>? Paniers { get; set; }
+    public List<PanierClientModel>? Paniers { get; set; }
 
-    public ICollection<FactureClientModel>? Factures { get; set; }
+    public List<FactureClientModel>? Factures { get; set; }
 }

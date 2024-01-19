@@ -21,8 +21,8 @@ public class CommandeClient
         Client = client;
     }
 
-    public CommandeClient(int id, DateTime dateCommande, DateTime dateLivraison, StatutCommande statut, Client client,
-        ICollection<LigneCommandeClient> ligneCommandeClients)
+    public CommandeClient(int id, DateTime dateCommande, DateTime? dateLivraison, StatutCommande statut, Client client,
+        List<LigneCommandeClient> ligneCommandeClients)
     {
         Id = id;
         DateCommande = dateCommande;
@@ -37,7 +37,7 @@ public class CommandeClient
     public DateTime? DateLivraison { get; set; }
     public StatutCommande Statut { get; set; }
     public Client Client { get; set; }
-    public ICollection<LigneCommandeClient> LigneCommandeClients { get; set; } = new List<LigneCommandeClient>();
+    public List<LigneCommandeClient> LigneCommandeClients { get; set; } = new();
 
     public void AjouterLigneCommandeClient(LigneCommandeClient ligneCommandeClient)
     {

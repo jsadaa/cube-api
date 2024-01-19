@@ -11,7 +11,9 @@ public class TransactionStockModel
     [Key]
     public int Id { get; set; }
 
-    [Column("quantite")] [Required] public required int Quantite { get; set; }
+    [Column("variation_quantite")]
+    [Required]
+    public required int VariationQuantite { get; set; }
 
     [Column("date")] [Required] public required DateTime Date { get; set; }
 

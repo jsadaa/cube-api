@@ -28,5 +28,5 @@ public class CommandeFournisseurModel
 
     [ForeignKey("EmployeId")] public required EmployeModel Employe { get; set; }
 
-    public required ICollection<LigneCommandeFournisseurModel> LigneCommandeFournisseurs { get; set; }
+    public required List<LigneCommandeFournisseurModel> LigneCommandeFournisseurs { get; set; }
 }

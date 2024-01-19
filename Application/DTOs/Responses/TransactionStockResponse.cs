@@ -6,7 +6,7 @@ public class TransactionStockResponse
 {
     [Required] public required int Id { get; set; }
 
-    [Required] public required int Quantite { get; set; }
+    [Required] public required int VariationQuantite { get; set; }
 
     [Required] public required DateTime Date { get; set; }
 

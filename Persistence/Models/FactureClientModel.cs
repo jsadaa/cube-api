@@ -24,10 +24,6 @@ public class FactureClientModel
 
     [Column("tva")] [Required] public required double Tva { get; set; }
 
-    [Column("client_id")] [Required] public required int ClientId { get; set; }
-
-    [ForeignKey("ClientId")] public required ClientModel Client { get; set; }
-
     [Column("commande_client_id")]
     [Required]
     public required int CommandeClientId { get; set; }

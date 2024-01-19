@@ -1,4 +1,3 @@
-using ApiCube.Domain.Mappers.Fournisseur;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
 using AutoMapper;
@@ -9,20 +8,17 @@ namespace ApiCube.Persistence.Repositories.Fournisseur;
 public class FournisseurRepository : IFournisseurRepository
 {
     private readonly ApiDbContext _context;
-    private readonly IFournisseurMapper _fournisseurMapper;
     private readonly IMapper _mapper;
 
-    public FournisseurRepository(ApiDbContext context, IMapper mapper, IFournisseurMapper fournisseurMapper)
+    public FournisseurRepository(ApiDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
-        _fournisseurMapper = fournisseurMapper;
     }
 
     public void Ajouter(Domain.Entities.Fournisseur nouveauFournisseur)
     {
         var nouveauFournisseurModel = _mapper.Map<FournisseurModel>(nouveauFournisseur);
-
         _context.Fournisseurs.Add(nouveauFournisseurModel);
         _context.SaveChanges();
     }
@@ -30,16 +26,15 @@ public class FournisseurRepository : IFournisseurRepository
     public List<Domain.Entities.Fournisseur> Lister()
     {
         var fournisseursModels = _context.Fournisseurs.AsNoTracking().ToList();
-
-        return fournisseursModels.Select(fournisseurModel => _fournisseurMapper.Mapper(fournisseurModel)).ToList();
+        return fournisseursModels.Select(fournisseurModel => _mapper.Map<Domain.Entities.Fournisseur>(fournisseurModel))
+            .ToList();
     }
 
     public Domain.Entities.Fournisseur Trouver(int id)
     {
         var fournisseurModel = _context.Fournisseurs.AsNoTracking().FirstOrDefault(fournisseur => fournisseur.Id == id);
         if (fournisseurModel == null) throw new FournisseurIntrouvable();
-
-        return _fournisseurMapper.Mapper(fournisseurModel);
+        return _mapper.Map<Domain.Entities.Fournisseur>(fournisseurModel);
     }
 
     public Domain.Entities.Fournisseur Trouver(string nom)
@@ -48,7 +43,7 @@ public class FournisseurRepository : IFournisseurRepository
             _context.Fournisseurs.AsNoTracking().FirstOrDefault(fournisseur => fournisseur.Nom == nom);
         if (fournisseurModel == null) throw new FournisseurIntrouvable();
 
-        return _fournisseurMapper.Mapper(fournisseurModel);
+        return _mapper.Map<Domain.Entities.Fournisseur>(fournisseurModel);
     }
 
     public void Modifier(Domain.Entities.Fournisseur fournisseurModifie)

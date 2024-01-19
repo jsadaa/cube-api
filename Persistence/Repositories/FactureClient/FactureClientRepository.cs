@@ -106,7 +106,7 @@ public class FactureClientRepository : IFactureClientRepository
             var commandeClient = _commandeClientMapper.Mapper(factureClientModel.CommandeClient, client, statutCommande,
                 ligneCommandeClients);
             var statutFacture = _statutFactureMapper.Mapper(factureClientModel.Statut);
-            var factureClient = _factureClientMapper.Mapper(factureClientModel, client, commandeClient, statutFacture);
+            var factureClient = _factureClientMapper.Mapper(factureClientModel, commandeClient, statutFacture);
             factureClients.Add(factureClient);
         }
 

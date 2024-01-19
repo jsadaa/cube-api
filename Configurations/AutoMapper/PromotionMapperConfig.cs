@@ -14,5 +14,6 @@ public class PromotionMapperConfig : Profile
         CreateMap<Promotion, PromotionResponse>();
         CreateMap<PromotionModel, PromotionResponse>();
         CreateMap<PromotionRequest, PromotionModel>();
+        CreateMap<PromotionModel, Promotion>();
     }
 }

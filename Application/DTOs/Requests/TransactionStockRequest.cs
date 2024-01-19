@@ -4,7 +4,7 @@ namespace ApiCube.Application.DTOs.Requests;
 
 public class TransactionStockRequest
 {
-    [Required] public required int Quantite { get; set; }
+    [Required] public required int VariationQuantite { get; set; }
 
     [Required] public required DateTime Date { get; set; }
 

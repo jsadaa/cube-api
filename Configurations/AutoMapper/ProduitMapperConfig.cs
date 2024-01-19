@@ -27,5 +27,7 @@ public class ProduitMapperConfig : Profile
             .ForMember(dest => dest.FournisseurNom, opt => opt.MapFrom(src => src.Fournisseur.Nom))
             .ForMember(dest => dest.EnPromotion, opt => opt.MapFrom(src => src.EnPromotion));
         CreateMap<ProduitRequest, ProduitModel>();
+
+        CreateMap<ProduitModel, Produit>();
     }
 }

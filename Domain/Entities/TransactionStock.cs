@@ -4,11 +4,11 @@ namespace ApiCube.Domain.Entities;
 
 public class TransactionStock
 {
-    public TransactionStock(int id, int quantite, DateTime date, TypeTransactionStock type, Stock stock,
+    public TransactionStock(int id, int variationQuantite, DateTime date, TypeTransactionStock type, Stock stock,
         double prixUnitaire, int quantiteAvant, int quantiteApres)
     {
         Id = id;
-        Quantite = quantite;
+        VariationQuantite = variationQuantite;
         Date = date;
         Type = type;
         Stock = stock;
@@ -18,10 +18,11 @@ public class TransactionStock
         QuantiteApres = quantiteApres;
     }
 
-    public TransactionStock(int quantite, DateTime date, TypeTransactionStock type, Stock stock, double prixUnitaire,
+    public TransactionStock(int variationQuantite, DateTime date, TypeTransactionStock type, Stock stock,
+        double prixUnitaire,
         int quantiteAvant, int quantiteApres)
     {
-        Quantite = quantite;
+        VariationQuantite = variationQuantite;
         Date = date;
         Type = type;
         Stock = stock;
@@ -33,7 +34,7 @@ public class TransactionStock
 
     public int Id { get; set; }
 
-    public int Quantite { get; set; }
+    public int VariationQuantite { get; set; }
 
     public DateTime Date { get; set; }
 
@@ -51,7 +52,7 @@ public class TransactionStock
 
     public double CalculerPrixTotal()
     {
-        return Quantite * PrixUnitaire;
+        return Math.Abs(VariationQuantite) * PrixUnitaire;
     }
 
     public bool EstUneEntree()

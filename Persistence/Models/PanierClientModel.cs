@@ -17,6 +17,5 @@ public class PanierClientModel
 
     [ForeignKey("ClientId")] public required ClientModel Client { get; set; }
 
-    public required ICollection<LignePanierClientModel> LignePanierClients { get; set; } =
-        new List<LignePanierClientModel>();
+    public required List<LignePanierClientModel> LignePanierClients { get; set; }
 }

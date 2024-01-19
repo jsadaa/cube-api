@@ -13,7 +13,8 @@ public class CommandeClientMapper : ICommandeClientMapper
             model.DateCommande,
             model.DateLivraison,
             statut,
-            client
+            client,
+            ligneCommandeClient
         );
     }
 }

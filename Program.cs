@@ -119,7 +119,8 @@ builder.Services.AddAutoMapper(
     typeof(LigneCommandeFournisseurMapperConfig),
     typeof(PanierClientMapperConfig),
     typeof(LignePanierClientMapperConfig),
-    typeof(CommandeClientMapperConfig)
+    typeof(CommandeClientMapperConfig),
+    typeof(LigneCommandeClientMapperConfig)
 );
 
 // Configure Mappers

@@ -34,11 +34,13 @@ public class PanierClient
     {
         VerifierDoublonProduit(lignePanierClient.Produit);
         LignePanierClients.Add(lignePanierClient);
+        Total = CalculerTotal();
     }
 
     public void SupprimerLignePanierClient(LignePanierClient lignePanierClient)
     {
         LignePanierClients.Remove(lignePanierClient);
+        Total = CalculerTotal();
     }
 
     public void Vider()

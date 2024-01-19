@@ -4,29 +4,27 @@ namespace ApiCube.Domain.Entities;
 
 public class FactureClient
 {
-    public FactureClient(int id, DateTime dateFacture, StatutFacture statut, double tva, Client client,
+    public FactureClient(int id, DateTime dateFacture, StatutFacture statut, double tva,
         CommandeClient commandeClient)
     {
         Id = id;
         DateFacture = dateFacture;
         Statut = statut;
         Tva = tva;
+        CommandeClient = commandeClient;
         PrixHt = CalculerPrixHt();
         PrixTtc = CalculerPrixTtc();
-        Client = client;
-        CommandeClient = commandeClient;
     }
 
-    public FactureClient(DateTime dateFacture, StatutFacture statut, double tva, Client client,
+    public FactureClient(DateTime dateFacture, StatutFacture statut, double tva,
         CommandeClient commandeClient)
     {
         DateFacture = dateFacture;
         Statut = statut;
         Tva = tva;
+        CommandeClient = commandeClient;
         PrixHt = CalculerPrixHt();
         PrixTtc = CalculerPrixTtc();
-        Client = client;
-        CommandeClient = commandeClient;
     }
 
     public int Id { get; set; }
@@ -35,13 +33,11 @@ public class FactureClient
     public double PrixHt { get; set; }
     public double PrixTtc { get; set; }
     public double Tva { get; set; }
-    public Client Client { get; set; }
     public CommandeClient CommandeClient { get; set; }
 
     private double CalculerPrixHt()
     {
-        return CommandeClient.LigneCommandeClients.Sum(ligneCommandeClient =>
-            ligneCommandeClient.Produit.PrixVente * ligneCommandeClient.Quantite);
+        return CommandeClient.LigneCommandeClients.Sum(ligneCommandeClient => ligneCommandeClient.Total);
     }
 
     private double CalculerPrixTtc()

@@ -10,7 +10,7 @@ public class TransactionStockMapper : ITransactionStockMapper
     {
         return new Entities.TransactionStock(
             transactionStockModel.Id,
-            transactionStockModel.Quantite,
+            transactionStockModel.VariationQuantite,
             transactionStockModel.Date,
             typeTransactionStock,
             stock,

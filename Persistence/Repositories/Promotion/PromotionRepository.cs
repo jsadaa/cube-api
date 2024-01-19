@@ -1,4 +1,3 @@
-using ApiCube.Domain.Mappers.Promotion;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
 using AutoMapper;
@@ -10,12 +9,10 @@ public class PromotionRepository : IPromotionRepository
 {
     private readonly ApiDbContext _context;
     private readonly IMapper _mapper;
-    private readonly IPromotionMapper _promotionMapper;
 
-    public PromotionRepository(ApiDbContext context, IPromotionMapper promotionMapper, IMapper mapper)
+    public PromotionRepository(ApiDbContext context, IMapper mapper)
     {
         _context = context;
-        _promotionMapper = promotionMapper;
         _mapper = mapper;
     }
 
@@ -31,7 +28,8 @@ public class PromotionRepository : IPromotionRepository
     {
         var promotionsModels = _context.Promotions.AsNoTracking().ToList();
 
-        return promotionsModels.Select(promotionModel => _promotionMapper.Mapper(promotionModel)).ToList();
+        return promotionsModels.Select(promotionModel => _mapper.Map<Domain.Entities.Promotion>(promotionModel))
+            .ToList();
     }
 
     public Domain.Entities.Promotion Trouver(int id)
@@ -40,7 +38,7 @@ public class PromotionRepository : IPromotionRepository
 
         if (promotionModel == null) throw new PromotionIntrouvable();
 
-        return _promotionMapper.Mapper(promotionModel);
+        return _mapper.Map<Domain.Entities.Promotion>(promotionModel);
     }
 
     public void Modifier(Domain.Entities.Promotion promotion)

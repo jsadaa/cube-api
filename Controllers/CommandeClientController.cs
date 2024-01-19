@@ -109,7 +109,7 @@ public class CommandeClientController : ControllerBase
     /// <param name="idProduit"></param>
     /// <returns></returns>
     /// <response code="200">produit_supprime_du_panier</response>
-    /// <response code="404">produit_introuvable | panier_introuvable</response>
+    /// <response code="404">produit_introuvable | panier_client_introuvable</response>
     /// <response code="409">produit_non_present_dans_panier</response>
     /// <response code="500">unexpected_error</response>
     [HttpDelete("panier/{idPanier:int}/produit/{idProduit:int}")]
@@ -133,7 +133,7 @@ public class CommandeClientController : ControllerBase
     /// <returns></returns>
     /// <response code="200">quantite_produit_modifiee</response>
     /// <response code="400">quantite_panier_invalide</response>
-    /// <response code="404">produit_introuvable | panier_introuvable</response>
+    /// <response code="404">produit_introuvable | panier_client_introuvable</response>
     /// <response code="500">unexpected_error</response>
     [HttpPut("panier/{idPanier:int}/produit")]
     [ActionName("ModifierLaQuantiteDUnProduitDansLePanier")]
@@ -155,7 +155,7 @@ public class CommandeClientController : ControllerBase
     /// <param name="idPanier"></param>
     /// <returns></returns>
     /// <response code="200">panier_vide</response>
-    /// <response code="404">panier_introuvable</response>
+    /// <response code="404">panier_client_introuvable</response>
     /// <response code="500">unexpected_error</response>
     [HttpDelete("panier/{idPanier:int}/vider")]
     [ActionName("ViderUnPanier")]
@@ -175,7 +175,7 @@ public class CommandeClientController : ControllerBase
     /// <param name="idPanier"></param>
     /// <returns></returns>
     /// <response code="200">panier_supprime</response>
-    /// <response code="404">panier_introuvable</response>
+    /// <response code="404">panier_client_introuvable</response>
     /// <response code="500">unexpected_error</response>
     [HttpDelete("panier/{idPanier:int}")]
     [ActionName("SupprimerUnPanier")]
@@ -195,8 +195,8 @@ public class CommandeClientController : ControllerBase
     /// <param name="idPanier"></param>
     /// <returns></returns>
     /// <response code="200">panier_valide</response>
-    /// <response code="404">panier_introuvable</response>
-    /// <response code="409">stock_insuffisant</response>
+    /// <response code="404">panier_client_introuvable | client_introuvable | stock_introuvable | produit_introuvable</response>
+    /// <response code="409">quantite_stock_insuffisant</response>
     /// <response code="500">unexpected_error</response>
     [HttpPut("panier/{idPanier:int}/valider")]
     [ActionName("ValiderUnPanier")]

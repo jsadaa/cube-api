@@ -46,5 +46,5 @@ public class FournisseurModel
     [StringLength(50)]
     public required string Email { get; set; }
 
-    public ICollection<ProduitModel> Produits { get; set; }
+    public List<ProduitModel> Produits { get; set; }
 }

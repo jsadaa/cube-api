@@ -386,7 +386,7 @@ namespace ApiCube.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     date_commande = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    date_livraison = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    date_livraison = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     statut = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     client_id = table.Column<int>(type: "int", nullable: false)
@@ -494,18 +494,17 @@ namespace ApiCube.Migrations
                     prix_ht = table.Column<double>(type: "double", nullable: false),
                     prix_ttc = table.Column<double>(type: "double", nullable: false),
                     tva = table.Column<double>(type: "double", nullable: false),
-                    client_id = table.Column<int>(type: "int", nullable: false),
-                    commande_client_id = table.Column<int>(type: "int", nullable: false)
+                    commande_client_id = table.Column<int>(type: "int", nullable: false),
+                    ClientModelId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_facture_client", x => x.id);
                     table.ForeignKey(
-                        name: "FK_facture_client_client_client_id",
-                        column: x => x.client_id,
+                        name: "FK_facture_client_client_ClientModelId",
+                        column: x => x.ClientModelId,
                         principalTable: "client",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_facture_client_commande_client_commande_client_id",
                         column: x => x.commande_client_id,
@@ -612,7 +611,7 @@ namespace ApiCube.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    quantite = table.Column<int>(type: "int", nullable: false),
+                    variation_quantite = table.Column<int>(type: "int", nullable: false),
                     date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     type = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -709,9 +708,9 @@ namespace ApiCube.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_facture_client_client_id",
+                name: "IX_facture_client_ClientModelId",
                 table: "facture_client",
-                column: "client_id");
+                column: "ClientModelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_facture_client_commande_client_id",

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiCube.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20240118173443_Initial")]
+    [Migration("20240119141255_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -180,7 +180,6 @@ namespace ApiCube.Migrations
                         .HasColumnName("date_commande");
 
                     b.Property<DateTime?>("DateLivraison")
-                        .IsRequired()
                         .HasColumnType("datetime(6)")
                         .HasColumnName("date_livraison");
 
@@ -296,9 +295,8 @@ namespace ApiCube.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int")
-                        .HasColumnName("client_id");
+                    b.Property<int?>("ClientModelId")
+                        .HasColumnType("int");
 
                     b.Property<int>("CommandeClientId")
                         .HasColumnType("int")
@@ -328,7 +326,7 @@ namespace ApiCube.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("ClientModelId");
 
                     b.HasIndex("CommandeClientId");
 
@@ -740,10 +738,6 @@ namespace ApiCube.Migrations
                         .HasColumnType("double")
                         .HasColumnName("prix_unitaire");
 
-                    b.Property<int>("Quantite")
-                        .HasColumnType("int")
-                        .HasColumnName("quantite");
-
                     b.Property<int>("QuantiteApres")
                         .HasColumnType("int")
                         .HasColumnName("quantite_apres");
@@ -761,6 +755,10 @@ namespace ApiCube.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("type");
+
+                    b.Property<int>("VariationQuantite")
+                        .HasColumnType("int")
+                        .HasColumnName("variation_quantite");
 
                     b.HasKey("Id");
 
@@ -951,19 +949,15 @@ namespace ApiCube.Migrations
 
             modelBuilder.Entity("ApiCube.Persistence.Models.FactureClientModel", b =>
                 {
-                    b.HasOne("ApiCube.Persistence.Models.ClientModel", "Client")
+                    b.HasOne("ApiCube.Persistence.Models.ClientModel", null)
                         .WithMany("Factures")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ClientModelId");
 
                     b.HasOne("ApiCube.Persistence.Models.CommandeClientModel", "CommandeClient")
                         .WithMany()
                         .HasForeignKey("CommandeClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Client");
 
                     b.Navigation("CommandeClient");
                 });
