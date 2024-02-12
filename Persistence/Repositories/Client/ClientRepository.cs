@@ -40,6 +40,14 @@ public class ClientRepository : IClientRepository
 
         return _clientMapper.Mapper(client);
     }
+    
+    public Domain.Entities.Client TrouverParApplicationUserId(string applicationUserId)
+    {
+        var client = _context.Clients.AsNoTracking().FirstOrDefault(client => client.ApplicationUserId == applicationUserId);
+        if (client == null) throw new ClientIntrouvable();
+
+        return _clientMapper.Mapper(client);
+    }
 
     public void Modifier(Domain.Entities.Client client)
     {

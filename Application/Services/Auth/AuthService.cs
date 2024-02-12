@@ -7,6 +7,7 @@ using ApiCube.Application.DTOs.Requests.Auth;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Exceptions;
 using ApiCube.Persistence.Models;
+using ApiCube.Persistence.Repositories.Client;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
@@ -17,13 +18,19 @@ public class AuthService : IAuthService
     private readonly IConfiguration _configuration;
     private readonly ILogger<AuthService> _logger;
     private readonly UserManager<ApplicationUserModel> _userManager;
+    private readonly IClientRepository _clientRepository;
 
-    public AuthService(UserManager<ApplicationUserModel> userManager, IConfiguration configuration,
-        ILogger<AuthService> logger)
+    public AuthService(
+        IConfiguration configuration,
+        ILogger<AuthService> logger,
+        UserManager<ApplicationUserModel> userManager,
+        IClientRepository clientRepository
+    )
     {
-        _userManager = userManager;
         _configuration = configuration;
         _logger = logger;
+        _userManager = userManager;
+        _clientRepository = clientRepository;
     }
 
     public async Task<BaseResponse> Login(LoginRequest loginRequest)
@@ -39,11 +46,14 @@ public class AuthService : IAuthService
 
             const string refreshTokenName = "RefreshToken";
             await _userManager.SetAuthenticationTokenAsync(user, "ApiCube", refreshTokenName, refreshToken);
+            
+            var client = _clientRepository.TrouverParApplicationUserId(user.Id);
 
             var tokenResponse = new TokenResponse
             {
                 AccessToken = tokenString,
-                RefreshToken = refreshToken
+                RefreshToken = refreshToken,
+                ClientId = client.Id
             };
 
             var response = new BaseResponse(
@@ -91,11 +101,14 @@ public class AuthService : IAuthService
             var newRefreshToken = GenerateRefreshToken();
 
             await _userManager.SetAuthenticationTokenAsync(user, "ApiCube", "RefreshToken", newRefreshToken);
+            
+            var client = _clientRepository.TrouverParApplicationUserId(user.Id);
 
             var tokenResponse = new TokenResponse
             {
                 AccessToken = newJwtToken,
-                RefreshToken = newRefreshToken
+                RefreshToken = newRefreshToken,
+                ClientId = client.Id
             };
 
             var response = new BaseResponse(
