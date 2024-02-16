@@ -143,6 +143,76 @@ make db-drop
 
 ## Développement
 
+### Valeurs Enums
+
+Les valeurs Enums métiers sont stockées dans le dossier Enums :
+
+```csharp
+public enum Role
+{
+    Admin,
+    Employe,
+    Manager,
+    Client
+}
+```
+
+```csharp
+public enum StatutCommande
+{
+    EnCours,
+    Livree,
+    Annulee,
+    Autre
+}
+```
+
+```csharp
+public enum StatutFacture
+{
+    EnCours,
+    Payee,
+    Annulee,
+    Autre
+}
+```
+
+```csharp
+public enum StatutStock
+{
+    EnStock,
+    EnRuptureDeStock,
+    Indisponible,
+    EnCommande,
+    EnCoursDeLivraison,
+    Livre,
+    Perime,
+    Retourne,
+    Vendu,
+    Perdu,
+    Vole,
+    Casse,
+    Supprime,
+    Autre
+}
+```
+
+```csharp
+public enum TypeTransactionStock
+{
+    Achat,
+    Approvisionnement,
+    AjoutInterne,
+    Vente,
+    Retour,
+    Perte,
+    Vol,
+    Peremption,
+    ModificationInterne,
+    Suppression
+}
+```
+
 ### Fixtures
 
 L'API utilise des seeders Bogus [Bogus](https://github.com/bchavez/Bogus) pour générer des données aléatoires.
