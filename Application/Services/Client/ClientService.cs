@@ -193,7 +193,7 @@ public class ClientService : IClientService
         }
     }
 
-    public async Task<BaseResponse> ModifierUnClient(int id, ClientRequest clientRequest)
+    /*public async Task<BaseResponse> ModifierUnClient(int id, ClientRequest clientRequest)
     {
         try
         {
@@ -258,6 +258,110 @@ public class ClientService : IClientService
                 clientRequest.Telephone,
                 clientRequest.Email,
                 clientRequest.DateNaissance,
+                appUserId
+            );
+
+            _clientRepository.Modifier(client);
+
+            var response = new BaseResponse(
+                HttpStatusCode.OK,
+                new { code = "client_modifie" }
+            );
+
+            return response;
+        }
+        catch (ClientIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (UtilisateurIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (FormatMotDePasseInvalide e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.BadRequest,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (DbUpdateException e) when (e.InnerException is MySqlException { Number: 1062 })
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.Conflict,
+                new { code = "client_existe_deja" }
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
+            );
+
+            return response;
+        }
+    }*/
+
+    public async Task<BaseResponse> ModifierUnClient(int id, ClientUpdate clientUpdate)
+    {
+        try
+        {
+            var client = _clientRepository.Trouver(id);
+            var applicationUser = await _userManager.FindByEmailAsync(client.Email);
+
+            if (applicationUser == null) throw new UtilisateurIntrouvable();
+
+            // Normalisation du nom d'utilisateur
+            var userName = clientUpdate.Nom + clientUpdate.Prenom;
+            userName = userName.Normalize(NormalizationForm.FormD);
+            var chars = userName.Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark);
+            userName = new string(chars.ToArray());
+            userName = userName.Replace(" ", "");
+
+            applicationUser.Email = clientUpdate.Email;
+            applicationUser.UserName = userName;
+
+            var updateAppUser = await _userManager.UpdateAsync(applicationUser);
+            if (!updateAppUser.Succeeded)
+            {
+                var firstError = updateAppUser.Errors.First();
+                switch (firstError.Code)
+                {
+                    case "DuplicateUserName":
+                    case "DuplicateEmail":
+                        throw new UtilisateurExisteDeja();
+                    default:
+                        throw new Exception("error_update_user");
+                }
+            }
+
+            var appUserId = await _userManager.GetUserIdAsync(applicationUser);
+
+            client.MettreAJour(
+                clientUpdate.Nom,
+                clientUpdate.Prenom,
+                clientUpdate.Adresse,
+                clientUpdate.CodePostal,
+                clientUpdate.Ville,
+                clientUpdate.Pays,
+                clientUpdate.Telephone,
+                clientUpdate.Email,
+                clientUpdate.DateNaissance,
                 appUserId
             );
 

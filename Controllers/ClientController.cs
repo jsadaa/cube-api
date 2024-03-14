@@ -81,7 +81,7 @@ public class ClientController : ControllerBase
     ///     Modifier un client
     /// </summary>
     /// <param name="id"></param>
-    /// <param name="clientRequest"></param>
+    /// <param name="clientUpdate"></param>
     /// <returns></returns>
     /// <response code="200">client_modifie</response>
     /// <response code="400">format_mot_de_passe_invalide</response>
@@ -96,9 +96,9 @@ public class ClientController : ControllerBase
     [ProducesResponseType(typeof(ExpectedErrorResponse), 409)]
     [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
     [Produces("application/json")]
-    public async Task<IActionResult> ModifierUnClient(int id, [FromBody] ClientRequest clientRequest)
+    public async Task<IActionResult> ModifierUnClient(int id, [FromBody] ClientUpdate clientUpdate)
     {
-        var response = await _clientService.ModifierUnClient(id, clientRequest);
+        var response = await _clientService.ModifierUnClient(id, clientUpdate);
         return StatusCode(response.StatusCode, response.Data);
     }
 
