@@ -78,6 +78,27 @@ public class StockController : ControllerBase
     }
 
     /// <summary>
+    ///    Trouver un stock par produit
+    /// </summary>
+    /// <param name="id">Identifiant du produit</param>
+    /// <returns> Stock </returns>
+    /// <response code="200"></response>
+    /// <response code="400">donnees_invalides</response>
+    /// <response code="404">stock_introuvable | produit_introuvable</response>
+    /// <response code="500">unexpected_error</response>
+    [HttpGet("produit/{id:int}")]
+    [ActionName("TrouverUnStockParProduit")]
+    [ProducesResponseType(typeof(StockResponse), 200)]
+    [ProducesResponseType(typeof(ExpectedErrorResponse), 404)]
+    [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
+    [Produces("application/json")]
+    public IActionResult TrouverUnStockParProduit(int id)
+    {
+        var response = _stockService.TrouverUnStockParProduit(id);
+        return StatusCode(response.StatusCode, response.Data);
+    }
+
+    /// <summary>
     ///     Modifier un stock
     /// </summary>
     /// <param name="id">Identifiant du stock</param>

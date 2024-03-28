@@ -9,6 +9,7 @@ public interface IStockService
     public BaseResponse ListerLesStocks();
 
     public BaseResponse TrouverUnStock(int id);
+    public BaseResponse TrouverUnStockParProduit(int produitId);
 
     public BaseResponse ModifierUnStock(int id, StockUpdate stockUpdate);
 

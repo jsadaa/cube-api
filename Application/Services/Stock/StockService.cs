@@ -131,6 +131,49 @@ public class StockService : IStockService
         }
     }
 
+    public BaseResponse TrouverUnStockParProduit(int id)
+    {
+        try
+        {
+            var stock = _stockRepository.TrouverParProduit(id);
+            var stockResponse = _mapper.Map<StockResponse>(stock);
+
+            var response = new BaseResponse(
+                HttpStatusCode.OK,
+                stockResponse
+            );
+
+            return response;
+        }
+        catch (StockIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (ProduitIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
+            );
+
+            return response;
+        }
+    }
+
     public BaseResponse ModifierUnStock(int id, StockUpdate stockUpdate)
     {
         try
