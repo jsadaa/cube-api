@@ -4,8 +4,8 @@ public interface IPanierClientRepository
 {
     public void Ajouter(Domain.Entities.PanierClient nouveauPanierClient);
     public List<Domain.Entities.PanierClient> Lister();
-    public List<Domain.Entities.PanierClient> ListerParClient(int idClient);
     public Domain.Entities.PanierClient Trouver(int id);
+    public Domain.Entities.PanierClient TrouverParClient(int clientId);
     public void Modifier(Domain.Entities.PanierClient panierClient);
     public void Supprimer(Domain.Entities.PanierClient panierClient);
 }

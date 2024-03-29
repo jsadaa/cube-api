@@ -96,5 +96,11 @@ public class ApiDbContext : IdentityDbContext<ApplicationUserModel>
         modelBuilder.Entity<StockModel>()
             .HasIndex(s => s.ProduitId)
             .IsUnique();
+        
+        modelBuilder.Entity<PanierClientModel>()
+            .HasOne(p => p.Client)
+            .WithMany()
+            .HasForeignKey(p => p.ClientId)
+            .OnDelete(DeleteBehavior.Restrict); // Pas de suppression en cascade
     }
 }

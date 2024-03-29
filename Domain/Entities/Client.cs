@@ -1,3 +1,4 @@
+using ApiCube.Domain.Exceptions;
 using ApiCube.Domain.ValuesObjects;
 
 namespace ApiCube.Domain.Entities;
@@ -38,7 +39,7 @@ public class Client
     public Client(string username, string nom, string prenom, string adresse, string codePostal, string ville,
         string pays, string telephone, string email, DateTime dateNaissance,
         DateTime dateInscription, List<CommandeClient> commandes, List<FactureClient> factures,
-        List<PanierClient> paniers, string applicationUserId)
+        PanierClient panier, string applicationUserId)
     {
         Username = username;
         Nom = nom;
@@ -50,14 +51,14 @@ public class Client
         DateInscription = dateInscription;
         Commandes = commandes;
         Factures = factures;
-        Paniers = paniers;
+        Panier = panier;
         ApplicationUserId = applicationUserId;
     }
 
     public Client(int id, string username, string nom, string prenom, string adresse, string codePostal, string ville,
         string pays, string telephone, string email, DateTime dateNaissance,
         DateTime dateInscription, List<CommandeClient> commandes, List<FactureClient> factures,
-        List<PanierClient> paniers, string applicationUserId)
+        PanierClient panier, string applicationUserId)
     {
         Id = id;
         Username = username;
@@ -70,14 +71,14 @@ public class Client
         DateInscription = dateInscription;
         Commandes = commandes;
         Factures = factures;
-        Paniers = paniers;
+        Panier = panier;
         ApplicationUserId = applicationUserId;
     }
 
     public Client(int id, string username, string nom, string prenom, Adresse adresse, Telephone telephone,
         string email, DateTime dateNaissance,
         DateTime dateInscription, List<CommandeClient> commandes, List<FactureClient> factures,
-        List<PanierClient> paniers, string applicationUserId)
+        PanierClient panier, string applicationUserId)
     {
         Id = id;
         Username = username;
@@ -90,7 +91,7 @@ public class Client
         DateInscription = dateInscription;
         Commandes = commandes;
         Factures = factures;
-        Paniers = paniers;
+        Panier = panier;
         ApplicationUserId = applicationUserId;
     }
 
@@ -105,7 +106,7 @@ public class Client
     public DateTime DateInscription { get; set; }
     public List<CommandeClient>? Commandes { get; set; }
     public List<FactureClient>? Factures { get; set; }
-    public List<PanierClient>? Paniers { get; set; }
+    public PanierClient? Panier { get; set; }
     public string ApplicationUserId { get; set; }
 
     public void AjouterCommande(CommandeClient commande)
@@ -132,13 +133,19 @@ public class Client
 
     public void AjouterPanier(PanierClient panier)
     {
-        Paniers ??= new List<PanierClient>();
-        Paniers.Add(panier);
+        if (Panier == null)
+        {
+            Panier = panier;
+
+        } else
+        {
+            throw new PanierDejaExistant();
+        }
     }
 
-    public void SupprimerPanier(PanierClient panier)
+    public void SupprimerPanier()
     {
-        Paniers?.Remove(panier);
+        Panier = null;
     }
 
     public void MettreAJour(string nom, string prenom, string adresse, string codePostal, string ville, string pays,

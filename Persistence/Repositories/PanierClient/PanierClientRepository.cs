@@ -80,43 +80,6 @@ public class PanierClientRepository : IPanierClientRepository
         return panierClients;
     }
 
-    public List<Domain.Entities.PanierClient> ListerParClient(int idClient)
-    {
-        var panierClientModels = _context.PaniersClients
-            .AsNoTracking()
-            .Include(panierClient => panierClient.Client)
-            .Include(panierClient => panierClient.LignePanierClients)
-            .ThenInclude(lignePanierClient => lignePanierClient.Produit)
-            .ThenInclude(produitModel => produitModel.Fournisseur)
-            .Include(panierClient => panierClient.LignePanierClients)
-            .ThenInclude(lignePanierClient => lignePanierClient.Produit)
-            .ThenInclude(produitModel => produitModel.FamilleProduit)
-            .Where(panierClient => panierClient.Client.Id == idClient)
-            .ToList();
-
-        var panierClients = new List<Domain.Entities.PanierClient>();
-
-        foreach (var panierClientModel in panierClientModels)
-        {
-            var client = _clientMapper.Mapper(panierClientModel.Client);
-            var lignePanierClients = new List<LignePanierClient>();
-
-            foreach (var lignePanierClientModel in panierClientModel.LignePanierClients)
-            {
-                var familleProduit = _familleProduitMapper.Mapper(lignePanierClientModel.Produit.FamilleProduit);
-                var fournisseur = _fournisseurMapper.Mapper(lignePanierClientModel.Produit.Fournisseur);
-                var produit = _produitMapper.Mapper(lignePanierClientModel.Produit, familleProduit, fournisseur);
-                var lignePanierClient = _lignePanierClientMapper.Mapper(lignePanierClientModel, produit);
-                lignePanierClients.Add(lignePanierClient);
-            }
-
-            var panierClient = _panierClientMapper.Mapper(panierClientModel, client, lignePanierClients);
-            panierClients.Add(panierClient);
-        }
-
-        return panierClients;
-    }
-
     public Domain.Entities.PanierClient Trouver(int id)
     {
         var panierClientModel = _context.PaniersClients
@@ -129,6 +92,36 @@ public class PanierClientRepository : IPanierClientRepository
             .ThenInclude(lignePanierClient => lignePanierClient.Produit)
             .ThenInclude(produitModel => produitModel.FamilleProduit)
             .FirstOrDefault(panierClient => panierClient.Id == id);
+
+        if (panierClientModel == null) throw new PanierClientIntrouvable();
+
+        var client = _clientMapper.Mapper(panierClientModel.Client);
+        var lignePanierClients = new List<LignePanierClient>();
+
+        foreach (var lignePanierClientModel in panierClientModel.LignePanierClients)
+        {
+            var familleProduit = _familleProduitMapper.Mapper(lignePanierClientModel.Produit.FamilleProduit);
+            var fournisseur = _fournisseurMapper.Mapper(lignePanierClientModel.Produit.Fournisseur);
+            var produit = _produitMapper.Mapper(lignePanierClientModel.Produit, familleProduit, fournisseur);
+            var lignePanierClient = _lignePanierClientMapper.Mapper(lignePanierClientModel, produit);
+            lignePanierClients.Add(lignePanierClient);
+        }
+
+        return _panierClientMapper.Mapper(panierClientModel, client, lignePanierClients);
+    }
+
+    public Domain.Entities.PanierClient TrouverParClient(int clientId)
+    {
+        var panierClientModel = _context.PaniersClients
+            .AsNoTracking()
+            .Include(panierClient => panierClient.Client)
+            .Include(panierClient => panierClient.LignePanierClients)
+            .ThenInclude(lignePanierClient => lignePanierClient.Produit)
+            .ThenInclude(produitModel => produitModel.Fournisseur)
+            .Include(panierClient => panierClient.LignePanierClients)
+            .ThenInclude(lignePanierClient => lignePanierClient.Produit)
+            .ThenInclude(produitModel => produitModel.FamilleProduit)
+            .FirstOrDefault(panierClient => panierClient.ClientId == clientId);
 
         if (panierClientModel == null) throw new PanierClientIntrouvable();
 

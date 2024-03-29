@@ -82,11 +82,46 @@ public class FactureClientRepository : IFactureClientRepository
             var ligneCommandeClient = _ligneCommandeClientMapper.Mapper(ligneCommandeClientModel, produit);
             ligneCommandeClients.Add(ligneCommandeClient);
         }
-        
+
         var commandeClient = _commandeClientMapper.Mapper(factureClientModel.CommandeClient, client, statutCommande,
             ligneCommandeClients);
         var statutFacture = Enum.Parse<StatutFacture>(factureClientModel.Statut);
-        
+
+        return _factureClientMapper.Mapper(factureClientModel, commandeClient, statutFacture);
+    }
+
+    public Domain.Entities.FactureClient TrouverParCommande(int commandeClientId)
+    {
+        var factureClientModel = _context.FacturesClients
+            .AsNoTracking()
+            .Include(factureClient => factureClient.CommandeClient)
+            .Include(factureClient => factureClient.CommandeClient.Client)
+            .Include(factureClient => factureClient.CommandeClient.LigneCommandeClients)
+            .ThenInclude(ligneCommandeClient => ligneCommandeClient.Produit)
+            .ThenInclude(produitModel => produitModel.Fournisseur)
+            .Include(factureClient => factureClient.CommandeClient.LigneCommandeClients)
+            .ThenInclude(ligneCommandeClient => ligneCommandeClient.Produit)
+            .ThenInclude(produitModel => produitModel.FamilleProduit)
+            .FirstOrDefault(factureClient => factureClient.CommandeClientId == commandeClientId);
+
+        if (factureClientModel == null) throw new FactureClientIntrouvable();
+
+        var client = _clientMapper.Mapper(factureClientModel.CommandeClient.Client);
+        var statutCommande = _statutCommandeMapper.Mapper(factureClientModel.CommandeClient.Statut);
+        var ligneCommandeClients = new List<LigneCommandeClient>();
+        foreach (var ligneCommandeClientModel in factureClientModel.CommandeClient.LigneCommandeClients)
+        {
+            var familleProduit = _familleProduitMapper.Mapper(ligneCommandeClientModel.Produit.FamilleProduit);
+            var fournisseur = _fournisseurMapper.Mapper(ligneCommandeClientModel.Produit.Fournisseur);
+            var produit = _produitMapper.Mapper(ligneCommandeClientModel.Produit, familleProduit, fournisseur);
+            var ligneCommandeClient = _ligneCommandeClientMapper.Mapper(ligneCommandeClientModel, produit);
+            ligneCommandeClients.Add(ligneCommandeClient);
+        }
+
+        var commandeClient = _commandeClientMapper.Mapper(factureClientModel.CommandeClient, client, statutCommande,
+            ligneCommandeClients);
+        var statutFacture = Enum.Parse<StatutFacture>(factureClientModel.Statut);
+
         return _factureClientMapper.Mapper(factureClientModel, commandeClient, statutFacture);
     }
 
@@ -128,7 +163,7 @@ public class FactureClientRepository : IFactureClientRepository
 
         return factureClients;
     }
-    
+
     public List<Domain.Entities.FactureClient> ListerParClient(int id)
     {
         var factureClientModels = _context.FacturesClients
@@ -165,7 +200,7 @@ public class FactureClientRepository : IFactureClientRepository
             var factureClient = _factureClientMapper.Mapper(factureClientModel, commandeClient, statutFacture);
             factureClients.Add(factureClient);
         }
-        
+
         return factureClients;
     }
 
