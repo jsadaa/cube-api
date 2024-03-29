@@ -4,6 +4,7 @@ using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Domain.Entities;
 using ApiCube.Domain.Exceptions;
+using ApiCube.Domain.Mappers.Client;
 using ApiCube.Domain.Services;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Repositories.Client;
@@ -13,6 +14,7 @@ using ApiCube.Persistence.Repositories.PanierClient;
 using ApiCube.Persistence.Repositories.Produit;
 using ApiCube.Persistence.Repositories.Stock;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApiCube.Application.Services.CommandeClient;
 
@@ -29,6 +31,7 @@ public class CommandeClientService : ICommandeClientService
     private readonly PreparateurDeCommandeClient _preparateurDeCommandeClient;
     private readonly IProduitRepository _produitRepository;
     private readonly IStockRepository _stockRepository;
+    private readonly IClientMapper _clientMapper;
 
     public CommandeClientService(
         IClientRepository clientRepository,
@@ -41,7 +44,8 @@ public class CommandeClientService : ICommandeClientService
         PreparateurDeCommandeClient preparateurDeCommandeClient,
         IProduitRepository produitRepository,
         IStockRepository stockRepository,
-        ApiDbContext context
+        ApiDbContext context,
+        IClientMapper clientMapper
     )
     {
         _clientRepository = clientRepository;
@@ -55,6 +59,7 @@ public class CommandeClientService : ICommandeClientService
         _produitRepository = produitRepository;
         _stockRepository = stockRepository;
         _context = context;
+        _clientMapper = clientMapper;
     }
 
     public BaseResponse CreerUnPanier(int idClient)
@@ -188,20 +193,26 @@ public class CommandeClientService : ICommandeClientService
         }
     }
 
-    public BaseResponse ListerLesPaniersDUnClient(int idClient)
+    public BaseResponse TrouverUnPanierParClient(int idClient)
     {
         try
         {
-            // On vérifie que le client existe
-            _ = _clientRepository.Trouver(idClient);
-
-            var paniersClient = _panierClientRepository.ListerParClient(idClient);
-            var paniersClientResponse = _mapper.Map<List<PanierClientResponse>>(paniersClient);
+            var panierClient = _panierClientRepository.TrouverParClient(idClient);
+            var panierClientResponse = _mapper.Map<PanierClientResponse>(panierClient);
 
             return new BaseResponse(
                 HttpStatusCode.OK,
-                paniersClientResponse
+                panierClientResponse
             );
+        }
+        catch (PanierClientIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+
+            return response;
         }
         catch (ClientIntrouvable e)
         {
@@ -376,12 +387,18 @@ public class CommandeClientService : ICommandeClientService
         }
     }
 
-    public BaseResponse SupprimerUnPanier(int id)
+    public BaseResponse SupprimerUnPanier(int idCLient)
     {
         try
         {
-            var panierClient = _panierClientRepository.Trouver(id);
-            _panierClientRepository.Supprimer(panierClient);
+            var client = _context.Clients
+                .Include(client => client.Panier)
+                .FirstOrDefault(client => client.Id == idCLient);
+
+            if (client is null) throw new ClientIntrouvable();
+
+            _context.RemoveRange(_context.PaniersClients.Find(client.Panier.Id));
+            _context.SaveChanges();
 
             return new BaseResponse(
                 HttpStatusCode.OK,
@@ -419,13 +436,10 @@ public class CommandeClientService : ICommandeClientService
 
             client.AjouterCommande(commandeClient);
             client.Facturer(factureClient);
-            panierClient.Vider();
-
             _clientRepository.Modifier(client);
 
-            // Ici, on supprime les lignes de panier client en base de données via le contexte pour éviter les problèmes de tracking
-            // TODO: Trouver une meilleure solution
-            _context.RemoveRange(_context.PaniersClients.Find(panierClient.Id));
+            foreach (var lignePanierClient in panierClient.LignePanierClients)
+                _context.RemoveRange(_context.LignesPaniersClients.Find(lignePanierClient.Id));
             _context.SaveChanges();
 
             foreach (var ligneCommandeClient in commandeClient.LigneCommandeClients)

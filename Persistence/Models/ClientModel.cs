@@ -65,7 +65,7 @@ public class ClientModel
 
     public List<CommandeClientModel>? Commandes { get; set; }
 
-    public List<PanierClientModel>? Paniers { get; set; }
+    public PanierClientModel? Panier { get; set; }
 
     public List<FactureClientModel>? Factures { get; set; }
 }

@@ -183,6 +183,7 @@ builder.Services.AddScoped<GestionnaireDeFacturation>();
 // Configure Production Seeder
 builder.Services.AddScoped<RoleSeeder>();
 builder.Services.AddScoped<EmployeSeeder>();
+builder.Services.AddScoped<ClientSeeder>();
 
 // Configure Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -237,6 +238,7 @@ using (var scope = app.Services.CreateScope())
     {
         await RoleSeeder.CreateRoles(services);
         await EmployeSeeder.CreateEmployes(services);
+        await ClientSeeder.CreateClients(services);
     }
     catch (Exception ex)
     {

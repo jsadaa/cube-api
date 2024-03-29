@@ -127,6 +127,9 @@ namespace ApiCube.Migrations
                         .HasColumnType("varchar(50)")
                         .HasColumnName("nom");
 
+                    b.Property<int?>("PanierId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Pays")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -157,6 +160,8 @@ namespace ApiCube.Migrations
 
                     b.HasIndex("Email")
                         .IsUnique();
+
+                    b.HasIndex("PanierId");
 
                     b.ToTable("client");
                 });
@@ -900,7 +905,13 @@ namespace ApiCube.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ApiCube.Persistence.Models.PanierClientModel", "Panier")
+                        .WithMany()
+                        .HasForeignKey("PanierId");
+
                     b.Navigation("ApplicationUser");
+
+                    b.Navigation("Panier");
                 });
 
             modelBuilder.Entity("ApiCube.Persistence.Models.CommandeClientModel", b =>
@@ -1019,9 +1030,9 @@ namespace ApiCube.Migrations
             modelBuilder.Entity("ApiCube.Persistence.Models.PanierClientModel", b =>
                 {
                     b.HasOne("ApiCube.Persistence.Models.ClientModel", "Client")
-                        .WithMany("Paniers")
+                        .WithMany()
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Client");
@@ -1130,8 +1141,6 @@ namespace ApiCube.Migrations
                     b.Navigation("Commandes");
 
                     b.Navigation("Factures");
-
-                    b.Navigation("Paniers");
                 });
 
             modelBuilder.Entity("ApiCube.Persistence.Models.CommandeClientModel", b =>

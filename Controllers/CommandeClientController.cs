@@ -83,22 +83,22 @@ public class CommandeClientController : ControllerBase
     }
 
     /// <summary>
-    ///     Lister les paniers d'un client
+    ///     Trouver un panier par l'id du client
     /// </summary>
     /// <param name="idClient"></param>
     /// <returns></returns>
-    /// <response code="200">paniers_trouves</response>
-    /// <response code="404">client_introuvable</response>
+    /// <response code="200">panier_trouve</response>
+    /// <response code="404">panier_introuvable | client_introuvable</response>
     /// <response code="500">unexpected_error</response>
     [HttpGet("panier/client/{idClient:int}")]
-    [ActionName("ListerLesPaniersDUnClient")]
+    [ActionName("TrouverUnPanierParIdClient")]
     [ProducesResponseType(typeof(PanierClientResponse), 200)]
     [ProducesResponseType(typeof(ExpectedErrorResponse), 404)]
     [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
     [Produces("application/json")]
-    public IActionResult ListerLesPaniersDUnClient(int idClient)
+    public IActionResult TrouverUnPanierParIdClient(int idClient)
     {
-        var response = _commandeClientService.ListerLesPaniersDUnClient(idClient);
+        var response = _commandeClientService.TrouverUnPanierParClient(idClient);
         return StatusCode(response.StatusCode, response.Data);
     }
 
@@ -170,22 +170,22 @@ public class CommandeClientController : ControllerBase
     }
 
     /// <summary>
-    ///     Supprimer un panier
+    ///     Supprimer le panier d'un client
     /// </summary>
-    /// <param name="idPanier"></param>
+    /// <param name="idClient"></param>
     /// <returns></returns>
     /// <response code="200">panier_supprime</response>
-    /// <response code="404">panier_client_introuvable</response>
+    /// <response code="404">client_introuvable</response>
     /// <response code="500">unexpected_error</response>
-    [HttpDelete("panier/{idPanier:int}")]
+    [HttpDelete("panier/{idClient:int}")]
     [ActionName("SupprimerUnPanier")]
     [ProducesResponseType(typeof(string), 200)]
     [ProducesResponseType(typeof(ExpectedErrorResponse), 404)]
     [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
     [Produces("application/json")]
-    public IActionResult SupprimerUnPanier(int idPanier)
+    public IActionResult SupprimerUnPanier(int idClient)
     {
-        var response = _commandeClientService.SupprimerUnPanier(idPanier);
+        var response = _commandeClientService.SupprimerUnPanier(idClient);
         return StatusCode(response.StatusCode, response.Data);
     }
 
