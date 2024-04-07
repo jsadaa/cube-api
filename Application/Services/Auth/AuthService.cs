@@ -6,8 +6,10 @@ using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests.Auth;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Exceptions;
+using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
 using ApiCube.Persistence.Repositories.Client;
+using ApiCube.Persistence.Repositories.Employe;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
@@ -19,18 +21,21 @@ public class AuthService : IAuthService
     private readonly ILogger<AuthService> _logger;
     private readonly UserManager<ApplicationUserModel> _userManager;
     private readonly IClientRepository _clientRepository;
+    private readonly IEmployeRepository _employeRepository;
 
     public AuthService(
         IConfiguration configuration,
         ILogger<AuthService> logger,
         UserManager<ApplicationUserModel> userManager,
-        IClientRepository clientRepository
+        IClientRepository clientRepository,
+        IEmployeRepository employeRepository
     )
     {
         _configuration = configuration;
         _logger = logger;
         _userManager = userManager;
         _clientRepository = clientRepository;
+        _employeRepository = employeRepository;
     }
 
     public async Task<BaseResponse> Login(LoginRequest loginRequest)
@@ -46,19 +51,47 @@ public class AuthService : IAuthService
 
             const string refreshTokenName = "RefreshToken";
             await _userManager.SetAuthenticationTokenAsync(user, "ApiCube", refreshTokenName, refreshToken);
-            
-            var client = _clientRepository.TrouverParApplicationUserId(user.Id);
 
+            object domainUser;
+            int id;
+            
+            try
+            {
+                domainUser = _clientRepository.TrouverParApplicationUserId(user.Id);
+                id = ((Domain.Entities.Client) domainUser).Id;
+            } 
+            catch (ClientIntrouvable)
+            {
+                try
+                {
+                    domainUser = _employeRepository.TrouverParApplicationUserId(user.Id);
+                    id = ((Domain.Entities.Employe) domainUser).Id;
+                } 
+                catch (EmployeIntrouvable)
+                {
+                    throw new UtilisateurIntrouvable();
+                }
+            }
+            
             var tokenResponse = new TokenResponse
             {
                 AccessToken = tokenString,
                 RefreshToken = refreshToken,
-                ClientId = client.Id
+                UserId = id
             };
 
             var response = new BaseResponse(
                 HttpStatusCode.OK,
                 tokenResponse
+            );
+
+            return response;
+        }
+        catch (UtilisateurIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
             );
 
             return response;
@@ -102,13 +135,32 @@ public class AuthService : IAuthService
 
             await _userManager.SetAuthenticationTokenAsync(user, "ApiCube", "RefreshToken", newRefreshToken);
             
-            var client = _clientRepository.TrouverParApplicationUserId(user.Id);
+            object domainUser;
+            int id;
+            
+            try
+            {
+                domainUser = _clientRepository.TrouverParApplicationUserId(user.Id);
+                id = ((Domain.Entities.Client) domainUser).Id;
+            } 
+            catch (ClientIntrouvable)
+            {
+                try
+                {
+                    domainUser = _employeRepository.TrouverParApplicationUserId(user.Id);
+                    id = ((Domain.Entities.Employe) domainUser).Id;
+                } 
+                catch (EmployeIntrouvable)
+                {
+                    throw new UtilisateurIntrouvable();
+                }
+            }
 
             var tokenResponse = new TokenResponse
             {
                 AccessToken = newJwtToken,
                 RefreshToken = newRefreshToken,
-                ClientId = client.Id
+                UserId = id
             };
 
             var response = new BaseResponse(

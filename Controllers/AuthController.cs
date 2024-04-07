@@ -24,11 +24,13 @@ public class AuthController : ControllerBase
     /// <returns></returns>
     /// <response code="200"></response>
     /// <response code="401">identifiants_incorrects</response>
+    /// <response code="404">utilisateur_introuvable</response>
     /// <response code="500">unexpected_error</response>
     [HttpPost("login")]
     [ActionName("Login")]
     [ProducesResponseType(typeof(TokenResponse), 200)]
     [ProducesResponseType(typeof(ExpectedErrorResponse), 401)]
+    [ProducesResponseType(typeof(ExpectedErrorResponse), 404)]
     [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
     [Produces("application/json")]
     public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
