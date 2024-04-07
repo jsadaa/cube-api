@@ -436,20 +436,21 @@ public class CommandeClientService : ICommandeClientService
 
             client.AjouterCommande(commandeClient);
             client.Facturer(factureClient);
-            _clientRepository.Modifier(client);
-
-            foreach (var lignePanierClient in panierClient.LignePanierClients)
-                _context.RemoveRange(_context.LignesPaniersClients.Find(lignePanierClient.Id));
-            _context.SaveChanges();
 
             foreach (var ligneCommandeClient in commandeClient.LigneCommandeClients)
             {
                 var produit = ligneCommandeClient.Produit;
                 var stock = _stockRepository.TrouverParProduit(produit.Id);
 
-                stock = _gestionnaireDeStock.Achat(stock, ligneCommandeClient);
+                stock = _gestionnaireDeStock.Vente(stock, ligneCommandeClient);
                 _stockRepository.Modifier(stock);
             }
+            
+            _clientRepository.Modifier(client);
+
+            foreach (var lignePanierClient in panierClient.LignePanierClients)
+                _context.RemoveRange(_context.LignesPaniersClients.Find(lignePanierClient.Id));
+            _context.SaveChanges();
 
             return new BaseResponse(
                 HttpStatusCode.OK,

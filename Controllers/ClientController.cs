@@ -29,7 +29,7 @@ public class ClientController : ControllerBase
     /// <response code="500">unexpected_error</response>
     [HttpPost("")]
     [ActionName("AjouterUnClient")]
-    [ProducesResponseType(typeof(string), 201)]
+    [ProducesResponseType(typeof(ClientResponse), 201)]
     [ProducesResponseType(typeof(ExpectedErrorResponse), 400)]
     [ProducesResponseType(typeof(ExpectedErrorResponse), 409)]
     [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]

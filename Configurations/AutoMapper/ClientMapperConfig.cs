@@ -11,6 +11,7 @@ public class ClientMapperConfig : Profile
     public ClientMapperConfig()
     {
         CreateMap<Client, ClientModel>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Adresse, opt => opt.MapFrom(src => src.Adresse.Rue))
             .ForMember(dest => dest.CodePostal, opt => opt.MapFrom(src => src.Adresse.CodePostal))
             .ForMember(dest => dest.Ville, opt => opt.MapFrom(src => src.Adresse.Ville))

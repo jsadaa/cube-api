@@ -22,12 +22,14 @@ public class ClientRepository : IClientRepository
         _mapper = mapper;
     }
 
-    public void Ajouter(Domain.Entities.Client nouveauClient)
+    public int Ajouter(Domain.Entities.Client nouveauClient)
     {
         var nouveauClientModel = _mapper.Map<ClientModel>(nouveauClient);
 
         _context.Clients.Add(nouveauClientModel);
-        _context.SaveChangesAsync();
+        _context.SaveChanges();
+        
+        return nouveauClientModel.Id;
     }
 
     public List<Domain.Entities.Client> Lister()
