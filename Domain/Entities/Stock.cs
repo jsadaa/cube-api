@@ -100,7 +100,8 @@ public class Stock
     {
         if (EstSupprime()) return;
         if (Quantite > SeuilDisponibilite) Statut = StatutStock.EnStock;
-        else if (Quantite <= SeuilDisponibilite || !EstEnCommande()) Statut = StatutStock.Indisponible;
+        else if (Quantite <= 0 && !EstEnCommande()) Statut = StatutStock.Indisponible;
+        else if (Quantite <= SeuilDisponibilite && Quantite > 0) Statut = StatutStock.QuasimentEpuise;
         else if (Quantite <= 0) Statut = StatutStock.EnRuptureDeStock;
         if (Produit.EstPerime()) Statut = StatutStock.Perime;
     }

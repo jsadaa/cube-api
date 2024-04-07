@@ -6,12 +6,12 @@ namespace ApiCube.Domain.Services;
 
 public class GestionnaireDeStock
 {
-    public Stock Achat(Stock stock, LigneCommandeClient ligneCommandeClient)
+    public Stock Vente(Stock stock, LigneCommandeClient ligneCommandeClient)
     {
         var nouvelleTransactionStock = new TransactionStock(
             -ligneCommandeClient.Quantite,
             DateTime.Now,
-            TypeTransactionStock.Achat,
+            TypeTransactionStock.Vente,
             stock,
             stock.Produit.PrixAchat,
             stock.Quantite,

@@ -183,6 +183,7 @@ public enum StatutStock
     EnStock,
     EnRuptureDeStock,
     Indisponible,
+    QuasimentEpuise,
     EnCommande,
     EnCoursDeLivraison,
     Livre,
