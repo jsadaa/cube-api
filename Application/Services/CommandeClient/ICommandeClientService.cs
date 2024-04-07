@@ -13,7 +13,7 @@ public interface ICommandeClientService
     public BaseResponse ViderUnPanier(int id);
     public BaseResponse SupprimerUnProduitDuPanier(int id, int idProduit);
     public BaseResponse SupprimerUnPanier(int id);
-    public BaseResponse ValiderUnPanier(int idClient);
+    public BaseResponse ValiderUnPanier(int idClient, DateLivraisonRequest dateLivraisonRequest);
     public BaseResponse TrouverUneCommande(int id);
     public BaseResponse ListerLesCommandesDUnClient(int idClient);
     public BaseResponse ListerLesCommandes();

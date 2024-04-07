@@ -10,6 +10,11 @@ public class CommandeClientModel
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Key]
     public int Id { get; set; }
+    
+    [Column("uuid")]
+    [Required]
+    [StringLength(36)]
+    public required Guid Uuid { get; set; }
 
     [Column("date_commande")] [Required] public required DateTime DateCommande { get; set; }
 

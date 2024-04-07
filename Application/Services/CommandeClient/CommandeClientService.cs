@@ -4,12 +4,10 @@ using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Domain.Entities;
 using ApiCube.Domain.Exceptions;
-using ApiCube.Domain.Mappers.Client;
 using ApiCube.Domain.Services;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Repositories.Client;
 using ApiCube.Persistence.Repositories.CommandeClient;
-using ApiCube.Persistence.Repositories.FactureClient;
 using ApiCube.Persistence.Repositories.PanierClient;
 using ApiCube.Persistence.Repositories.Produit;
 using ApiCube.Persistence.Repositories.Stock;
@@ -23,7 +21,6 @@ public class CommandeClientService : ICommandeClientService
     private readonly IClientRepository _clientRepository;
     private readonly ICommandeClientRepository _commandeClientRepository;
     private readonly ApiDbContext _context;
-    private readonly IFactureClientRepository _factureClientRepository;
     private readonly GestionnaireDeFacturation _gestionnaireDeFacturation;
     private readonly GestionnaireDeStock _gestionnaireDeStock;
     private readonly IMapper _mapper;
@@ -31,12 +28,10 @@ public class CommandeClientService : ICommandeClientService
     private readonly PreparateurDeCommandeClient _preparateurDeCommandeClient;
     private readonly IProduitRepository _produitRepository;
     private readonly IStockRepository _stockRepository;
-    private readonly IClientMapper _clientMapper;
 
     public CommandeClientService(
         IClientRepository clientRepository,
         ICommandeClientRepository commandeClientRepository,
-        IFactureClientRepository factureClientRepository,
         GestionnaireDeFacturation gestionnaireDeFacturation,
         GestionnaireDeStock gestionnaireDeStock,
         IMapper mapper,
@@ -44,13 +39,11 @@ public class CommandeClientService : ICommandeClientService
         PreparateurDeCommandeClient preparateurDeCommandeClient,
         IProduitRepository produitRepository,
         IStockRepository stockRepository,
-        ApiDbContext context,
-        IClientMapper clientMapper
+        ApiDbContext context
     )
     {
         _clientRepository = clientRepository;
         _commandeClientRepository = commandeClientRepository;
-        _factureClientRepository = factureClientRepository;
         _gestionnaireDeFacturation = gestionnaireDeFacturation;
         _gestionnaireDeStock = gestionnaireDeStock;
         _mapper = mapper;
@@ -59,7 +52,6 @@ public class CommandeClientService : ICommandeClientService
         _produitRepository = produitRepository;
         _stockRepository = stockRepository;
         _context = context;
-        _clientMapper = clientMapper;
     }
 
     public BaseResponse CreerUnPanier(int idClient)
@@ -425,7 +417,7 @@ public class CommandeClientService : ICommandeClientService
         }
     }
 
-    public BaseResponse ValiderUnPanier(int id)
+    public BaseResponse ValiderUnPanier(int id, DateLivraisonRequest dateLivraisonRequest)
     {
         try
         {
@@ -433,6 +425,8 @@ public class CommandeClientService : ICommandeClientService
             var client = panierClient.Client;
             var commandeClient = _preparateurDeCommandeClient.Commande(panierClient);
             var factureClient = _gestionnaireDeFacturation.Commande(commandeClient);
+            
+            commandeClient.ModifierDateLivraison(dateLivraisonRequest.DateLivraison);
 
             client.AjouterCommande(commandeClient);
             client.Facturer(factureClient);
@@ -451,10 +445,12 @@ public class CommandeClientService : ICommandeClientService
             foreach (var lignePanierClient in panierClient.LignePanierClients)
                 _context.RemoveRange(_context.LignesPaniersClients.Find(lignePanierClient.Id));
             _context.SaveChanges();
+            
+            commandeClient = _commandeClientRepository.TrouverParUuid(commandeClient.Uuid);
 
             return new BaseResponse(
                 HttpStatusCode.OK,
-                new { code = "panier_valide" }
+                new { code = "panier_valide", idCommande = commandeClient.Id }
             );
         }
         catch (PanierClientIntrouvable e)

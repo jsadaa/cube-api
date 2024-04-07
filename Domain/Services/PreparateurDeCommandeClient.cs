@@ -8,6 +8,7 @@ public class PreparateurDeCommandeClient
     public CommandeClient Commande(PanierClient panierClient)
     {
         var nouvelleCommandeClient = new CommandeClient(
+            Guid.NewGuid(),
             DateTime.Now,
             null,
             StatutCommande.EnCours,

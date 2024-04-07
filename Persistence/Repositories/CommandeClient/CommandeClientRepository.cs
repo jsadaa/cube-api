@@ -79,6 +79,38 @@ public class CommandeClientRepository : ICommandeClientRepository
 
         return commandeClient;
     }
+    
+    public Domain.Entities.CommandeClient TrouverParUuid(Guid uuid)
+    {
+        var commandeClientModel = _context.CommandesClients
+            .AsNoTracking()
+            .Include(commandeClient => commandeClient.Client)
+            .Include(commandeClient => commandeClient.LigneCommandeClients)
+            .ThenInclude(ligneCommandeClient => ligneCommandeClient.Produit)
+            .ThenInclude(produitModel => produitModel.Fournisseur)
+            .Include(commandeClient => commandeClient.LigneCommandeClients)
+            .ThenInclude(ligneCommandeClient => ligneCommandeClient.Produit)
+            .ThenInclude(produitModel => produitModel.FamilleProduit)
+            .FirstOrDefault(commandeClient => commandeClient.Uuid == uuid);
+
+        if (commandeClientModel == null) throw new CommandeClientIntrouvable();
+
+        var client = _clientMapper.Mapper(commandeClientModel.Client);
+        var statut = _statutCommandeMapper.Mapper(commandeClientModel.Statut);
+        var ligneCommandeClients = new List<LigneCommandeClient>();
+        foreach (var ligneCommandeClientModel in commandeClientModel.LigneCommandeClients)
+        {
+            var familleProduit = _familleProduitMapper.Mapper(ligneCommandeClientModel.Produit.FamilleProduit);
+            var fournisseur = _fournisseurMapper.Mapper(ligneCommandeClientModel.Produit.Fournisseur);
+            var produit = _produitMapper.Mapper(ligneCommandeClientModel.Produit, familleProduit, fournisseur);
+            var ligneCommandeClient = _ligneCommandeClientMapper.Mapper(ligneCommandeClientModel, produit);
+            ligneCommandeClients.Add(ligneCommandeClient);
+        }
+
+        var commandeClient = _commandeClientMapper.Mapper(commandeClientModel, client, statut, ligneCommandeClients);
+
+        return commandeClient;
+    }
 
     public List<Domain.Entities.CommandeClient> Lister()
     {

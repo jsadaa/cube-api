@@ -10,6 +10,7 @@ public class CommandeClientMapper : ICommandeClientMapper
     {
         return new Entities.CommandeClient(
             model.Id,
+            model.Uuid,
             model.DateCommande,
             model.DateLivraison,
             statut,

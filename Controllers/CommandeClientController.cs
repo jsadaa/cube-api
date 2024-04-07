@@ -188,9 +188,10 @@ public class CommandeClientController : ControllerBase
     }
 
     /// <summary>
-    ///     Valider un panier (passer la commande)
+    ///     Valider un panier (passer la commande) (avec date de livraison)
     /// </summary>
     /// <param name="idPanier"></param>
+    /// <param name="dateLivraisonRequest"></param>
     /// <returns></returns>
     /// <response code="200">panier_valide</response>
     /// <response code="400">quantite_stock_insuffisant</response>
@@ -203,9 +204,9 @@ public class CommandeClientController : ControllerBase
     [ProducesResponseType(typeof(ExpectedErrorResponse), 404)]
     [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
     [Produces("application/json")]
-    public IActionResult ValiderUnPanier(int idPanier)
+    public IActionResult ValiderUnPanier(int idPanier, [FromBody] DateLivraisonRequest dateLivraisonRequest)
     {
-        var response = _commandeClientService.ValiderUnPanier(idPanier);
+        var response = _commandeClientService.ValiderUnPanier(idPanier, dateLivraisonRequest);
         return StatusCode(response.StatusCode, response.Data);
     }
 
