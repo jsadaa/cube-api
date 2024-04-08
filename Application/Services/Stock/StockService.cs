@@ -6,6 +6,7 @@ using ApiCube.Domain.Services;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Repositories.Produit;
 using ApiCube.Persistence.Repositories.Stock;
+using ApiCube.Persistence.Repositories.TransactionStock;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
@@ -18,18 +19,21 @@ public class StockService : IStockService
     private readonly IMapper _mapper;
     private readonly IProduitRepository _produitRepository;
     private readonly IStockRepository _stockRepository;
+    private readonly ITransactionStockRepository _transactionStockRepository;
 
     public StockService(
         IStockRepository stockRepository,
         IProduitRepository produitRepository,
         GestionnaireDeStock gestionnaireDeStock,
-        IMapper mapper
+        IMapper mapper,
+        ITransactionStockRepository transactionStockRepository
     )
     {
         _stockRepository = stockRepository;
         _produitRepository = produitRepository;
         _gestionnaireDeStock = gestionnaireDeStock;
         _mapper = mapper;
+        _transactionStockRepository = transactionStockRepository;
     }
 
     public BaseResponse AjouterUnStockDeProduit(StockRequest stockRequest)
@@ -237,6 +241,65 @@ public class StockService : IStockService
             var response = new BaseResponse(
                 HttpStatusCode.OK,
                 new { code = "stock_supprime" }
+            );
+
+            return response;
+        }
+        catch (StockIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
+            );
+
+            return response;
+        }
+    }
+    
+    public BaseResponse ListerLesTransactionsStock()
+    {
+        try
+        {
+            var listeTransactionsStock = _transactionStockRepository.Lister();
+            var transactionsStock = _mapper.Map<List<TransactionStockResponse>>(listeTransactionsStock);
+
+            var response = new BaseResponse(
+                HttpStatusCode.OK,
+                transactionsStock
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
+            );
+
+            return response;
+        }
+    }
+    
+    public BaseResponse ListerLesTransactionsStockParStock(int stockId)
+    {
+        try
+        {
+            var listeTransactionsStock = _transactionStockRepository.ListerParStock(stockId);
+            var transactionsStock = _mapper.Map<List<TransactionStockResponse>>(listeTransactionsStock);
+
+            var response = new BaseResponse(
+                HttpStatusCode.OK,
+                transactionsStock
             );
 
             return response;

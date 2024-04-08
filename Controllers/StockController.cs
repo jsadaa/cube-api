@@ -144,4 +144,42 @@ public class StockController : ControllerBase
         var response = _stockService.SupprimerUnStock(id);
         return StatusCode(response.StatusCode, response.Data);
     }
+    
+    /// <summary>
+    ///    Lister les transactions stock
+    /// </summary>
+    /// <returns> Liste des transactions stock </returns>
+    /// <response code="200"></response>
+    /// <response code="500">unexpected_error</response>
+    [HttpGet("transactions")]
+    [ActionName("ListerLesTransactionsStock")]
+    [ProducesResponseType(typeof(List<TransactionStockResponse>), 200)]
+    [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
+    [Produces("application/json")]
+    public IActionResult ListerLesTransactionsStock()
+    {
+        var response = _stockService.ListerLesTransactionsStock();
+        return StatusCode(response.StatusCode, response.Data);
+    }
+    
+    /// <summary>
+    ///     Lister les transactions stock par stock
+    /// </summary>
+    /// <param name="stockId">Identifiant du stock</param>
+    /// <returns> Liste des transactions stock </returns>
+    /// <response code="200"></response>
+    /// <response code="400">donnees_invalides</response>
+    /// <response code="404">stock_introuvable</response>
+    /// <response code="500">unexpected_error</response>
+    [HttpGet("transactions/{stockId:int}")]
+    [ActionName("ListerLesTransactionsStockParStock")]
+    [ProducesResponseType(typeof(List<TransactionStockResponse>), 200)]
+    [ProducesResponseType(typeof(ExpectedErrorResponse), 404)]
+    [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
+    [Produces("application/json")]
+    public IActionResult ListerLesTransactionsStockParStock(int stockId)
+    {
+        var response = _stockService.ListerLesTransactionsStockParStock(stockId);
+        return StatusCode(response.StatusCode, response.Data);
+    }
 }

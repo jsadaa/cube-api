@@ -14,4 +14,6 @@ public interface IStockService
     public BaseResponse ModifierUnStock(int id, StockUpdate stockUpdate);
 
     public BaseResponse SupprimerUnStock(int id);
+    public BaseResponse ListerLesTransactionsStock();
+    public BaseResponse ListerLesTransactionsStockParStock(int stockId);
 }

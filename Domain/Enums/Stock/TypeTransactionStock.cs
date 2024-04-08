@@ -24,6 +24,7 @@ public class TypeTransactionStockMapper
         {
             "Achat" => TypeTransactionStock.Achat,
             "Approvisionnement" => TypeTransactionStock.Approvisionnement,
+            "AjoutInterne" => TypeTransactionStock.AjoutInterne,
             "Vente" => TypeTransactionStock.Vente,
             "Retour" => TypeTransactionStock.Retour,
             "Perte" => TypeTransactionStock.Perte,
