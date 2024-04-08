@@ -1,4 +1,3 @@
-using ApiCube.Domain.Entities;
 using ApiCube.Persistence.Models;
 using Microsoft.AspNetCore.Identity;
 
@@ -43,7 +42,7 @@ public class ClientSeeder
 
         context.Clients.Add(client);
         context.SaveChanges();
-        
+
         var panier = new PanierClientModel
         {
             Total = 0,
@@ -51,7 +50,7 @@ public class ClientSeeder
             Client = client,
             LignePanierClients = new List<LignePanierClientModel>()
         };
-        
+
         context.PaniersClients.Add(panier);
         context.SaveChanges();
     }

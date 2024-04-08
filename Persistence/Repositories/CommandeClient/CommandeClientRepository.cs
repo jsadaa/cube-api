@@ -79,7 +79,7 @@ public class CommandeClientRepository : ICommandeClientRepository
 
         return commandeClient;
     }
-    
+
     public Domain.Entities.CommandeClient TrouverParUuid(Guid uuid)
     {
         var commandeClientModel = _context.CommandesClients

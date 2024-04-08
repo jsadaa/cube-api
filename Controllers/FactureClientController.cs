@@ -17,7 +17,7 @@ public class FactureClientController : ControllerBase
     }
 
     /// <summary>
-    ///  Trouver une facture par son identifiant
+    ///     Trouver une facture par son identifiant
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -37,7 +37,7 @@ public class FactureClientController : ControllerBase
     }
 
     /// <summary>
-    /// Lister les factures
+    ///     Lister les factures
     /// </summary>
     /// <returns></returns>
     /// <response code="200"></response>
@@ -54,7 +54,7 @@ public class FactureClientController : ControllerBase
     }
 
     /// <summary>
-    ///    Marquer une facture comme payée
+    ///     Marquer une facture comme payée
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -74,7 +74,7 @@ public class FactureClientController : ControllerBase
     }
 
     /// <summary>
-    ///   Lister les factures d'un client
+    ///     Lister les factures d'un client
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -94,7 +94,7 @@ public class FactureClientController : ControllerBase
     }
 
     /// <summary>
-    ///  Trouver une facture par commande
+    ///     Trouver une facture par commande
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>

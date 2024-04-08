@@ -4,7 +4,8 @@ namespace ApiCube.Domain.Entities;
 
 public class CommandeClient
 {
-    public CommandeClient(Guid uuid, DateTime dateCommande, DateTime? dateLivraison, StatutCommande statut, Client client)
+    public CommandeClient(Guid uuid, DateTime dateCommande, DateTime? dateLivraison, StatutCommande statut,
+        Client client)
     {
         Uuid = uuid;
         DateCommande = dateCommande;
@@ -13,7 +14,8 @@ public class CommandeClient
         Client = client;
     }
 
-    public CommandeClient(int id, Guid uuid, DateTime dateCommande, DateTime? dateLivraison, StatutCommande statut, Client client)
+    public CommandeClient(int id, Guid uuid, DateTime dateCommande, DateTime? dateLivraison, StatutCommande statut,
+        Client client)
     {
         Id = id;
         Uuid = uuid;
@@ -23,7 +25,8 @@ public class CommandeClient
         Client = client;
     }
 
-    public CommandeClient(int id, Guid uuid, DateTime dateCommande, DateTime? dateLivraison, StatutCommande statut, Client client,
+    public CommandeClient(int id, Guid uuid, DateTime dateCommande, DateTime? dateLivraison, StatutCommande statut,
+        Client client,
         List<LigneCommandeClient> ligneCommandeClients)
     {
         Id = id;
@@ -57,7 +60,7 @@ public class CommandeClient
     {
         Statut = statut;
     }
-    
+
     public void ModifierDateLivraison(DateTime dateLivraison)
     {
         DateLivraison = dateLivraison;

@@ -10,11 +10,12 @@ namespace ApiCube.Persistence.Repositories.Client;
 public class ClientRepository : IClientRepository
 {
     private readonly IClientMapper _clientMapper;
-    private readonly IPanierClientMapper _panierClientMapper;
     private readonly ApiDbContext _context;
     private readonly IMapper _mapper;
+    private readonly IPanierClientMapper _panierClientMapper;
 
-    public ClientRepository(ApiDbContext context, IClientMapper clientMapper, IPanierClientMapper panierClientMapper, IMapper mapper)
+    public ClientRepository(ApiDbContext context, IClientMapper clientMapper, IPanierClientMapper panierClientMapper,
+        IMapper mapper)
     {
         _context = context;
         _clientMapper = clientMapper;
@@ -28,7 +29,7 @@ public class ClientRepository : IClientRepository
 
         _context.Clients.Add(nouveauClientModel);
         _context.SaveChanges();
-        
+
         return nouveauClientModel.Id;
     }
 
@@ -46,15 +47,16 @@ public class ClientRepository : IClientRepository
             .Include(c => c.Factures) // Inclure les factures clients
             .AsNoTracking()
             .FirstOrDefault(client => client.Id == id);
-        
+
         if (client == null) throw new ClientIntrouvable();
-        
+
         return _clientMapper.Mapper(client);
     }
-    
+
     public Domain.Entities.Client TrouverParApplicationUserId(string applicationUserId)
     {
-        var client = _context.Clients.AsNoTracking().FirstOrDefault(client => client.ApplicationUserId == applicationUserId);
+        var client = _context.Clients.AsNoTracking()
+            .FirstOrDefault(client => client.ApplicationUserId == applicationUserId);
         if (client == null) throw new ClientIntrouvable();
 
         return _clientMapper.Mapper(client);

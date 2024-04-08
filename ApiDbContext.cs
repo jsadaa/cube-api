@@ -96,7 +96,7 @@ public class ApiDbContext : IdentityDbContext<ApplicationUserModel>
         modelBuilder.Entity<StockModel>()
             .HasIndex(s => s.ProduitId)
             .IsUnique();
-        
+
         modelBuilder.Entity<PanierClientModel>()
             .HasOne(p => p.Client)
             .WithMany()

@@ -10,7 +10,7 @@ public class CommandeClientModel
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [Key]
     public int Id { get; set; }
-    
+
     [Column("uuid")]
     [Required]
     [StringLength(36)]

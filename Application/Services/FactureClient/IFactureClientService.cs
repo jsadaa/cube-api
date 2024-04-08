@@ -1,5 +1,4 @@
 using ApiCube.Application.DTOs;
-using ApiCube.Application.DTOs.Responses;
 
 namespace ApiCube.Application.Services.FactureClient;
 

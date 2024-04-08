@@ -134,13 +134,9 @@ public class Client
     public void AjouterPanier(PanierClient panier)
     {
         if (Panier == null)
-        {
             Panier = panier;
-
-        } else
-        {
+        else
             throw new PanierDejaExistant();
-        }
     }
 
     public void SupprimerPanier()

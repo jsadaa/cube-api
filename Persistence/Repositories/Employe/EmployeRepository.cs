@@ -35,7 +35,7 @@ public class EmployeRepository : IEmployeRepository
         if (employe == null) throw new EmployeIntrouvable();
         return _mapper.Map<Domain.Entities.Employe>(employe);
     }
-    
+
     public Domain.Entities.Employe TrouverParApplicationUserId(string applicationUserId)
     {
         var employe = _context.Employes.AsNoTracking().FirstOrDefault(e => e.ApplicationUserId == applicationUserId);

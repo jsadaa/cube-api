@@ -78,7 +78,7 @@ public class StockController : ControllerBase
     }
 
     /// <summary>
-    ///    Trouver un stock par produit
+    ///     Trouver un stock par produit
     /// </summary>
     /// <param name="id">Identifiant du produit</param>
     /// <returns> Stock </returns>
@@ -144,9 +144,9 @@ public class StockController : ControllerBase
         var response = _stockService.SupprimerUnStock(id);
         return StatusCode(response.StatusCode, response.Data);
     }
-    
+
     /// <summary>
-    ///    Lister les transactions stock
+    ///     Lister les transactions stock
     /// </summary>
     /// <returns> Liste des transactions stock </returns>
     /// <response code="200"></response>
@@ -161,7 +161,7 @@ public class StockController : ControllerBase
         var response = _stockService.ListerLesTransactionsStock();
         return StatusCode(response.StatusCode, response.Data);
     }
-    
+
     /// <summary>
     ///     Lister les transactions stock par stock
     /// </summary>

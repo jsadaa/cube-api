@@ -264,7 +264,7 @@ public class StockService : IStockService
             return response;
         }
     }
-    
+
     public BaseResponse ListerLesTransactionsStock()
     {
         try
@@ -289,7 +289,7 @@ public class StockService : IStockService
             return response;
         }
     }
-    
+
     public BaseResponse ListerLesTransactionsStockParStock(int stockId)
     {
         try

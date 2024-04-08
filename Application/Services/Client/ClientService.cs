@@ -5,7 +5,6 @@ using ApiCube.Application.DTOs;
 using ApiCube.Application.DTOs.Requests;
 using ApiCube.Application.DTOs.Responses;
 using ApiCube.Application.Exceptions;
-using ApiCube.Domain.Entities;
 using ApiCube.Domain.Enums.Administration;
 using ApiCube.Persistence.Exceptions;
 using ApiCube.Persistence.Models;
@@ -89,7 +88,7 @@ public class ClientService : IClientService
             );
 
             var id = _clientRepository.Ajouter(client);
-            
+
             var clientResponse = _mapper.Map<ClientResponse>(client);
             clientResponse.Id = id;
 

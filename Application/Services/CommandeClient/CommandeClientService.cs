@@ -425,7 +425,7 @@ public class CommandeClientService : ICommandeClientService
             var client = panierClient.Client;
             var commandeClient = _preparateurDeCommandeClient.Commande(panierClient);
             var factureClient = _gestionnaireDeFacturation.Commande(commandeClient);
-            
+
             commandeClient.ModifierDateLivraison(dateLivraisonRequest.DateLivraison);
 
             client.AjouterCommande(commandeClient);
@@ -439,13 +439,13 @@ public class CommandeClientService : ICommandeClientService
                 stock = _gestionnaireDeStock.Vente(stock, ligneCommandeClient);
                 _stockRepository.Modifier(stock);
             }
-            
+
             _clientRepository.Modifier(client);
 
             foreach (var lignePanierClient in panierClient.LignePanierClients)
                 _context.RemoveRange(_context.LignesPaniersClients.Find(lignePanierClient.Id));
             _context.SaveChanges();
-            
+
             commandeClient = _commandeClientRepository.TrouverParUuid(commandeClient.Uuid);
 
             return new BaseResponse(

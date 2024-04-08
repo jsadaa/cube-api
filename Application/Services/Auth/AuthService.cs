@@ -17,11 +17,11 @@ namespace ApiCube.Application.Services.Auth;
 
 public class AuthService : IAuthService
 {
+    private readonly IClientRepository _clientRepository;
     private readonly IConfiguration _configuration;
+    private readonly IEmployeRepository _employeRepository;
     private readonly ILogger<AuthService> _logger;
     private readonly UserManager<ApplicationUserModel> _userManager;
-    private readonly IClientRepository _clientRepository;
-    private readonly IEmployeRepository _employeRepository;
 
     public AuthService(
         IConfiguration configuration,
@@ -54,25 +54,25 @@ public class AuthService : IAuthService
 
             object domainUser;
             int id;
-            
+
             try
             {
                 domainUser = _clientRepository.TrouverParApplicationUserId(user.Id);
-                id = ((Domain.Entities.Client) domainUser).Id;
-            } 
+                id = ((Domain.Entities.Client)domainUser).Id;
+            }
             catch (ClientIntrouvable)
             {
                 try
                 {
                     domainUser = _employeRepository.TrouverParApplicationUserId(user.Id);
-                    id = ((Domain.Entities.Employe) domainUser).Id;
-                } 
+                    id = ((Domain.Entities.Employe)domainUser).Id;
+                }
                 catch (EmployeIntrouvable)
                 {
                     throw new UtilisateurIntrouvable();
                 }
             }
-            
+
             var tokenResponse = new TokenResponse
             {
                 AccessToken = tokenString,
@@ -134,22 +134,22 @@ public class AuthService : IAuthService
             var newRefreshToken = GenerateRefreshToken();
 
             await _userManager.SetAuthenticationTokenAsync(user, "ApiCube", "RefreshToken", newRefreshToken);
-            
+
             object domainUser;
             int id;
-            
+
             try
             {
                 domainUser = _clientRepository.TrouverParApplicationUserId(user.Id);
-                id = ((Domain.Entities.Client) domainUser).Id;
-            } 
+                id = ((Domain.Entities.Client)domainUser).Id;
+            }
             catch (ClientIntrouvable)
             {
                 try
                 {
                     domainUser = _employeRepository.TrouverParApplicationUserId(user.Id);
-                    id = ((Domain.Entities.Employe) domainUser).Id;
-                } 
+                    id = ((Domain.Entities.Employe)domainUser).Id;
+                }
                 catch (EmployeIntrouvable)
                 {
                     throw new UtilisateurIntrouvable();
