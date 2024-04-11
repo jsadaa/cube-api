@@ -27,6 +27,8 @@ public class ProduitResponse
     [Required] public required DateTime DatePeremption { get; set; }
 
     [Required] public required bool EnPromotion { get; set; }
+    
+    public PromotionResponse? Promotion { get; set; }
 
     [Required] public required string FamilleProduitNom { get; set; } = null!;
 

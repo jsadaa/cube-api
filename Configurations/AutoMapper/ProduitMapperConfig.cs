@@ -17,7 +17,7 @@ public class ProduitMapperConfig : Profile
             .ForMember(dest => dest.Fournisseur, opt => opt.Ignore())
             .ForMember(dest => dest.PromotionId,
                 opt => opt.MapFrom(src => src.Promotion != null ? src.Promotion.Id : (int?)null))
-            .ForMember(dest => dest.Promotion, opt => opt.Ignore());
+            .ForMember(dest => dest.Promotion, opt => opt.MapFrom(src => src.Promotion));
         CreateMap<Produit, ProduitResponse>()
             .ForMember(dest => dest.FamilleProduitNom, opt => opt.MapFrom(src => src.FamilleProduit.Nom))
             .ForMember(dest => dest.FournisseurNom, opt => opt.MapFrom(src => src.Fournisseur.Nom))
