@@ -10,7 +10,6 @@ public enum StatutStock
     QuasimentEpuise,
     EnCommande,
     EnCoursDeLivraison,
-    Livre,
     Perime,
     Retourne,
     Vendu,
@@ -18,7 +17,6 @@ public enum StatutStock
     Vole,
     Casse,
     Supprime,
-    Autre
 }
 
 public class StatutStockMapper
@@ -33,7 +31,6 @@ public class StatutStockMapper
             "EnCommande" => StatutStock.EnCommande,
             "EnCoursDeLivraison" => StatutStock.EnCoursDeLivraison,
             "QuasimentEpuise" => StatutStock.QuasimentEpuise,
-            "Livre" => StatutStock.Livre,
             "Perime" => StatutStock.Perime,
             "Retourne" => StatutStock.Retourne,
             "Vendu" => StatutStock.Vendu,
@@ -41,7 +38,6 @@ public class StatutStockMapper
             "Vole" => StatutStock.Vole,
             "Casse" => StatutStock.Casse,
             "Supprime" => StatutStock.Supprime,
-            "Autre" => StatutStock.Autre,
             _ => throw new StatutStockInexistant()
         };
     }
