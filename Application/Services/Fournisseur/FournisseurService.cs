@@ -121,6 +121,39 @@ public class FournisseurService : IFournisseurService
             return response;
         }
     }
+    
+    public BaseResponse TrouverUnFournisseurParProduit(int id)
+    {
+        try
+        {
+            var fournisseur = _fournisseurRepository.TrouverParProduit(id);
+
+            var response = new BaseResponse(
+                HttpStatusCode.OK,
+                _mapper.Map<FournisseurResponse>(fournisseur)
+            );
+
+            return response;
+        }
+        catch (FournisseurIntrouvable e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.NotFound,
+                new { code = e.Message }
+            );
+
+            return response;
+        }
+        catch (Exception e)
+        {
+            var response = new BaseResponse(
+                HttpStatusCode.InternalServerError,
+                new { code = "unexpected_error", message = e.Message }
+            );
+
+            return response;
+        }
+    }
 
     public BaseResponse ModifierUnFournisseur(int id, FournisseurRequest fournisseurRequest)
     {

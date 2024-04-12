@@ -10,6 +10,7 @@ public interface IFournisseurService
     public BaseResponse ListerLesFournisseurs();
 
     public BaseResponse TrouverUnFournisseur(int id);
+    public BaseResponse TrouverUnFournisseurParProduit(int id);
 
     public BaseResponse ModifierUnFournisseur(int id, FournisseurRequest fournisseurRequest);
 

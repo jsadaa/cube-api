@@ -45,6 +45,14 @@ public class FournisseurRepository : IFournisseurRepository
 
         return _mapper.Map<Domain.Entities.Fournisseur>(fournisseurModel);
     }
+    
+    public Domain.Entities.Fournisseur TrouverParProduit(int id)
+    {
+        var fournisseurModel = _context.Fournisseurs.AsNoTracking().FirstOrDefault(fournisseur => fournisseur.Produits.Any(produit => produit.Id == id));
+        if (fournisseurModel == null) throw new FournisseurIntrouvable();
+
+        return _mapper.Map<Domain.Entities.Fournisseur>(fournisseurModel);
+    }
 
     public void Modifier(Domain.Entities.Fournisseur fournisseurModifie)
     {

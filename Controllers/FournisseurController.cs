@@ -76,6 +76,26 @@ public class FournisseurController : ControllerBase
         var response = _fournisseurService.TrouverUnFournisseur(id);
         return StatusCode(response.StatusCode, response.Data);
     }
+    
+    /// <summary>
+    ///     Trouver un fournisseur par identifiant de produit
+    /// </summary>
+    /// <param name="idProduit"></param>
+    /// <returns> Fournisseur </returns>
+    /// <response code="200"></response>
+    /// <response code="404">fournisseur_introuvable</response>
+    /// <response code="500">unexpected_error</response>
+    [HttpGet("produit/{idProduit:int}")]
+    [ActionName("TrouverUnFournisseurParProduit")]
+    [ProducesResponseType(typeof(FournisseurResponse), 200)]
+    [ProducesResponseType(typeof(ExpectedErrorResponse), 404)]
+    [ProducesResponseType(typeof(UnexpectedErrorResponse), 500)]
+    [Produces("application/json")]
+    public IActionResult TrouverUnFournisseurParProduit(int idProduit)
+    {
+        var response = _fournisseurService.TrouverUnFournisseurParProduit(idProduit);
+        return StatusCode(response.StatusCode, response.Data);
+    }
 
     /// <summary>
     ///     Modifier un fournisseur
