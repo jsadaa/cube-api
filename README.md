@@ -214,7 +214,10 @@ public enum TypeTransactionStock
 }
 ```
 
-### Comptes clients et employés pour le développement
+### Fixtures
+
+L'API utilise des seeders Bogus [Bogus](https://github.com/bchavez/Bogus) pour générer des données aléatoires.
+Elles sont chargées au démarrage de l'API (voir Persistence/Seeders).
 
 #### Compte client
 
@@ -234,15 +237,12 @@ var client = new ClientModel
     ApplicationUserId = userId1
 };
 
-var password1 = "Doudou58!";
+var passwordClient = "Doudou58!";
 ```
 
 #### Comptes employés
 
 ```csharp
-var password1 = "Admin123!";
-var password2 = "Client123!";
-
 var employe1 = new EmployeModel
 {
     Nom = "Admin",
@@ -262,12 +262,10 @@ var employe2 = new EmployeModel
     Poste = "Saisonnier",
     ApplicationUserId = userId2
 };
+
+var passwordAdmin = "Admin123!";
+var passwordSaisonnier = "Client123!";
 ```
-
-### Fixtures
-
-L'API utilise des seeders Bogus [Bogus](https://github.com/bchavez/Bogus) pour générer des données aléatoires.
-Elles sont chargées au démarrage de l'API (voir Persistence/Seeders).
 
 ### Tests des endpoints
 
