@@ -2,7 +2,7 @@
 
 ## Description
 
-Cette API permet de gérer les données de la société LCE.
+Cette API permet de gérer les données de la société Negosud.
 
 Elle est consommée par :
 
