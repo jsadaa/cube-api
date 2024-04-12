@@ -214,6 +214,56 @@ public enum TypeTransactionStock
 }
 ```
 
+### Comptes clients et employés pour le développement
+
+#### Compte client
+
+```csharp
+var client = new ClientModel
+{
+    Nom = "Gagnant",
+    Prenom = "Michel",
+    Email = "michel@mail.fr",
+    Adresse = "12, rue des fleurs",
+    CodePostal = "75000",
+    Ville = "Paris",
+    Pays = "France",
+    Telephone = "0123456789",
+    DateNaissance = new DateTime(1980, 1, 1),
+    DateInscription = DateTime.Now,
+    ApplicationUserId = userId1
+};
+
+var password1 = "Doudou58!";
+```
+
+#### Comptes employés
+
+```csharp
+var password1 = "Admin123!";
+var password2 = "Client123!";
+
+var employe1 = new EmployeModel
+{
+    Nom = "Admin",
+    Prenom = "Admin",
+    Email = "admin@gmail.com",
+    DateEmbauche = DateTime.Now,
+    Poste = "Responsable",
+    ApplicationUserId = userId1
+};
+
+var employe2 = new EmployeModel
+{
+    Nom = "Employe",
+    Prenom = "Employe",
+    Email = "employe@gmail.com",
+    DateEmbauche = DateTime.Now,
+    Poste = "Saisonnier",
+    ApplicationUserId = userId2
+};
+```
+
 ### Fixtures
 
 L'API utilise des seeders Bogus [Bogus](https://github.com/bchavez/Bogus) pour générer des données aléatoires.
