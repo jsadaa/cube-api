@@ -27,8 +27,8 @@ public class ClientSeeder
 
         var client = new ClientModel
         {
-            Nom = "Michel",
-            Prenom = "Gagnant",
+            Nom = "Gagnant",
+            Prenom = "Michel",
             Email = "michel@mail.fr",
             Adresse = "12, rue des fleurs",
             CodePostal = "75000",
