@@ -1,4 +1,4 @@
-# API - LCE
+# API - NEGOSUD
 
 ## Description
 
@@ -219,8 +219,12 @@ public enum TypeTransactionStock
 L'API utilise des seeders Bogus [Bogus](https://github.com/bchavez/Bogus) pour générer des données aléatoires.
 Elles sont chargées au démarrage de l'API (voir Persistence/Seeders).
 
-### Tests
+### Tests des endpoints
 
 En environnement de développement, l'api utilise SwaggerUI pour tester les endpoints.
 Pour accéder à SwaggerUI, lancer l'API et se rendre sur l'URL suivante : http://localhost:5273/swagger/index.html (
 adapter le port si besoin) ou lancer le runner de l'API.
+
+## Auteurs
+
+Léo Paillard
