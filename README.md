@@ -1,43 +1,43 @@
-# API - NEGOSUD
+# Cube API : Stock Management
 
 ## Description
 
-Cette API permet de gérer les données de la société Negosud.
+This API was created to manage the wine stock of a fictive company during a school project. 
 
-Elle est consommée par :
+It is consumed by :
 
-- Une application web pour la vente de produits
-- Une application desktop pour la gestion des stocks
+- A Symfony web application for the e-commerce part
+- A .NET WPF desktop application for the management of the stock
 
 ## Installation
 
-### Prérequis
+### Pre-requisites
 
 - Dotnet SDK >= 7.0
 - Entity Framework Core CLI
-- MariaDB (Docker ou non)
+- MariaDB
 - Docker
 - Make
 
-### Installation des prérequis
+### Installation
 
 #### Make
 
 ##### Windows
 
-- Télécharger et installer [Chocolatey](https://chocolatey.org/install)
-- Ouvrir un terminal en tant qu'administrateur
-- Exécuter la commande `choco install make`
-- Redémarrer le terminal
-- Vérifier l'installation avec la commande `make --version`
+- Download and install [Chocolatey](https://chocolatey.org/install)
+- Open a terminal as administrator
+- Run `choco install make` in the terminal
+- Restart the terminal
+- Check the installation with the command `make --version`
 
 ##### MacOS
 
-- Ouvrir un terminal
-- Exécuter la commande `xcode-select --install`
-- Installer [Homebrew](https://brew.sh/index_fr)
-- Exécuter la commande `brew install make`
-- Vérifier l'installation avec la commande `make --version`
+- Open a terminal
+- Run `xcode-select --install` 
+- Download and install [Homebrew](https://brew.sh/index_fr)
+- Run `brew install make`
+- Check the installation with the command `make --version`
 
 #### Dotnet SDK
 
@@ -87,7 +87,7 @@ docker compose up -d
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
-Se référer à la documentation officielle de [Docker](https://docs.docker.com/engine/install/debian/)
+Check official documentation : [Docker](https://docs.docker.com/engine/install/debian/)
 
 ##### MacOS
 
@@ -95,57 +95,57 @@ Se référer à la documentation officielle de [Docker](https://docs.docker.com/
 brew install docker
 ```
 
-Ou suivre les instructions sur le site officiel de [Docker](https://docs.docker.com/docker-for-mac/install/)
+Or check official documentation [Docker](https://docs.docker.com/docker-for-mac/install/)
 
-### Installation de l'API
+### API installation
 
-#### Cloner le projet
+#### Clone the repository
 
 ```bash
 git clone git@github.com:LCE-CESI/ApiCube.git
 ```
 
-#### Créer la base de données
+#### Create the database
 
 ```bash
 make db-create
 ```
 
-#### Créer les tables
+#### Run the migrations
 
 ```bash
 make db-migrate
 ```
 
-#### Lancer l'API
+#### Run the API
 
 ```bash
 make run
 ```
 
-#### Mettre à jour la base de données
+#### Update the database
 
 ```bash
 make db-update
 ```
 
-#### Réinitialiser la base de données
+#### Reset the database
 
 ```bash
 make db-reset
 ```
 
-#### Supprimer la base de données
+#### Drop the database
 
 ```bash
 make db-drop
 ```
 
-## Développement
+## Development
 
-### Valeurs Enums
+### Domain Enums
 
-Les valeurs Enums métiers sont stockées dans le dossier Enums :
+Enums used in the API for status and roles.
 
 ```csharp
 public enum Role
@@ -216,10 +216,10 @@ public enum TypeTransactionStock
 
 ### Fixtures
 
-L'API utilise des seeders Bogus [Bogus](https://github.com/bchavez/Bogus) pour générer des données aléatoires.
-Elles sont chargées au démarrage de l'API (voir Persistence/Seeders).
+The API use seeders [Bogus](https://github.com/bchavez/Bogus) to generate fake data for the database.
+They are loaded at the start of the API (see Persistence/Seeders).
 
-#### Compte client
+#### Clients accounts
 
 ```csharp
 var client = new ClientModel
@@ -240,7 +240,7 @@ var client = new ClientModel
 var passwordClient = "Doudou58!";
 ```
 
-#### Comptes employés
+#### Employes accounts
 
 ```csharp
 var employe1 = new EmployeModel
@@ -267,12 +267,12 @@ var passwordAdmin = "Admin123!";
 var passwordSaisonnier = "Client123!";
 ```
 
-### Tests des endpoints
+### API Endpoints
 
-En environnement de développement, l'api utilise SwaggerUI pour tester les endpoints.
-Pour accéder à SwaggerUI, lancer l'API et se rendre sur l'URL suivante : http://localhost:5273/swagger/index.html (
-adapter le port si besoin) ou lancer le runner de l'API.
+In development environment, the API uses SwaggerUI to test the endpoints.
+To access SwaggerUI, launch the API and go to the following URL: http://localhost:5273/swagger/index.html (
+adapt the port if necessary) or launch the API runner.
 
-## Auteurs
+## Authors and contributors
 
 Léo Paillard
