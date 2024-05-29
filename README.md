@@ -44,19 +44,19 @@ It is consumed by :
 ##### Linux (Debian)
 
 ```bash
-Make install-dotnet-on-debian
+make install-dotnet-on-debian
 ```
 
 ##### MacOS
 
 ```bash
-Make install-dotnet-on-mac
+make install-dotnet-on-mac
 ```
 
 #### Entity Framework Core CLI
 
 ```bash
-Make install-ef
+make install-ef
 ```
 
 #### MariaDB (Sans Docker)
@@ -64,13 +64,13 @@ Make install-ef
 ##### Linux (Debian)
 
 ```bash
-Make install-mariadb-on-debian
+make install-mariadb-on-debian
 ```
 
 ##### MacOS
 
 ```bash
-Make install-mariadb-on-mac
+make install-mariadb-on-mac
 ```
 
 #### MariaDB (Dev: utilisation du docker-compose.yml)
